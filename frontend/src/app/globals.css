@@ -1,26 +1,64 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #FAFAF7;
+  --foreground: #1A1A1A;
+
+  --huap-azul: #1B4F7A;
+  --huap-fondo: #FAFAF7;
+  --huap-texto: #1A1A1A;
+  --huap-verde: #2D6E3E;
+  --huap-ambar: #B85C00;
+  --huap-ambar-claro: #FFF4E6;
+  --huap-rojo: #B02E2E;
+  --huap-purpura: #6B3A8C;
+  --huap-gris-suave: #F1EFE8;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-huap-azul: var(--huap-azul);
+  --color-huap-fondo: var(--huap-fondo);
+  --color-huap-texto: var(--huap-texto);
+  --color-huap-verde: var(--huap-verde);
+  --color-huap-ambar: var(--huap-ambar);
+  --color-huap-ambar-claro: var(--huap-ambar-claro);
+  --color-huap-rojo: var(--huap-rojo);
+  --color-huap-purpura: var(--huap-purpura);
+  --color-huap-gris-suave: var(--huap-gris-suave);
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+button {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--huap-azul);
+  outline-offset: 2px;
 }
