@@ -1,35 +1,27 @@
-﻿import type { Metadata } from "next";
-import "./globals.css";
+﻿import type { Metadata } from "next"
+import "./globals.css"
+import NextAuthProvider from "@/components/layout/SessionProvider"
 
 export const metadata: Metadata = {
   title: "IA y Salud · Guía Digital para Personas Mayores",
-  description:
-    "Plataforma educativa del Hospital de Urgencia Asistencia Pública (HUAP) para aprender a usar inteligencia artificial de forma segura en información de salud.",
-  keywords: [
-    "adultos mayores",
-    "alfabetización digital",
-    "inteligencia artificial",
-    "salud",
-    "HUAP",
-    "Posta Central",
-  ],
-  authors: [{ name: "HUAP - Posta Central" }],
-  robots: {
-    index: false,
-    follow: false,
-  },
-};
+  description: "Aprende a usar la inteligencia artificial para entender información de salud de forma segura",
+  keywords: ["IA", "salud", "adulto mayor", "HUAP", "inteligencia artificial"],
+  authors: [{ name: "Hospital de Urgencia Asistencia Pública" }],
+  robots: "noindex, nofollow",
+}
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html lang="es" className="h-full antialiased">
-      <body className="min-h-full flex flex-col bg-huap-fondo text-huap-texto">
-        {children}
+    <html lang="es">
+      <body className="antialiased min-h-screen flex flex-col">
+        <NextAuthProvider>
+          {children}
+        </NextAuthProvider>
       </body>
     </html>
-  );
-}
+  )
+} 
