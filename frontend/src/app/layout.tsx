@@ -1,6 +1,7 @@
 ﻿import type { Metadata } from "next"
 import "./globals.css"
 import NextAuthProvider from "@/components/layout/SessionProvider"
+import NavTabs from "@/components/layout/NavTabs"
 
 export const metadata: Metadata = {
   title: "IA y Salud · Guía Digital para Personas Mayores",
@@ -20,6 +21,7 @@ export default function RootLayout({
       <body className="antialiased min-h-screen flex flex-col">
         <NextAuthProvider>
           {children}
+          <NavTabs />
         </NextAuthProvider>
       </body>
     </html>
