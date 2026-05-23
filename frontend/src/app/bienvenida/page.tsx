@@ -7,7 +7,7 @@ export default function BienvenidaPage() {
   const router = useRouter()
 
   const handleContinuar = () => {
-    router.push("/modulos")
+    router.push("/inicio")
   }
 
   return (

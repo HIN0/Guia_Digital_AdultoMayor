@@ -36,7 +36,7 @@ export default function Home() {
             backgroundColor: "white",
             border: "2px solid var(--huap-verde)",
           }}>
-          <p style={{ color: "var(--huap-texto)", fontSize: "17px" }}>
+          <p style={{ color: "var(--huap-texto)", fontSize: "18px" }}>
             Esta aplicación te enseña paso a paso. No necesitas experiencia previa.
           </p>
         </div>
@@ -58,7 +58,7 @@ export default function Home() {
               <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
               <path fill="none" d="M0 0h48v48H0z"/>
             </svg>
-            Entrar con Google
+            Entrar con Google 
           </button>
 
           <button

@@ -7,18 +7,20 @@ export function proxy(request: NextRequest) {
     request.cookies.get("__Secure-authjs.session-token")
 
   const isProtectedRoute =
+    request.nextUrl.pathname.startsWith("/inicio") ||
+    request.nextUrl.pathname.startsWith("/bienvenida") ||
     request.nextUrl.pathname.startsWith("/modulos") ||
     request.nextUrl.pathname.startsWith("/quiz") ||
     request.nextUrl.pathname.startsWith("/chatbot") ||
     request.nextUrl.pathname.startsWith("/perfil")
 
   if (isProtectedRoute && !sessionToken) {
-    return NextResponse.redirect(new URL("/login", request.nextUrl))
+    return NextResponse.redirect(new URL("/", request.nextUrl))
   }
 
   return NextResponse.next()
 }
 
 export const config = {
-  matcher: ["/modulos/:path*", "/quiz/:path*", "/chatbot/:path*", "/perfil/:path*"],
+  matcher: ["/inicio/:path*", "/bienvenida/:path*", "/modulos/:path*", "/quiz/:path*", "/chatbot/:path*", "/perfil/:path*"],
 }
