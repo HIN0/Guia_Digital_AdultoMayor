@@ -18,6 +18,9 @@ build/
 .idea/
 .DS_Store
 
+# Claude
+.claude/
+
 # Logs
 *.log
 npm-debug.log*
