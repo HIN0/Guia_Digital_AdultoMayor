@@ -4,15 +4,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from core.database import Base, engine
 
 # Importamos las entidades para que SQLAlchemy las registre antes de crear tablas
-#from modules.auth import entity as auth_entity
+from modules.auth import entity as auth_entity
 from modules.educacion import entity as educacion_entity
-#from modules.progreso import entity as progreso_entity
+from modules.progreso import entity as progreso_entity
 #from modules.chatbot import entity as chatbot_entity
 
 # Importamos los routers (controllers) de cada módulo
-#from modules.auth.controller import router as auth_router
+from modules.auth.controller import router as auth_router
 from modules.educacion.controller import router as educacion_router
-#from modules.progreso.controller import router as progreso_router
+from modules.progreso.controller import router as progreso_router
 #from modules.chatbot.controller import router as chatbot_router
 #from modules.admin.controller import router as admin_router
 
@@ -35,9 +35,9 @@ app.add_middleware(
 )
 
 # Registramos todos los routers bajo el prefijo /api
-#app.include_router(auth_router, prefix="/api")
+app.include_router(auth_router, prefix="/api")
 app.include_router(educacion_router, prefix="/api")
-#app.include_router(progreso_router, prefix="/api")
+app.include_router(progreso_router, prefix="/api")
 #app.include_router(chatbot_router, prefix="/api")
 #app.include_router(admin_router, prefix="/api")
 
