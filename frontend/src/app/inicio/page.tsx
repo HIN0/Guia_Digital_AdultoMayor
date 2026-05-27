@@ -6,10 +6,10 @@ import { ShieldCheck } from "lucide-react"
 
 export default function InicioPage() {
   return (
-    <div className="min-h-screen pb-28" style={{ backgroundColor: "var(--huap-fondo)" }}>
+    <div className="min-h-screen flex flex-col pb-28" style={{ backgroundColor: "var(--huap-fondo)" }}>
       <Header />
 
-      <main className="px-5 py-6 w-full mx-auto" style={{ maxWidth: "480px" }}>
+      <main className="flex-1 px-5 py-6 w-full mx-auto" style={{ maxWidth: "480px" }}>
 
         {/* Hero */}
         <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: "28px", minHeight: "180px" }}>
@@ -20,6 +20,8 @@ export default function InicioPage() {
             </h1>
 
             <div style={{
+              borderLeft: "3px solid var(--huap-azul)",
+              paddingLeft: "10px",
               marginBottom: "16px",
               color: "#4A4A4A",
               fontSize: "18px",

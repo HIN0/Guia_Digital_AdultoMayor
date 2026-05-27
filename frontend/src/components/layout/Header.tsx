@@ -9,6 +9,7 @@ export default function Header() {
 
   return (
     <header>
+      {/* Div azul con la ola incluida adentro */}
       <div style={{
         backgroundColor: "var(--huap-azul)",
         paddingBottom: "30px",
@@ -54,23 +55,20 @@ export default function Header() {
             )}
           </button>
         </div>
-      </div>
 
-      {/* Ola fuera del overflow:hidden — el backgroundColor cubre el overlap de 2px con el azul del header */}
-      <svg
-        viewBox="0 0 1440 40"
-        xmlns="http://www.w3.org/2000/svg"
-        preserveAspectRatio="none"
-        style={{
-          display: "block",
-          width: "100%",
-          height: "32px",
-          marginTop: "-32px",
-          backgroundColor: "var(--huap-azul)",
-        }}
-      >
-        <path d="M0,40 Q720,0 1440,40 L1440,50 L0,50 Z" fill="#FAFAF7" />
-      </svg>
+        {/* Ola dentro del div azul — recorta con el color de la página */}
+        <svg
+          viewBox="0 0 1440 40"
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="none"
+          style={{
+            position: "absolute", bottom: 0, left: 0,
+            width: "100%", height: "30px", display: "block",
+          }}
+        >
+          <path d="M0,40 Q720,0 1440,40 Z" fill="#FAFAF7" />
+        </svg>
+      </div>
     </header>
   )
 }
