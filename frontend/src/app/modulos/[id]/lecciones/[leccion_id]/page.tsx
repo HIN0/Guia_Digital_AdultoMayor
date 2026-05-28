@@ -2,8 +2,27 @@
 
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
+import Image from "next/image"
 import Header from "@/components/layout/Header"
 import { getLeccion, completarLeccion, type LeccionDetalle, type PreguntaQuizCorto } from "@/lib/api"
+
+const IMAGENES_APOYO: Record<string, string> = {
+  'Ilustración cálida de una persona mayor sonriendo frente a un teléfono. Botón verde grande "Comenzar".': "/medico_bienvenida.svg",
+  "Flechas animadas señalando: ① la flecha ← para Volver, ② el menú principal (Inicio), ③ el botón de Chat, ④ el botón de progreso, ⑤ el ajuste de tamaño de letra (selector de tamaño de letra).": "/tutorial-buttons.svg",
+  "Demostración del selector Pequeño / Mediano / Grande cambiando el tamaño del texto en vivo.": "/ajustar-tamano-letra.svg",
+  "Guía paso a paso con refuerzo positivo después de cada toque.": "/pract.svg",
+  "Mensaje de felicitación con marca de avance del módulo.": "/congre.svg",
+  "Ilustración simple: un computador rodeado de ejemplos con una flecha que sale hacia una respuesta.": "/Chat-ia.svg",
+  "Cuatro tarjetas: 📷 reconocer cara, ✍️ corregir texto, 🗺️ sugerir ruta, 🔊 asistente de voz.": "/IA-2.svg",
+  "Analogía visual del aprendizaje por ejemplos.": "/IA-3.svg",
+  "Comparación: calculadora 🧮 = herramienta útil / IA 🤖 = herramienta útil.": "/IA-4.svg",
+  "Ilustración de un chatbot conversando con un usuario.": "/IA-5.svg",
+  "Resumen con tres viñetas y marca de avance.": "/IA-6.svg",
+  "Ícono de corazón con un signo de ayuda.": "/IA-SALUD-1.svg",
+  "Tres tarjetas: 📖 explicar palabras, ℹ️ información general, ⏰ recordatorios.": "/IA-SALUD-2.svg",
+  "Viñeta ilustrada de don Luis consultando la app en casa.": "/IA-SALUD-3.svg",
+  'Lista con íconos rojos de "no" frente a cada límite.': "/IA-SALUD-4.svg",
+}
 
 type Fase = "paginas" | "quiz" | "resultado"
 
@@ -199,20 +218,32 @@ export default function LeccionPage() {
               {pagina.texto}
             </p>
             {pagina.apoyo_visual && (
-              <p
-                style={{
-                  marginTop: "20px",
-                  padding: "12px 16px",
-                  backgroundColor: "var(--huap-gris-suave)",
-                  borderRadius: "8px",
-                  color: "#555",
-                  fontSize: "15px",
-                  fontStyle: "italic",
-                  lineHeight: 1.5,
-                }}
-              >
-                {pagina.apoyo_visual}
-              </p>
+              IMAGENES_APOYO[pagina.apoyo_visual] ? (
+                <div style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
+                  <Image
+                    src={IMAGENES_APOYO[pagina.apoyo_visual]}
+                    alt="Ilustración de la lección"
+                    width={280}
+                    height={280}
+                    style={{ objectFit: "contain", maxWidth: "100%", maxHeight: "35vh" }}
+                  />
+                </div>
+              ) : (
+                <p
+                  style={{
+                    marginTop: "20px",
+                    padding: "12px 16px",
+                    backgroundColor: "var(--huap-gris-suave)",
+                    borderRadius: "8px",
+                    color: "#555",
+                    fontSize: "15px",
+                    fontStyle: "italic",
+                    lineHeight: 1.5,
+                  }}
+                >
+                  {pagina.apoyo_visual}
+                </p>
+              )
             )}
           </div>
 

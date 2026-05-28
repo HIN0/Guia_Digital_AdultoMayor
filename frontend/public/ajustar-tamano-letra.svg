@@ -1,0 +1,83 @@
+<svg width="100%" viewBox="0 0 380 448" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>Cómo ajustar el tamaño de letra</title>
+  <desc>Guía visual para cambiar el tamaño del texto desde el menú de usuario</desc>
+
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#1B4F8A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <style>
+      @keyframes bD { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+      @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.55} }
+      .ad  { animation: bD 1.4s ease-in-out infinite; }
+      .pul { animation: pulse 1.6s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+    </style>
+  </defs>
+
+  <!-- ══ CARD 1 · ABRIR MENÚ DE USUARIO ══ -->
+  <rect x="16" y="16" width="348" height="180" rx="14" fill="#EEF3FA" stroke="#C5D5EA" stroke-width="1"/>
+  <circle cx="52" cy="58" r="20" fill="#1B4F8A"/>
+  <text x="52" y="64" text-anchor="middle" font-family="sans-serif" font-size="17" font-weight="700" fill="#fff">1</text>
+  <text x="84" y="46" font-family="sans-serif" font-size="14" font-weight="700" fill="#1B4F8A">Abre tu menú</text>
+  <text x="84" y="65" font-family="sans-serif" font-size="13" fill="#444">Toca el círculo con tu</text>
+  <text x="84" y="83" font-family="sans-serif" font-size="13" fill="#444">inicial arriba a la derecha.</text>
+
+  <!-- Avatar destacado con flecha indicando -->
+  <g class="pul">
+    <circle cx="316" cy="58" r="18" fill="#1B4F8A"/>
+    <text x="316" y="65" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="#fff">U</text>
+  </g>
+
+  <!-- Tarjetita de menú desplegado (mockup) -->
+  <rect x="40" y="104" width="300" height="80" rx="10" fill="#fff" stroke="#C5D5EA" stroke-width="1"/>
+  <!-- avatar grande -->
+  <circle cx="64" cy="128" r="14" fill="#B5D4F4"/>
+  <text x="64" y="133" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#0C447C">U</text>
+  <!-- nombre -->
+  <text x="86" y="125" font-family="sans-serif" font-size="12" font-weight="700" fill="#222">Nombre del usuario</text>
+  <text x="86" y="139" font-family="sans-serif" font-size="11" fill="#666">correo@ejemplo.cl</text>
+  <!-- separador -->
+  <line x1="48" y1="152" x2="332" y2="152" stroke="#E5E7EB" stroke-width="1"/>
+  <!-- opción Ajustes resaltada -->
+  <rect x="44" y="158" width="292" height="22" rx="6" fill="#EEF3FA"/>
+  <!-- icono engranaje (estilo Lucide settings, 8 dientes) -->
+  <g transform="translate(58,169) scale(0.55)" fill="none" stroke="#1B4F8A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10.5,2.3 C10.6,1.6 10.6,-1.6 10.5,-2.3 L8.3,-3 C8.1,-3.6 7.9,-4.1 7.6,-4.6 L8.6,-6.7 C8.2,-7.3 6.7,-8.5 6,-8.9 L4,-7.6 C3.4,-7.9 2.9,-8.1 2.3,-8.3 L1.6,-10.5 C0.9,-10.6 -1.6,-10.6 -2.3,-10.5 L-3,-8.3 C-3.6,-8.1 -4.1,-7.9 -4.6,-7.6 L-6.7,-8.6 C-7.3,-8.2 -8.5,-6.7 -8.9,-6 L-7.6,-4 C-7.9,-3.4 -8.1,-2.9 -8.3,-2.3 L-10.5,-1.6 C-10.6,-0.9 -10.6,1.6 -10.5,2.3 L-8.3,3 C-8.1,3.6 -7.9,4.1 -7.6,4.6 L-8.6,6.7 C-8.2,7.3 -6.7,8.5 -6,8.9 L-4,7.6 C-3.4,7.9 -2.9,8.1 -2.3,8.3 L-1.6,10.5 C-0.9,10.6 1.6,10.6 2.3,10.5 L3,8.3 C3.6,8.1 4.1,7.9 4.6,7.6 L6.7,8.6 C7.3,8.2 8.5,6.7 8.9,6 L7.6,4 C7.9,3.4 8.1,2.9 8.3,2.3 Z"/>
+    <circle cx="0" cy="0" r="3.5"/>
+  </g>
+  <text x="72" y="173" font-family="sans-serif" font-size="12" font-weight="600" fill="#1B4F8A">Ajustes</text>
+  <!-- flecha desde avatar al menú -->
+  <path d="M310,80 Q280,95 250,104" fill="none" stroke="#1B4F8A" stroke-width="1.5" stroke-dasharray="3,3"/>
+
+  <!-- ══ CARD 2 · ENTRAR A AJUSTES ══ -->
+  <rect x="16" y="212" width="348" height="220" rx="14" fill="#EEF3FA" stroke="#C5D5EA" stroke-width="1"/>
+  <circle cx="52" cy="254" r="20" fill="#1B4F8A"/>
+  <text x="52" y="260" text-anchor="middle" font-family="sans-serif" font-size="17" font-weight="700" fill="#fff">2</text>
+  <text x="84" y="242" font-family="sans-serif" font-size="14" font-weight="700" fill="#1B4F8A">Selecciona Ajustes</text>
+  <text x="84" y="261" font-family="sans-serif" font-size="13" fill="#444">Verás la sección</text>
+  <text x="84" y="279" font-family="sans-serif" font-size="13" fill="#444">"Tamaño de letra".</text>
+
+  <!-- flecha animada hacia abajo -->
+  <g class="ad">
+    <line x1="190" y1="288" x2="190" y2="300" stroke="#1B4F8A" stroke-width="2" marker-end="url(#arr)"/>
+  </g>
+
+  <!-- Mockup Tamaño de letra (estilo captura: 3 tarjetas grandes) -->
+  <text x="40" y="320" font-family="sans-serif" font-size="13" font-weight="700" fill="#1B4F8A">Tamaño de letra</text>
+
+  <!-- Tarjeta Pequeño -->
+  <rect x="40" y="330" width="92" height="84" rx="10" fill="#fff" stroke="#C5D5EA" stroke-width="1"/>
+  <text x="86" y="365" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="700" fill="#222">A</text>
+  <text x="86" y="392" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">Pequeño</text>
+
+  <!-- Tarjeta Mediano (seleccionada) -->
+  <rect x="144" y="330" width="92" height="84" rx="10" fill="#EEF3FA" stroke="#1B4F8A" stroke-width="2"/>
+  <text x="190" y="368" text-anchor="middle" font-family="sans-serif" font-size="22" font-weight="700" fill="#1B4F8A">A</text>
+  <text x="190" y="392" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" fill="#1B4F8A">Mediano</text>
+
+  <!-- Tarjeta Grande -->
+  <rect x="248" y="330" width="92" height="84" rx="10" fill="#fff" stroke="#C5D5EA" stroke-width="1"/>
+  <text x="294" y="371" text-anchor="middle" font-family="sans-serif" font-size="26" font-weight="700" fill="#222">A</text>
+  <text x="294" y="392" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">Grande</text>
+
+</svg>

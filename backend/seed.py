@@ -46,20 +46,20 @@ LECCIONES_DATA = [
           "tipo": "tour",
           "titulo": "Los botones que vas a usar",
           "texto": "Esta aplicación tiene pocos botones y son siempre los mismos. Te los presentamos una sola vez y los reconocerás en todas las pantallas.",
-          "apoyo_visual": "Flechas animadas señalando: ① la flecha ← para Volver, ② el menú principal (Inicio), ③ el botón de Chat, ④ el botón de progreso, ⑤ el ajuste de tamaño de letra (A-/A+)."
+          "apoyo_visual": "Flechas animadas señalando: ① la flecha ← para Volver, ② el menú principal (Inicio), ③ el botón de Chat, ④ el botón de progreso, ⑤ el selector de tamaño de letra."
         },
         {
           "n": 3,
           "tipo": "tour",
           "titulo": "Si algo se ve muy chico",
-          "texto": "¿La letra se ve pequeña? Toca el botón A+ para agrandarla. Puedes hacerlo en cualquier momento, en cualquier pantalla.",
-          "apoyo_visual": "Demostración del control A- / A+ cambiando el tamaño del texto en vivo."
+          "texto": "¿La letra se ve pequeña? Elige el tamaño Grande para agrandarla. Puedes hacerlo en cualquier momento, en cualquier pantalla.",
+          "apoyo_visual": "Demostración del selector Pequeño / Mediano / Grande cambiando el tamaño del texto en vivo."
         },
         {
           "n": 4,
           "tipo": "mini_practica",
           "titulo": "Practiquemos juntos",
-          "texto": "Vamos a practicar sin riesgo. Sigue las instrucciones: \"Toca el botón verde para continuar\" → \"Excelente, ahora toca la flecha para volver\" → \"Perfecto, así puedes navegar siempre\".",
+          "texto": "Vamos a practicar sin riesgo. Sigue las instrucciones: \"Toca el botón azul para continuar\" → \"Excelente, ahora toca la flecha para volver\" → \"Perfecto, así puedes navegar siempre\".",
           "apoyo_visual": "Guía paso a paso con refuerzo positivo después de cada toque."
         },
         {
@@ -117,7 +117,7 @@ LECCIONES_DATA = [
             "pregunta": "¿Puedes hacer la letra de la app más grande o más pequeña?",
             "opciones": [
               {
-                "texto": "Sí, con el botón A+ y A-",
+                "texto": "Sí, con el selector de tamaño de letra",
                 "correcta": True
               },
               {
@@ -129,7 +129,7 @@ LECCIONES_DATA = [
                 "correcta": False
               }
             ],
-            "feedback": "Sí. El botón A+ agranda la letra y A- la achica, en cualquier momento."
+            "feedback": "Sí. El selector Grande agranda la letra y Pequeño la achica, en cualquier momento."
           },
           {
             "pregunta": "Si no entiendes algo, ¿qué puedes hacer?",

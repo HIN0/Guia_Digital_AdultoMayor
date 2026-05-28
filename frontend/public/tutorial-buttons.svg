@@ -1,0 +1,75 @@
+<svg width="100%" viewBox="0 0 380 426" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>Los botones que vas a usar</title>
+  <desc>Guía visual de los botones de la aplicación</desc>
+
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#1B4F8A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="arrG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <style>
+      @keyframes bL { 0%,100%{transform:translateX(0)} 50%{transform:translateX(-8px)} }
+      @keyframes bU { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
+      .al  { animation: bL 1.4s ease-in-out infinite; }
+      .au1 { animation: bU 1.4s ease-in-out 0.0s infinite; }
+      .au2 { animation: bU 1.4s ease-in-out 0.2s infinite; }
+      .au3 { animation: bU 1.4s ease-in-out 0.4s infinite; }
+    </style>
+  </defs>
+
+  <!-- ══ CARD 1 · BOTÓN VOLVER ══ -->
+  <rect x="16" y="16" width="348" height="96" rx="14" fill="#EEF3FA" stroke="#C5D5EA" stroke-width="1"/>
+  <circle cx="52" cy="64" r="20" fill="#1B4F8A"/>
+  <text x="52" y="70" text-anchor="middle" font-family="sans-serif" font-size="17" font-weight="700" fill="#fff">1</text>
+  <text x="84" y="50" font-family="sans-serif" font-size="14" font-weight="700" fill="#1B4F8A">Botón Volver</text>
+  <text x="84" y="69" font-family="sans-serif" font-size="13" fill="#444">Te lleva a la pantalla</text>
+  <text x="84" y="85" font-family="sans-serif" font-size="13" fill="#444">anterior.</text>
+  <g class="al">
+    <line x1="232" y1="64" x2="248" y2="64" stroke="#1B4F8A" stroke-width="2" marker-end="url(#arr)"/>
+  </g>
+  <rect x="256" y="46" width="92" height="36" rx="10" fill="#1B4F8A"/>
+  <text x="302" y="69" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="600" fill="#fff">← Volver</text>
+
+  <!-- ══ CARD 2 · NAVEGAR PANTALLAS (botones debajo del texto) ══ -->
+  <rect x="16" y="128" width="348" height="156" rx="14" fill="#EEF3FA" stroke="#C5D5EA" stroke-width="1"/>
+  <circle cx="52" cy="170" r="20" fill="#1B4F8A"/>
+  <text x="52" y="176" text-anchor="middle" font-family="sans-serif" font-size="17" font-weight="700" fill="#fff">2</text>
+  <text x="84" y="158" font-family="sans-serif" font-size="14" font-weight="700" fill="#1B4F8A">Navegar pantallas</text>
+  <text x="84" y="177" font-family="sans-serif" font-size="13" fill="#444">Avanza o retrocede en el contenido.</text>
+
+  <!-- Botones centrados debajo. SVG ancho=380, centro=190 -->
+  <!-- Botón Anterior: w=84, x=140, centro=182 -->
+  <!-- Botón Siguiente: w=96, x=232, centro=280 -->
+  <!-- Gap entre ellos: 8px -->
+
+  <!-- flecha sobre Anterior: centro x=182 -->
+  <g class="au1">
+    <line x1="182" y1="208" x2="182" y2="220" stroke="#1B4F8A" stroke-width="2" marker-end="url(#arr)"/>
+  </g>
+  <!-- flecha sobre Siguiente: centro x=280 -->
+  <g class="au2">
+    <line x1="280" y1="208" x2="280" y2="220" stroke="#1B4F8A" stroke-width="2" marker-end="url(#arr)"/>
+  </g>
+
+  <!-- Botón Anterior -->
+  <rect x="140" y="222" width="84" height="40" rx="10" fill="#fff" stroke="#1B4F8A" stroke-width="2"/>
+  <text x="182" y="247" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="600" fill="#1B4F8A">← Anterior</text>
+  <!-- Botón Siguiente -->
+  <rect x="232" y="222" width="96" height="40" rx="10" fill="#1B4F8A"/>
+  <text x="280" y="247" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="600" fill="#fff">Siguiente →</text>
+
+  <!-- ══ CARD 3 · PROGRESO (sin texto de módulo) ══ -->
+  <rect x="16" y="300" width="348" height="110" rx="14" fill="#EEF3FA" stroke="#C5D5EA" stroke-width="1"/>
+  <circle cx="52" cy="355" r="20" fill="#1B4F8A"/>
+  <text x="52" y="361" text-anchor="middle" font-family="sans-serif" font-size="17" font-weight="700" fill="#fff">3</text>
+  <text x="84" y="336" font-family="sans-serif" font-size="14" font-weight="700" fill="#1B4F8A">Progreso del módulo</text>
+  <text x="84" y="355" font-family="sans-serif" font-size="13" fill="#444">Muestra en qué pantalla</text>
+  <text x="84" y="373" font-family="sans-serif" font-size="13" fill="#444">vas dentro del tema.</text>
+  <!-- preview: solo "2 / 5" + barra, centrados verticalmente -->
+  <text x="358" y="348" text-anchor="end" font-family="sans-serif" font-size="15" font-weight="700" fill="#1B4F8A">2 / 5</text>
+  <rect x="226" y="356" width="132" height="10" rx="5" fill="#D3D1C7"/>
+  <rect x="226" y="356" width="53"  height="10" rx="5" fill="#1B4F8A"/>
+
+</svg>
