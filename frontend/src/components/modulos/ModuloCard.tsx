@@ -8,25 +8,22 @@ interface ModuloCardProps {
 
 const ESTADO_CONFIG = {
   disponible: {
-    borderColor: "#E8853A",
-    numeroBg: "#E8853A",
-    progressColor: "#E8853A",
-    titleColor: "var(--huap-texto)",
-    descColor: "#4A4A4A",
+    gradient: "linear-gradient(145deg, #1E5C8A 0%, #1B4F7A 100%)",
+    numeroBg: "rgba(255,255,255,0.2)",
+    progressTrack: "rgba(255,255,255,0.2)",
+    progressFill: "rgba(255,255,255,0.85)",
   },
   completado: {
-    borderColor: "var(--huap-verde)",
-    numeroBg: "var(--huap-verde)",
-    progressColor: "var(--huap-verde)",
-    titleColor: "var(--huap-texto)",
-    descColor: "#4A4A4A",
+    gradient: "linear-gradient(145deg, #2D7A47 0%, #1E5530 100%)",
+    numeroBg: "rgba(255,255,255,0.2)",
+    progressTrack: "rgba(255,255,255,0.2)",
+    progressFill: "rgba(255,255,255,0.85)",
   },
   bloqueado: {
-    borderColor: "#E0E0E0",
-    numeroBg: "#AAAAAA",
-    progressColor: "#AAAAAA",
-    titleColor: "#AAAAAA",
-    descColor: "#AAAAAA",
+    gradient: "linear-gradient(145deg, #6B7280 0%, #4B5563 100%)",
+    numeroBg: "rgba(255,255,255,0.15)",
+    progressTrack: "rgba(255,255,255,0.15)",
+    progressFill: "rgba(255,255,255,0.5)",
   },
 }
 
@@ -36,21 +33,21 @@ export default function ModuloCard({ modulo }: ModuloCardProps) {
   function renderStatus() {
     if (modulo.estado === "completado") {
       return (
-        <span style={{ color: "var(--huap-verde)", fontSize: "18px", fontWeight: 600 }}>
+        <span style={{ color: "rgba(255,255,255,0.95)", fontSize: "18px", fontWeight: 600 }}>
           ✓ Completado
         </span>
       )
     }
     if (modulo.estado === "bloqueado") {
       return (
-        <span style={{ color: "#777777", fontSize: "18px" }}>
+        <span style={{ color: "rgba(255,255,255,0.7)", fontSize: "18px" }}>
           Completa el Módulo {modulo.numero - 1} para desbloquearlo
         </span>
       )
     }
     if (modulo.leccionesCompletadas !== undefined && modulo.leccionesTotales) {
       return (
-        <span style={{ color: "#4A4A4A", fontSize: "18px" }}>
+        <span style={{ color: "rgba(255,255,255,0.85)", fontSize: "18px" }}>
           {modulo.leccionesCompletadas} de {modulo.leccionesTotales} lecciones
         </span>
       )
@@ -61,11 +58,10 @@ export default function ModuloCard({ modulo }: ModuloCardProps) {
   return (
     <article
       style={{
-        backgroundColor: "white",
+        background: cfg.gradient,
         borderRadius: "16px",
-        borderLeft: `5px solid ${cfg.borderColor}`,
-        boxShadow: "0 1px 6px rgba(0,0,0,0.07)",
-        padding: "20px 20px 20px 18px",
+        boxShadow: "0 2px 10px rgba(0,0,0,0.15)",
+        padding: "20px 20px 20px 20px",
         display: "flex",
         flexDirection: "column",
         gap: "14px",
@@ -97,7 +93,7 @@ export default function ModuloCard({ modulo }: ModuloCardProps) {
         <div>
           <h2
             style={{
-              color: cfg.titleColor,
+              color: "white",
               fontSize: "22px",
               fontWeight: 700,
               lineHeight: 1.3,
@@ -106,7 +102,7 @@ export default function ModuloCard({ modulo }: ModuloCardProps) {
           >
             {modulo.titulo}
           </h2>
-          <p style={{ color: cfg.descColor, fontSize: "18px", lineHeight: 1.5 }}>
+          <p style={{ color: "rgba(255,255,255,0.85)", fontSize: "18px", lineHeight: 1.5 }}>
             {modulo.descripcion}
           </p>
         </div>
@@ -123,7 +119,7 @@ export default function ModuloCard({ modulo }: ModuloCardProps) {
           style={{
             width: "100%",
             height: "8px",
-            backgroundColor: "#E0E0E0",
+            backgroundColor: cfg.progressTrack,
             borderRadius: "4px",
             overflow: "hidden",
           }}
@@ -132,7 +128,7 @@ export default function ModuloCard({ modulo }: ModuloCardProps) {
             style={{
               width: `${modulo.progreso}%`,
               height: "100%",
-              backgroundColor: cfg.progressColor,
+              backgroundColor: cfg.progressFill,
               borderRadius: "4px",
               transition: "width 0.4s ease",
             }}

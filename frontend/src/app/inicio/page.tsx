@@ -12,37 +12,30 @@ export default function InicioPage() {
       <main className="px-5 py-6 w-full mx-auto" style={{ maxWidth: "480px" }}>
 
         {/* Hero */}
-        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: "28px", minHeight: "180px" }}>
-          <div style={{ flex: 1, paddingRight: "8px" }}>
-            <h1 style={{ color: "var(--huap-texto)", fontSize: "28px", fontWeight: 400, lineHeight: 1.2, marginBottom: "16px" }}>
-              Bienvenido a<br />
-              <strong style={{ fontWeight: 800, fontSize: "32px" }}>IA y Salud</strong>
-            </h1>
+        <div style={{ marginBottom: "24px" }}>
+          <p style={{
+            color: "#E05555",
+            fontSize: "0.72rem",
+            fontWeight: 700,
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
+            marginBottom: "16px",
+            lineHeight: 1.4,
+            textAlign: "center",
+          }}>
+            Hospital de Urgencia Asistencia Pública
+          </p>
 
-            <div style={{
-              marginBottom: "16px",
-              color: "#4A4A4A",
-              fontSize: "18px",
-              lineHeight: 1.4,
-            }}>
-              Hospital de Urgencia<br />Asistencia Pública
-            </div>
+          <h1 style={{ color: "var(--huap-texto)", fontSize: "2rem", fontWeight: 400, lineHeight: 1.2, marginBottom: "4px", textAlign: "left" }}>
+            Bienvenido a
+          </h1>
+          <p style={{ color: "var(--huap-azul)", fontSize: "2.33rem", fontWeight: 800, lineHeight: 1.1, marginBottom: "20px", textAlign: "center" }}>
+            IA y Salud
+          </p>
 
-            <p style={{ color: "#4A4A4A", fontSize: "18px", lineHeight: 1.55 }}>
-              Aprende a usar la inteligencia artificial para entender información de salud de forma segura.
-            </p>
-          </div>
-
-          {/* Imagen médico */}
-          <div style={{ flexShrink: 0, width: "48%", maxWidth: "220px", aspectRatio: "1/1", position: "relative" }}>
-            <Image
-              src="/medico.svg"
-              alt="Asistente de salud"
-              fill
-              sizes="(max-width: 480px) 48vw, 220px"
-              style={{ objectFit: "contain", objectPosition: "center" }}
-            />
-          </div>
+          <p style={{ color: "#4A4A4A", fontSize: "1.11rem", lineHeight: 1.55 }}>
+            Aprende a usar inteligencia artificial para entender información de salud de forma segura.
+          </p>
         </div>
 
         {/* Tarjeta asistente educativo */}
@@ -64,17 +57,28 @@ export default function InicioPage() {
             <ShieldCheck size={24} color="white" strokeWidth={2} />
           </div>
           <div style={{ flex: 1 }}>
-            <p style={{ fontWeight: 700, fontSize: "18px", marginBottom: "6px", color: "var(--huap-texto)" }}>
+            <p style={{ fontWeight: 700, fontSize: "1rem", marginBottom: "6px", color: "var(--huap-texto)" }}>
               Asistente educativo
             </p>
-            <p style={{ fontSize: "18px", color: "#4A4A4A", lineHeight: 1.5 }}>
+            <p style={{ fontSize: "1rem", color: "#4A4A4A", lineHeight: 1.5 }}>
               Esta aplicación te entrega información educativa.{" "}
               <strong>No reemplaza la consulta con tu médico o médica.</strong>
             </p>
-            <p style={{ fontSize: "18px", color: "#6B5A3E", marginTop: "6px" }}>
+            <p style={{ fontSize: "1rem", color: "#6B5A3E", marginTop: "6px" }}>
               Si tienes síntomas graves, acude a tu centro de salud más cercano o llama al 131.
             </p>
           </div>
+        </div>
+
+        {/* Imagen médico */}
+        <div style={{ position: "relative", width: "100%", maxWidth: "280px", aspectRatio: "1/1", margin: "0 auto" }}>
+          <Image
+            src="/medico.svg"
+            alt="Asistente de salud"
+            fill
+            sizes="(max-width: 480px) 60vw, 280px"
+            style={{ objectFit: "contain", objectPosition: "center" }}
+          />
         </div>
 
       </main>

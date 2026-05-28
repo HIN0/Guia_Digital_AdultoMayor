@@ -10,19 +10,19 @@ const TABS: { label: string; href: string; matchPaths: string[]; icon: React.Rea
     label: "Inicio",
     href: "/inicio",
     matchPaths: ["/inicio"],
-    icon: <House size={26} strokeWidth={2} />,
+    icon: <House size={34} strokeWidth={2} />,
   },
   {
     label: "Aprender",
     href: "/modulos",
     matchPaths: ["/modulos"],
-    icon: <BookOpenText size={26} strokeWidth={2} />,
+    icon: <BookOpenText size={34} strokeWidth={2} />,
   },
   {
     label: "Chat",
     href: "/chatbot",
     matchPaths: ["/chatbot"],
-    icon: <MessageCircle size={26} strokeWidth={2} />,
+    icon: <MessageCircle size={34} strokeWidth={2} />,
   },
 ]
 
@@ -70,14 +70,13 @@ export default function NavTabs() {
               aria-current={active ? "page" : undefined}
               style={{
                 display: "flex",
+                flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
-                gap: "7px",
+                gap: "4px",
                 flex: 1,
-                padding: "9px 12px",
+                padding: "8px 4px",
                 borderRadius: "12px",
-                fontWeight: active ? 600 : 400,
-                fontSize: "18px",
                 textDecoration: "none",
                 transition: "background 0.15s, color 0.15s",
                 backgroundColor: active ? "var(--huap-azul)" : "transparent",
@@ -85,7 +84,9 @@ export default function NavTabs() {
               }}
             >
               {tab.icon}
-              {tab.label}
+              <span style={{ fontSize: "14px", fontWeight: active ? 600 : 400, lineHeight: 1 }}>
+                {tab.label}
+              </span>
             </Link>
           )
         })}

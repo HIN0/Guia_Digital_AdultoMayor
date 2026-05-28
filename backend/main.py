@@ -1,7 +1,8 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from core.database import Base, engine
+from core.database import Base, engine, SessionLocal
 
 # Importamos las entidades para que SQLAlchemy las registre antes de crear tablas
 from modules.auth import entity as auth_entity
@@ -19,10 +20,28 @@ from modules.progreso.controller import router as progreso_router
 # Crea las tablas en PostgreSQL si no existen (útil en desarrollo)
 Base.metadata.create_all(bind=engine)
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    db = SessionLocal()
+    try:
+        if db.query(educacion_entity.Modulo).count() == 0:
+            from seed import poblar
+            print("⏳ Base de datos vacía — poblando con seed...")
+            poblar(db)
+    except Exception as e:
+        db.rollback()
+        print(f"❌ Error en auto-seed: {e}")
+    finally:
+        db.close()
+    yield
+
+
 app = FastAPI(
     title="Guía Digital Adulto Mayor - API",
     description="API educativa de IA y Salud para personas mayores",
     version="0.1.0",
+    lifespan=lifespan,
 )
 
 # CORS: permite que el frontend (React/Next) llame a esta API

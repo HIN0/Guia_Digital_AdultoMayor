@@ -17,7 +17,7 @@ from core.database import SessionLocal, Base, engine
 from modules.auth.entity import Usuario
 from modules.educacion.entity import Modulo, Leccion, QuizFinal, PreguntaQuiz, OpcionRespuesta
 from modules.progreso.entity import ProgresoLeccion, IntentoQuiz, Insignia, InsigniaObtenida
-from modules.chatbot.entity import Patologia
+# from modules.chatbot.entity import Patologia  # pendiente: módulo chatbot sin entity aún
 
 
 def crear_tablas():
@@ -77,19 +77,19 @@ LECCIONES_DATA = [
         "items": [
           {
             "opcion": "Atrás (flecha ←)",
-            "correcta": true
+            "correcta": True
           },
           {
             "opcion": "Menú",
-            "correcta": false
+            "correcta": False
           },
           {
             "opcion": "Chatbot",
-            "correcta": false
+            "correcta": False
           },
           {
             "opcion": "Ajustes",
-            "correcta": false
+            "correcta": False
           }
         ]
       },
@@ -100,15 +100,15 @@ LECCIONES_DATA = [
             "opciones": [
               {
                 "texto": "El botón Inicio",
-                "correcta": true
+                "correcta": True
               },
               {
                 "texto": "Apagar el teléfono",
-                "correcta": false
+                "correcta": False
               },
               {
                 "texto": "Esperar a que se cierre solo",
-                "correcta": false
+                "correcta": False
               }
             ],
             "feedback": "El botón Inicio siempre te lleva al menú principal desde cualquier pantalla. No tienes que apagar nada."
@@ -118,15 +118,15 @@ LECCIONES_DATA = [
             "opciones": [
               {
                 "texto": "Sí, con el botón A+ y A-",
-                "correcta": true
+                "correcta": True
               },
               {
                 "texto": "No, la letra es fija",
-                "correcta": false
+                "correcta": False
               },
               {
                 "texto": "Solo llamando al hospital",
-                "correcta": false
+                "correcta": False
               }
             ],
             "feedback": "Sí. El botón A+ agranda la letra y A- la achica, en cualquier momento."
@@ -136,15 +136,15 @@ LECCIONES_DATA = [
             "opciones": [
               {
                 "texto": "Volver a leer la lección",
-                "correcta": true
+                "correcta": True
               },
               {
                 "texto": "Cerrar la app y no volver",
-                "correcta": false
+                "correcta": False
               },
               {
                 "texto": "Nada, seguir aunque no entiendas",
-                "correcta": false
+                "correcta": False
               }
             ],
             "feedback": "Puedes volver atrás a releer cuantas veces quieras. Equivocarse es parte de aprender."
@@ -245,15 +245,15 @@ LECCIONES_DATA = [
             "opciones": [
               {
                 "texto": "Un programa que aprende de muchos ejemplos para ayudarte",
-                "correcta": true
+                "correcta": True
               },
               {
                 "texto": "Un robot con sentimientos que vive en el teléfono",
-                "correcta": false
+                "correcta": False
               },
               {
                 "texto": "Una persona del hospital que responde en secreto",
-                "correcta": false
+                "correcta": False
               }
             ],
             "feedback": "La IA es un programa que encuentra patrones en muchos ejemplos. No es una persona ni siente emociones."
@@ -263,15 +263,15 @@ LECCIONES_DATA = [
             "opciones": [
               {
                 "texto": "No, también se equivoca",
-                "correcta": true
+                "correcta": True
               },
               {
                 "texto": "Sí, nunca falla",
-                "correcta": false
+                "correcta": False
               },
               {
                 "texto": "Solo se equivoca de noche",
-                "correcta": false
+                "correcta": False
               }
             ],
             "feedback": "La IA aprende de ejemplos y a veces se equivoca. Por eso hay que usarla con criterio, sobre todo en salud."
@@ -281,15 +281,15 @@ LECCIONES_DATA = [
             "opciones": [
               {
                 "texto": "No, es solo una herramienta de apoyo",
-                "correcta": true
+                "correcta": True
               },
               {
                 "texto": "Sí, es igual que un doctor",
-                "correcta": false
+                "correcta": False
               },
               {
                 "texto": "Sí, pero solo los fines de semana",
-                "correcta": false
+                "correcta": False
               }
             ],
             "feedback": "La IA puede ayudarte a entender información, pero nunca reemplaza la evaluación de un profesional de salud."
@@ -391,15 +391,15 @@ LECCIONES_DATA = [
             "opciones": [
               {
                 "texto": "Explicarte qué significa una palabra médica",
-                "correcta": true
+                "correcta": True
               },
               {
                 "texto": "Recetarte un medicamento",
-                "correcta": false
+                "correcta": False
               },
               {
                 "texto": "Decirte el resultado de tus exámenes",
-                "correcta": false
+                "correcta": False
               }
             ],
             "feedback": "La IA sirve para orientarte y explicarte información general. Recetar e interpretar exámenes es tarea exclusiva de tu médico."
@@ -409,15 +409,15 @@ LECCIONES_DATA = [
             "opciones": [
               {
                 "texto": "Sí, si le das muchos detalles",
-                "correcta": false
+                "correcta": False
               },
               {
                 "texto": "No, solo un médico puede diagnosticar",
-                "correcta": true
+                "correcta": True
               },
               {
                 "texto": "Sí, igual que en el hospital",
-                "correcta": false
+                "correcta": False
               }
             ],
             "feedback": "Un diagnóstico necesita examen físico, historia clínica y exámenes. La IA no puede hacer eso; solo orienta."
@@ -427,15 +427,15 @@ LECCIONES_DATA = [
             "opciones": [
               {
                 "texto": "Cambiando tu tratamiento",
-                "correcta": false
+                "correcta": False
               },
               {
                 "texto": "Cancelando tu próxima consulta",
-                "correcta": false
+                "correcta": False
               },
               {
                 "texto": "Explicándote qué significa esa palabra",
-                "correcta": true
+                "correcta": True
               }
             ],
             "feedback": "La IA es excelente para explicar términos médicos en palabras simples, y así llegas más preparado a tu control."
@@ -528,15 +528,15 @@ LECCIONES_DATA = [
             "opciones": [
               {
                 "texto": "Diagnóstico",
-                "correcta": false
+                "correcta": False
               },
               {
                 "texto": "Alucinación",
-                "correcta": true
+                "correcta": True
               },
               {
                 "texto": "Receta",
-                "correcta": false
+                "correcta": False
               }
             ],
             "feedback": "Se llama alucinación. La IA puede inventar datos con mucha seguridad. Por eso lo importante se confirma."
@@ -546,15 +546,15 @@ LECCIONES_DATA = [
             "opciones": [
               {
                 "texto": "No, lo confirmo con un profesional",
-                "correcta": true
+                "correcta": True
               },
               {
                 "texto": "Sí, porque sonó muy segura",
-                "correcta": false
+                "correcta": False
               },
               {
                 "texto": "Sí, si usa palabras difíciles",
-                "correcta": false
+                "correcta": False
               }
             ],
             "feedback": "Sonar segura no significa tener la razón. En salud, lo importante siempre se confirma con tu médico."
@@ -564,15 +564,15 @@ LECCIONES_DATA = [
             "opciones": [
               {
                 "texto": "Porque la IA no habla español",
-                "correcta": false
+                "correcta": False
               },
               {
                 "texto": "Porque no conoce tu edad, tus remedios ni tus otras enfermedades",
-                "correcta": true
+                "correcta": True
               },
               {
                 "texto": "Porque siempre se equivoca a propósito",
-                "correcta": false
+                "correcta": False
               }
             ],
             "feedback": "La IA da respuestas para la mayoría. Tu médico conoce tu caso completo, y eso hace toda la diferencia."
@@ -678,15 +678,15 @@ LECCIONES_DATA = [
             "opciones": [
               {
                 "texto": "No se los das y desconfías",
-                "correcta": true
+                "correcta": True
               },
               {
                 "texto": "Se los das",
-                "correcta": false
+                "correcta": False
               },
               {
                 "texto": "Le das solo el RUT",
-                "correcta": false
+                "correcta": False
               }
             ],
             "feedback": "Una IA confiable nunca necesita tu RUT ni tu dirección para responder dudas de salud."
@@ -696,15 +696,15 @@ LECCIONES_DATA = [
             "opciones": [
               {
                 "texto": "No, nunca se le pregunta nada a la IA",
-                "correcta": false
+                "correcta": False
               },
               {
                 "texto": "Solo si le das tu dirección primero",
-                "correcta": false
+                "correcta": False
               },
               {
                 "texto": "Sí, es información general, no datos personales",
-                "correcta": true
+                "correcta": True
               }
             ],
             "feedback": "Correcto. Preguntar por información general es seguro. El problema son los datos que te identifican."
@@ -714,15 +714,15 @@ LECCIONES_DATA = [
             "opciones": [
               {
                 "texto": "No la mando y llamo directamente al hospital para confirmar",
-                "correcta": true
+                "correcta": True
               },
               {
                 "texto": "La mando de inmediato",
-                "correcta": false
+                "correcta": False
               },
               {
                 "texto": "Mando solo la mitad de la foto",
-                "correcta": false
+                "correcta": False
               }
             ],
             "feedback": "Ningún hospital pide eso por WhatsApp. Ante la duda, confirma llamando directamente al número oficial."
@@ -821,15 +821,15 @@ LECCIONES_DATA = [
             "opciones": [
               {
                 "texto": "Te ofrecen información gratis",
-                "correcta": false
+                "correcta": False
               },
               {
                 "texto": "El sitio tiene fotos",
-                "correcta": false
+                "correcta": False
               },
               {
                 "texto": "Te prometen curas milagrosas",
-                "correcta": true
+                "correcta": True
               }
             ],
             "feedback": "Las curas milagrosas no existen. Esa promesa es la señal de alerta más clara de una estafa."
@@ -839,15 +839,15 @@ LECCIONES_DATA = [
             "opciones": [
               {
                 "texto": "Cuelgo y llamo al hospital al número oficial",
-                "correcta": true
+                "correcta": True
               },
               {
                 "texto": "Pago de inmediato para no perder la cita",
-                "correcta": false
+                "correcta": False
               },
               {
                 "texto": "Respondo el WhatsApp pidiendo más datos",
-                "correcta": false
+                "correcta": False
               }
             ],
             "feedback": "Los hospitales no cobran citas por WhatsApp. Cuelga y verifica llamando tú mismo al número oficial."
@@ -857,15 +857,15 @@ LECCIONES_DATA = [
             "opciones": [
               {
                 "texto": "Sí, mientras más especialidades mejor",
-                "correcta": false
+                "correcta": False
               },
               {
                 "texto": "No, los médicos reales se especializan en áreas específicas",
-                "correcta": true
+                "correcta": True
               },
               {
                 "texto": "Sí, si tiene muchas estrellas",
-                "correcta": false
+                "correcta": False
               }
             ],
             "feedback": "Nadie es especialista en todo. Esa exageración es típica de las páginas falsas."
@@ -888,22 +888,22 @@ QUIZZES_DATA = [
     "quiz_final_id": "QF1",
     "modulo_id": 1,
     "minimo_aciertos": 5,
-    "bloqueante": true,
+    "bloqueante": True,
     "preguntas": [
       {
         "pregunta": "En palabras simples, ¿qué es la inteligencia artificial?",
         "opciones": [
           {
             "texto": "Un programa que aprende de muchos ejemplos para ayudarte",
-            "correcta": true
+            "correcta": True
           },
           {
             "texto": "Una persona del hospital que responde en secreto",
-            "correcta": false
+            "correcta": False
           },
           {
             "texto": "Un robot con sentimientos",
-            "correcta": false
+            "correcta": False
           }
         ],
         "feedback": "La IA es un programa que encuentra patrones en ejemplos. No es una persona ni siente."
@@ -913,15 +913,15 @@ QUIZZES_DATA = [
         "opciones": [
           {
             "texto": "Explicarte una palabra médica que no entendiste",
-            "correcta": true
+            "correcta": True
           },
           {
             "texto": "Recetarte un medicamento",
-            "correcta": false
+            "correcta": False
           },
           {
             "texto": "Interpretar tus exámenes de sangre",
-            "correcta": false
+            "correcta": False
           }
         ],
         "feedback": "La IA orienta y explica. Recetar e interpretar exámenes es tarea exclusiva del médico."
@@ -931,15 +931,15 @@ QUIZZES_DATA = [
         "opciones": [
           {
             "texto": "Alucinación",
-            "correcta": true
+            "correcta": True
           },
           {
             "texto": "Diagnóstico",
-            "correcta": false
+            "correcta": False
           },
           {
             "texto": "Consulta",
-            "correcta": false
+            "correcta": False
           }
         ],
         "feedback": "Se llama alucinación. Por eso, lo importante de salud siempre se confirma."
@@ -949,15 +949,15 @@ QUIZZES_DATA = [
         "opciones": [
           {
             "texto": "No, lo confirmo con un profesional",
-            "correcta": true
+            "correcta": True
           },
           {
             "texto": "Sí, porque sonó muy segura",
-            "correcta": false
+            "correcta": False
           },
           {
             "texto": "Sí, si usó palabras difíciles",
-            "correcta": false
+            "correcta": False
           }
         ],
         "feedback": "Sonar segura no es tener la razón. Lo importante se confirma con tu médico o farmacéutico."
@@ -967,15 +967,15 @@ QUIZZES_DATA = [
         "opciones": [
           {
             "texto": "Tu RUT y tu clave del banco",
-            "correcta": true
+            "correcta": True
           },
           {
             "texto": "Una duda general sobre la diabetes",
-            "correcta": false
+            "correcta": False
           },
           {
             "texto": "Que tienes dolor de cabeza",
-            "correcta": false
+            "correcta": False
           }
         ],
         "feedback": "Nunca compartas datos que te identifican o dan acceso a tu dinero, como el RUT o claves."
@@ -985,15 +985,15 @@ QUIZZES_DATA = [
         "opciones": [
           {
             "texto": "Te prometen una cura milagrosa",
-            "correcta": true
+            "correcta": True
           },
           {
             "texto": "Te dan información gratis",
-            "correcta": false
+            "correcta": False
           },
           {
             "texto": "La página tiene fotos",
-            "correcta": false
+            "correcta": False
           }
         ],
         "feedback": "Las curas milagrosas no existen: son la señal más clara de estafa."
@@ -1003,15 +1003,15 @@ QUIZZES_DATA = [
         "opciones": [
           {
             "texto": "Volver a leer la lección o preguntar al chatbot",
-            "correcta": true
+            "correcta": True
           },
           {
             "texto": "Cerrar la app y no volver",
-            "correcta": false
+            "correcta": False
           },
           {
             "texto": "Nada, seguir aunque no entiendas",
-            "correcta": false
+            "correcta": False
           }
         ],
         "feedback": "Puedes volver atrás a releer cuantas veces quieras y también preguntarle al asistente."
@@ -1074,19 +1074,14 @@ def poblar(db: Session):
     print(f"✓ {len(QUIZZES_DATA)} quiz final insertado")
 
     for idata in [
-        {"nombre": "Conocedor de la IA",   "descripcion": "Completaste el Módulo 1: Conocer la IA",      "icono": "🧠"},
-        {"nombre": "Practicante de la IA", "descripcion": "Completaste el Módulo 2: Practicar con la IA", "icono": "💪"},
+        {"nombre": "Conocedor de la IA",   "descripcion": "Completaste el Módulo 1: Conocer la IA",      "icono_url": "🧠"},
+        {"nombre": "Practicante de la IA", "descripcion": "Completaste el Módulo 2: Practicar con la IA", "icono_url": "💪"},
     ]:
         db.add(Insignia(**idata))
 
-    for pdata in [
-        {"nombre": "Hipertensión",         "descripcion": "Presión arterial alta"},
-        {"nombre": "Diabetes tipo 2",      "descripcion": "Enfermedad metabólica con azúcar elevada en sangre"},
-        {"nombre": "Artrosis",             "descripcion": "Desgaste del cartílago articular"},
-        {"nombre": "Colesterol alto",      "descripcion": "Niveles elevados de colesterol en sangre"},
-        {"nombre": "Insuficiencia venosa", "descripcion": "Dificultad del retorno venoso en las piernas"},
-    ]:
-        db.add(Patologia(**pdata))
+    # Patologías pendientes: requiere módulo chatbot implementado
+    # for pdata in [...]:
+    #     db.add(Patologia(**pdata))
 
     db.commit()
     print("\n✅ Base de datos poblada exitosamente.")
@@ -1102,7 +1097,7 @@ def reset_datos(db: Session):
     db.query(QuizFinal).delete()
     db.query(Leccion).delete()
     db.query(Modulo).delete()
-    db.query(Patologia).delete()
+    # db.query(Patologia).delete()  # pendiente: módulo chatbot sin entity aún
     db.query(Usuario).delete()
     db.commit()
     print("✓ Datos eliminados. Listo para re-poblar.")

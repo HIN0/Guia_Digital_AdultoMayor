@@ -1,76 +1,66 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Link from "next/link"
 import Header from "@/components/layout/Header"
 import ModuloCard from "@/components/modulos/ModuloCard"
+import { getModulos, type ModuloResumen } from "@/lib/api"
 import type { Modulo } from "@/types"
 
-const MODULOS_ESTATICOS = [
-  {
-    id: 1,
-    numero: 1,
-    titulo: "Entender qué es la IA",
-    descripcion: "Cómo funciona, qué puede y qué no puede hacer",
-    leccionesTotales: 6,
-  },
-  {
-    id: 2,
-    numero: 2,
-    titulo: "Practicar con la IA",
-    descripcion: "Hacer preguntas, leer respuestas, verificar",
-    leccionesTotales: 6,
-  },
-  {
-    id: 3,
-    numero: 3,
-    titulo: "Asistente de IA",
-    descripcion: "Conversa sobre temas de salud",
-    leccionesTotales: 0,
-  },
-]
+// Datos de display estáticos indexados por orden (1, 2, 3)
+const DISPLAY: Record<number, { titulo: string; descripcion: string; leccionesTotales: number }> = {
+  1: { titulo: "Entender qué es la IA",   descripcion: "Cómo funciona, qué puede y qué no puede hacer", leccionesTotales: 6 },
+  2: { titulo: "Practicar con la IA",     descripcion: "Hacer preguntas, leer respuestas, verificar",   leccionesTotales: 6 },
+  3: { titulo: "Asistente de IA",         descripcion: "Conversa sobre temas de salud",                 leccionesTotales: 0 },
+}
 
-function cargarModulos(): Modulo[] {
+function construirModulos(apiModulos: ModuloResumen[]): Modulo[] {
   const mod1completado = localStorage.getItem("huap_mod1_completado") === "true"
-  const quiz1aprobado = localStorage.getItem("huap_quiz1_aprobado") === "true"
-  const mod1progreso = Math.min(
-    100,
-    parseInt(localStorage.getItem("huap_mod1_progreso") ?? "0", 10)
-  )
-  const mod2progreso = Math.min(
-    100,
-    parseInt(localStorage.getItem("huap_mod2_progreso") ?? "0", 10)
-  )
+  const quiz1aprobado  = localStorage.getItem("huap_quiz1_aprobado")  === "true"
 
-  const mod1Lecciones = Math.round((mod1progreso / 100) * MODULOS_ESTATICOS[0].leccionesTotales)
-  const mod2Lecciones = Math.round((mod2progreso / 100) * MODULOS_ESTATICOS[1].leccionesTotales)
+  const mod1Lecciones: number[] = JSON.parse(localStorage.getItem("huap_mod1_lecciones_completadas") ?? "[]")
+  const mod2Lecciones: number[] = JSON.parse(localStorage.getItem("huap_mod2_lecciones_completadas") ?? "[]")
 
-  return [
-    {
-      ...MODULOS_ESTATICOS[0],
-      estado: mod1completado ? "completado" : "disponible",
-      progreso: mod1completado ? 100 : mod1progreso,
-      leccionesCompletadas: mod1completado ? MODULOS_ESTATICOS[0].leccionesTotales : mod1Lecciones,
-    },
-    {
-      ...MODULOS_ESTATICOS[1],
-      estado: mod1completado ? "disponible" : "bloqueado",
-      progreso: mod1completado ? mod2progreso : 0,
-      leccionesCompletadas: mod1completado ? mod2Lecciones : 0,
-    },
-    {
-      ...MODULOS_ESTATICOS[2],
+  return apiModulos.map((m) => {
+    const display = DISPLAY[m.orden] ?? { titulo: m.nombre, descripcion: "", leccionesTotales: 0 }
+    const leccionesTotales = display.leccionesTotales
+
+    if (m.orden === 1) {
+      const completadas = mod1Lecciones.length
+      const progreso = leccionesTotales > 0 ? Math.round((completadas / leccionesTotales) * 100) : 0
+      return {
+        id: m.id, numero: m.orden, ...display,
+        estado: mod1completado ? "completado" : "disponible",
+        progreso: mod1completado ? 100 : progreso,
+        leccionesCompletadas: mod1completado ? leccionesTotales : completadas,
+      }
+    }
+    if (m.orden === 2) {
+      const completadas = mod2Lecciones.length
+      const progreso = leccionesTotales > 0 ? Math.round((completadas / leccionesTotales) * 100) : 0
+      return {
+        id: m.id, numero: m.orden, ...display,
+        estado: mod1completado ? "disponible" : "bloqueado",
+        progreso: mod1completado ? progreso : 0,
+        leccionesCompletadas: mod1completado ? completadas : 0,
+      }
+    }
+    return {
+      id: m.id, numero: m.orden, ...display,
       estado: quiz1aprobado ? "disponible" : "bloqueado",
       progreso: 0,
       leccionesCompletadas: 0,
-    },
-  ]
+    }
+  })
 }
 
 export default function ModulosPage() {
   const [modulos, setModulos] = useState<Modulo[] | null>(null)
 
   useEffect(() => {
-    setModulos(cargarModulos())
+    getModulos()
+      .then((apiModulos) => setModulos(construirModulos(apiModulos)))
+      .catch(() => setModulos([]))  // si el back no responde, muestra lista vacía
   }, [])
 
   return (
@@ -104,9 +94,15 @@ export default function ModulosPage() {
           </div>
         ) : (
           <div className="flex flex-col gap-5">
-            {modulos.map((modulo) => (
-              <ModuloCard key={modulo.id} modulo={modulo} />
-            ))}
+            {modulos.map((modulo) =>
+              modulo.estado !== "bloqueado" ? (
+                <Link key={modulo.id} href={`/modulos/${modulo.id}`} style={{ textDecoration: "none" }}>
+                  <ModuloCard modulo={modulo} />
+                </Link>
+              ) : (
+                <ModuloCard key={modulo.id} modulo={modulo} />
+              )
+            )}
           </div>
         )}
       </main>
