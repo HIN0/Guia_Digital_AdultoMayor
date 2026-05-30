@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
-import { CheckCircle, Circle, ChevronRight } from "lucide-react"
+import { CheckCircle, ChevronRight, ArrowLeft } from "lucide-react"
 import Header from "@/components/layout/Header"
 import { getModuloDetalle, type ModuloDetalle } from "@/lib/api"
 
@@ -60,11 +60,14 @@ export default function ModuloDetallePage() {
           </div>
         ) : (
           <>
+            {/* Cabecera */}
             <div style={{ marginBottom: "28px" }}>
               <button
                 onClick={() => router.push("/modulos")}
                 style={{
-                  alignSelf: "flex-start",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "8px",
                   padding: "12px 20px",
                   borderRadius: "12px",
                   border: "none",
@@ -73,24 +76,46 @@ export default function ModuloDetallePage() {
                   fontSize: "17px",
                   fontWeight: 600,
                   cursor: "pointer",
-                  marginBottom: "16px",
+                  marginBottom: "20px",
                 }}
               >
-                ← Volver a módulos
+                <ArrowLeft size={20} />
+                Volver a módulos
               </button>
 
-              <h1 style={{ color: "var(--huap-azul)" }}>
+              <h1 style={{ color: "var(--huap-azul)", fontSize: "28px", fontWeight: 700 }}>
                 Módulo {modulo.orden}
               </h1>
-              <p style={{ color: "#4A4A4A", fontSize: "18px", marginTop: "6px" }}>
+              <p style={{ color: "#4A4A4A", fontSize: "19px", marginTop: "6px", fontWeight: 500 }}>
                 {modulo.nombre}
               </p>
-              <p style={{ color: "#888", fontSize: "16px", marginTop: "4px" }}>
-                {leccionesCompletadas.size} de {modulo.lecciones.length} lecciones completadas
-              </p>
+
+              {/* Barra de progreso */}
+              <div style={{ marginTop: "16px" }}>
+                <p style={{ color: "#666", fontSize: "15px", marginBottom: "8px" }}>
+                  {leccionesCompletadas.size} de {modulo.lecciones.length} lecciones completadas
+                </p>
+                <div style={{
+                  backgroundColor: "#E8EDF2",
+                  borderRadius: "999px",
+                  height: "10px",
+                  overflow: "hidden",
+                }}>
+                  <div style={{
+                    backgroundColor: "var(--huap-verde)",
+                    height: "100%",
+                    borderRadius: "999px",
+                    width: `${modulo.lecciones.length > 0
+                      ? (leccionesCompletadas.size / modulo.lecciones.length) * 100
+                      : 0}%`,
+                    transition: "width 0.4s ease",
+                  }} />
+                </div>
+              </div>
             </div>
 
-            <div className="flex flex-col gap-4">
+            {/* Lista de lecciones */}
+            <div className="flex flex-col gap-3">
               {modulo.lecciones.map((leccion) => {
                 const completada = leccionesCompletadas.has(leccion.id)
                 return (
@@ -100,32 +125,51 @@ export default function ModuloDetallePage() {
                       router.push(`/modulos/${moduloId}/lecciones/${leccion.id}`)
                     }
                     style={{
-                      backgroundColor: "white",
+                      backgroundColor: completada ? "#F0FAF4" : "white",
                       border: `2px solid ${completada ? "var(--huap-verde)" : "#E0E0E0"}`,
-                      borderRadius: "12px",
-                      padding: "18px 20px",
+                      borderRadius: "16px",
+                      padding: "20px 20px",
                       cursor: "pointer",
                       display: "flex",
                       alignItems: "center",
                       gap: "16px",
                       textAlign: "left",
                       width: "100%",
+                      transition: "box-shadow 0.15s ease",
+                      boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
                     }}
                   >
-                    {completada ? (
-                      <CheckCircle size={28} color="var(--huap-verde)" style={{ flexShrink: 0 }} />
-                    ) : (
-                      <Circle size={28} color="#C0C0C0" style={{ flexShrink: 0 }} />
-                    )}
-                    <div style={{ flex: 1 }}>
-                      <p style={{ fontSize: "13px", color: "#888", marginBottom: "3px" }}>
+                    {/* Círculo numerado */}
+                    <div style={{
+                      width: "48px",
+                      height: "48px",
+                      borderRadius: "50%",
+                      backgroundColor: completada ? "var(--huap-verde)" : "#F0F0F0",
+                      border: `2px solid ${completada ? "var(--huap-verde)" : "#D0D0D0"}`,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                    }}>
+                      {completada
+                        ? <CheckCircle size={26} color="white" strokeWidth={2.5} />
+                        : <span style={{ fontSize: "17px", fontWeight: 700, color: "#999" }}>
+                            {leccion.orden}
+                          </span>
+                      }
+                    </div>
+
+                    {/* Texto */}
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ fontSize: "13px", color: completada ? "var(--huap-verde)" : "#999", marginBottom: "3px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em" }}>
                         Lección {leccion.orden}
                       </p>
-                      <p style={{ fontSize: "18px", color: "#222", fontWeight: 600 }}>
+                      <p style={{ fontSize: "18px", color: completada ? "#1a1a1a" : "#333", fontWeight: 600, lineHeight: 1.3 }}>
                         {leccion.titulo}
                       </p>
                     </div>
-                    <ChevronRight size={22} color="#C0C0C0" />
+
+                    <ChevronRight size={26} color={completada ? "var(--huap-verde)" : "#C0C0C0"} strokeWidth={2} />
                   </button>
                 )
               })}

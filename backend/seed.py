@@ -207,7 +207,7 @@ LECCIONES_DATA = [
           "n": 6,
           "tipo": "cierre",
           "titulo": "Punto Clave",
-          "texto": "La IA es una herramienta útil, no un reemplazo de tu doctor. Úsala para aprender y preparar preguntas, pero siempre confirma la información importante de salud con un profesional.",
+          "texto": "La IA es una herramienta útil, no un reemplazo de tu médico. Úsala para aprender y preparar preguntas, pero siempre confirma la información importante de salud con un profesional.",
           "apoyo_visual": "Resumen con tres viñetas y marca de avance."
         }
       ],
@@ -284,7 +284,7 @@ LECCIONES_DATA = [
                 "correcta": True
               },
               {
-                "texto": "Sí, es igual que un doctor",
+                "texto": "Sí, es igual que un médico",
                 "correcta": False
               },
               {
@@ -338,14 +338,14 @@ LECCIONES_DATA = [
           "n": 4,
           "tipo": "advertencia",
           "titulo": "Lo Que NO Debes Hacer",
-          "texto": "Nunca uses la IA para: autodiagnosticarte, cambiar tu medicación, reemplazar la visita al doctor, o tomar decisiones urgentes de salud. La IA es para aprender, no para decisiones médicas.",
+          "texto": "Nunca uses la IA para: autodiagnosticarte, cambiar tu medicación, reemplazar la visita al médico, o tomar decisiones urgentes de salud. La IA es para aprender, no para decisiones médicas.",
           "apoyo_visual": "Lista con íconos rojos de \"no\" frente a cada límite."
         },
         {
           "n": 5,
           "tipo": "cierre",
           "titulo": "En resumen",
-          "texto": "La IA en salud sirve para entender, informarte y recordar cuidados generales. Nunca para diagnosticar ni reemplazar a tu doctor.",
+          "texto": "La IA en salud sirve para entender, informarte y recordar cuidados generales. Nunca para diagnosticar ni reemplazar a tu médico.",
           "apoyo_visual": "Resumen con tres viñetas y marca de avance."
         }
       ],
@@ -423,7 +423,7 @@ LECCIONES_DATA = [
             "feedback": "Un diagnóstico necesita examen físico, historia clínica y exámenes. La IA no puede hacer eso; solo orienta."
           },
           {
-            "pregunta": "Tu doctor mencionó una palabra que no entendiste. ¿Cómo te ayuda la IA?",
+            "pregunta": "Tu médico mencionó una palabra que no entendiste. ¿Cómo te ayuda la IA?",
             "opciones": [
               {
                 "texto": "Cambiando tu tratamiento",
@@ -491,7 +491,7 @@ LECCIONES_DATA = [
           "n": 5,
           "tipo": "ejemplo_real",
           "titulo": "Un caso para recordar",
-          "texto": "La señora Rosa le preguntó a una IA por un dolor y la IA le sugirió un remedio con mucha seguridad. Por suerte, Rosa lo consultó con su doctora, quien le explicó que ese remedio le hacía mal por otro medicamento que ya tomaba. Confirmar le evitó un problema serio.",
+          "texto": "La señora Rosa le preguntó a una IA por un dolor y la IA le sugirió un remedio con mucha seguridad. Por suerte, Rosa lo consultó con su médica, quien le explicó que ese remedio le hacía mal por otro medicamento que ya tomaba. Confirmar le evitó un problema serio.",
           "apoyo_visual": "Viñeta del caso con mensaje: \"confirmar la salvó de un error\"."
         },
         {
@@ -600,7 +600,7 @@ LECCIONES_DATA = [
           "n": 1,
           "tipo": "analogia",
           "titulo": "Hablarle a la IA no es hablar en privado",
-          "texto": "Cuando le hablas a la IA, es como gritar tu mensaje en una plaza llena de gente. Algunas IAs guardan todo lo que escribes. No es como hablar en privado con tu doctor en su consulta.",
+          "texto": "Cuando le hablas a la IA, es como gritar tu mensaje en una plaza llena de gente. Algunas IAs guardan todo lo que escribes. No es como hablar en privado con tu médico en su consulta.",
           "apoyo_visual": "Ilustración de una plaza con mucha gente escuchando, frente a una consulta médica cerrada."
         },
         {
@@ -628,7 +628,7 @@ LECCIONES_DATA = [
           "n": 5,
           "tipo": "cierre",
           "titulo": "Recuerda siempre",
-          "texto": "Los datos personales se guardan para ti y tu doctor, no para la IA. Si una IA te pide datos personales para ayudarte mejor, desconfía: una IA confiable nunca necesita tu RUT ni tu dirección para responder dudas de salud.",
+          "texto": "Los datos personales se guardan para ti y tu médico, no para la IA. Si una IA te pide datos personales para ayudarte mejor, desconfía: una IA confiable nunca necesita tu RUT ni tu dirección para responder dudas de salud.",
           "apoyo_visual": "Mensaje de cierre destacado con candado 🔒."
         }
       ],
@@ -750,14 +750,14 @@ LECCIONES_DATA = [
           "n": 1,
           "tipo": "concepto",
           "titulo": "No todo lo que parece un hospital lo es",
-          "texto": "No todo lo que parece un hospital o un doctor en internet, lo es. Hay personas que crean páginas y mensajes falsos para engañarte y quitarte tu dinero o tus datos. Aprender a reconocerlos te protege.",
+          "texto": "No todo lo que parece un hospital o un médico en internet, lo es. Hay personas que crean páginas y mensajes falsos para engañarte y quitarte tu dinero o tus datos. Aprender a reconocerlos te protege.",
           "apoyo_visual": "Ilustración de un mensaje con disfraz de hospital y una alerta."
         },
         {
           "n": 2,
           "tipo": "concepto",
           "titulo": "Tres señales de alerta",
-          "texto": "Desconfía siempre que algo: ① te promete curas milagrosas, ② te apura (responde ya o pierdes el cupo), o ③ te pide pagar antes de explicarte nada. Los servicios de salud de verdad no funcionan así.",
+          "texto": "Desconfía siempre que algo: te promete curas milagrosas, te apura (responde ya o pierdes el cupo), o te pide pagar antes de explicarte nada. Los servicios de salud de verdad no funcionan así.",
           "apoyo_visual": "Tres tarjetas de alerta: 🪄 cura milagrosa, ⏱️ te apura, 💳 te pide pagar."
         },
         {
