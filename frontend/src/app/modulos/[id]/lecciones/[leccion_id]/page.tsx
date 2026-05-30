@@ -1,27 +1,50 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import Image from "next/image"
 import Header from "@/components/layout/Header"
+import { Trophy, RefreshCw } from "lucide-react"
 import { getLeccion, completarLeccion, type LeccionDetalle, type PreguntaQuizCorto } from "@/lib/api"
 
 const IMAGENES_APOYO: Record<string, string> = {
-  'Ilustración cálida de una persona mayor sonriendo frente a un teléfono. Botón verde grande "Comenzar".': "/medico_bienvenida.svg",
-  "Flechas animadas señalando: ① la flecha ← para Volver, ② el menú principal (Inicio), ③ el botón de Chat, ④ el botón de progreso, ⑤ el ajuste de tamaño de letra (selector de tamaño de letra).": "/tutorial-buttons.svg",
-  "Demostración del selector Pequeño / Mediano / Grande cambiando el tamaño del texto en vivo.": "/ajustar-tamano-letra.svg",
-  "Guía paso a paso con refuerzo positivo después de cada toque.": "/pract.svg",
-  "Mensaje de felicitación con marca de avance del módulo.": "/congre.svg",
-  "Ilustración simple: un computador rodeado de ejemplos con una flecha que sale hacia una respuesta.": "/Chat-ia.svg",
-  "Cuatro tarjetas: 📷 reconocer cara, ✍️ corregir texto, 🗺️ sugerir ruta, 🔊 asistente de voz.": "/IA-2.svg",
-  "Analogía visual del aprendizaje por ejemplos.": "/IA-3.svg",
-  "Comparación: calculadora 🧮 = herramienta útil / IA 🤖 = herramienta útil.": "/IA-4.svg",
-  "Ilustración de un chatbot conversando con un usuario.": "/IA-5.svg",
-  "Resumen con tres viñetas y marca de avance.": "/IA-6.svg",
-  "Ícono de corazón con un signo de ayuda.": "/IA-SALUD-1.svg",
-  "Tres tarjetas: 📖 explicar palabras, ℹ️ información general, ⏰ recordatorios.": "/IA-SALUD-2.svg",
-  "Viñeta ilustrada de don Luis consultando la app en casa.": "/IA-SALUD-3.svg",
-  'Lista con íconos rojos de "no" frente a cada límite.': "/IA-SALUD-4.svg",
+  // L1 — Bienvenida y navegación
+  'Ilustración cálida de una persona mayor sonriendo frente a un teléfono. Botón verde grande "Comenzar".': "/lecciones/L1-1.svg",
+  "Flechas animadas señalando: ① la flecha ← para Volver, ② el menú principal (Inicio), ③ el botón de Chat, ④ el botón de progreso, ⑤ el ajuste de tamaño de letra (selector de tamaño de letra).": "/lecciones/L1-2.svg",
+  "Demostración del selector Pequeño / Mediano / Grande cambiando el tamaño del texto en vivo.": "/lecciones/L1-3.svg",
+  "Guía paso a paso con refuerzo positivo después de cada toque.": "/lecciones/L1-4.svg",
+  "Mensaje de felicitación con marca de avance del módulo.": "/lecciones/L1-5.svg",
+  // L2 — ¿Qué es la IA?
+  "Ilustración simple: un computador rodeado de ejemplos con una flecha que sale hacia una respuesta.": "/lecciones/L2-1.svg",
+  "Cuatro tarjetas: 📷 reconocer cara, ✍️ corregir texto, 🗺️ sugerir ruta, 🔊 asistente de voz.": "/lecciones/L2-2.svg",
+  "Analogía visual del aprendizaje por ejemplos.": "/lecciones/L2-3.svg",
+  "Comparación: calculadora 🧮 = herramienta útil / IA 🤖 = herramienta útil.": "/lecciones/L2-4.svg",
+  "Ilustración de un chatbot conversando con un usuario.": "/lecciones/L2-5.svg",
+  "Resumen con tres viñetas y marca de avance.": "/lecciones/L2-6.svg",
+  // L3 — La IA en salud
+  "Ícono de corazón con un signo de ayuda.": "/lecciones/L3-1.svg",
+  "Tres tarjetas: 📖 explicar palabras, ℹ️ información general, ⏰ recordatorios.": "/lecciones/L3-2.svg",
+  "Viñeta ilustrada de don Luis consultando la app en casa.": "/lecciones/L3-3.svg",
+  'Lista con íconos rojos de "no" frente a cada límite.': "/lecciones/L3-4.svg",
+  // L5 — Privacidad y datos
+  "Ilustración de una plaza con mucha gente escuchando, frente a una consulta médica cerrada.": "/lecciones/L5-1.svg",
+  "Lista verde: síntomas en general, dudas sobre una enfermedad, preguntas de orientación.": "/lecciones/L5-2.svg",
+  "Lista roja: RUT, dirección, Fonasa, fotos con nombre, tarjeta bancaria, contraseñas.": "/lecciones/L5-3.svg",
+  "Viñeta del caso de María recibiendo publicidad no deseada.": "/lecciones/L5-4.svg",
+  "Mensaje de cierre destacado con candado 🔒.": "/lecciones/L5-5.svg",
+  // L6 — Reconocer engaños
+  "Ilustración de un mensaje con disfraz de hospital y una alerta.": "/lecciones/L6-1.svg",
+  "Tres tarjetas de alerta: 🪄 cura milagrosa, ⏱️ te apura, 💳 te pide pagar.": "/lecciones/L6-2.svg",
+  "Pasos ilustrados: buscar en Google, llamar al número oficial, no tocar links de WhatsApp.": "/lecciones/L6-3.svg",
+  "Capturas comparadas: mensaje falso vs. sitio oficial gob.cl.": "/lecciones/L6-4.svg",
+  "Resumen con las tres señales y la acción de verificar.": "/lecciones/L6-5.svg",
+  // L4 — Riesgos y limitaciones
+  "Ilustración de un robot hablando con tono seguro mientras un signo de interrogación flota encima.": "/lecciones/L4-1.svg",
+  "Ejemplo de una respuesta inventada marcada con una lupa y la palabra \"alucinación\".": "/lecciones/L4-2.svg",
+  "Calendario con una fecha de corte y un reloj indicando \"puede estar atrasada\".": "/lecciones/L4-3.svg",
+  "Comparación: una multitud (lo general) frente a una sola persona destacada (tu caso).": "/lecciones/L4-4.svg",
+  "Viñeta del caso con mensaje: \"confirmar la salvó de un error\".": "/lecciones/L4-5.svg",
+  "Resumen con tres riesgos y la regla de oro destacada.": "/lecciones/L4-6.svg",
 }
 
 type Fase = "paginas" | "quiz" | "resultado"
@@ -50,6 +73,29 @@ export default function LeccionPage() {
     aciertos: 0,
   })
   const [aprobado, setAprobado] = useState(false)
+  const [tocandoAudio, setTocandoAudio] = useState(false)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+
+  function detenerAudio() {
+    if (audioRef.current) {
+      audioRef.current.pause()
+      audioRef.current.currentTime = 0
+    }
+    setTocandoAudio(false)
+  }
+
+  function toggleAudio(numero: number) {
+    if (audioRef.current && !audioRef.current.paused) {
+      detenerAudio()
+      return
+    }
+    detenerAudio()
+    const url = `/audio/L${leccionId}/L${leccionId}-${numero}.mp3`
+    const audio = new Audio(url)
+    audioRef.current = audio
+    audio.play().then(() => setTocandoAudio(true)).catch(() => setTocandoAudio(false))
+    audio.onended = () => setTocandoAudio(false)
+  }
 
   useEffect(() => {
     getLeccion(leccionId)
@@ -59,6 +105,7 @@ export default function LeccionPage() {
 
   function avanzarPagina() {
     if (!leccion) return
+    detenerAudio()
     if (paginaActual < leccion.contenido.paginas.length - 1) {
       setPaginaActual((p) => p + 1)
     } else {
@@ -85,6 +132,7 @@ export default function LeccionPage() {
 
   function siguientePregunta() {
     if (!leccion) return
+    detenerAudio()
     const siguiente = quiz.indice + 1
     const totalPreguntas = leccion.contenido.quiz_corto.preguntas.length
     if (siguiente >= totalPreguntas) {
@@ -207,13 +255,34 @@ export default function LeccionPage() {
               borderRadius: "16px",
               padding: "28px",
               flex: 1,
+              minHeight: 0,
               marginBottom: "20px",
               boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+              overflowY: "auto",
             }}
           >
-            <h2 style={{ color: "var(--huap-azul)", marginBottom: "16px" }}>
-              {pagina.titulo}
-            </h2>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "16px" }}>
+              <h2 style={{ color: "var(--huap-azul)", flex: 1, marginRight: "12px" }}>
+                {pagina.titulo}
+              </h2>
+              <button
+                onClick={() => toggleAudio(paginaActual + 1)}
+                style={{
+                  flexShrink: 0,
+                  padding: "8px 14px",
+                  borderRadius: "10px",
+                  border: `2px solid ${tocandoAudio ? "var(--huap-rojo)" : "var(--huap-azul)"}`,
+                  backgroundColor: tocandoAudio ? "#FFEBEE" : "#E3F2FD",
+                  color: tocandoAudio ? "var(--huap-rojo)" : "var(--huap-azul)",
+                  fontSize: "15px",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {tocandoAudio ? "⏹ Detener" : "🔊 Escuchar"}
+              </button>
+            </div>
             <p style={{ color: "#333", fontSize: "18px", lineHeight: 1.7 }}>
               {pagina.texto}
             </p>
@@ -223,9 +292,9 @@ export default function LeccionPage() {
                   <Image
                     src={IMAGENES_APOYO[pagina.apoyo_visual]}
                     alt="Ilustración de la lección"
-                    width={280}
-                    height={280}
-                    style={{ objectFit: "contain", maxWidth: "100%", maxHeight: "35vh" }}
+                    width={340}
+                    height={340}
+                    style={{ objectFit: "contain", maxWidth: "100%", maxHeight: "min(55vh, 420px)" }}
                   />
                 </div>
               ) : (
@@ -294,6 +363,7 @@ export default function LeccionPage() {
   if (fase === "quiz") {
     const preguntas = leccion.contenido.quiz_corto.preguntas
     const preguntaActual: PreguntaQuizCorto = preguntas[quiz.indice]
+    const esCorrecta = quiz.seleccion !== null && preguntaActual.opciones[quiz.seleccion].correcta
 
     return (
       <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--huap-fondo)" }}>
@@ -302,6 +372,25 @@ export default function LeccionPage() {
           className="flex-1 flex flex-col px-5 py-6 pb-28 w-full mx-auto"
           style={{ maxWidth: "680px" }}
         >
+          {/* Volver */}
+          <button
+            onClick={() => router.push(`/modulos/${moduloId}`)}
+            style={{
+              alignSelf: "flex-start",
+              padding: "12px 20px",
+              borderRadius: "12px",
+              border: "none",
+              backgroundColor: "var(--huap-azul)",
+              color: "white",
+              fontSize: "17px",
+              fontWeight: 600,
+              cursor: "pointer",
+              marginBottom: "16px",
+            }}
+          >
+            ← Volver
+          </button>
+
           {/* Progreso del quiz */}
           <div style={{ marginBottom: "20px" }}>
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
@@ -336,9 +425,28 @@ export default function LeccionPage() {
               boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
             }}
           >
-            <h2 style={{ color: "#333", fontSize: "20px", marginBottom: "24px", lineHeight: 1.5 }}>
-              {preguntaActual.pregunta}
-            </h2>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "24px" }}>
+              <h2 style={{ color: "#333", fontSize: "20px", lineHeight: 1.5, flex: 1, marginRight: "12px" }}>
+                {preguntaActual.pregunta}
+              </h2>
+              <button
+                onClick={() => toggleAudio(leccion.contenido.paginas.length + quiz.indice + 1)}
+                style={{
+                  flexShrink: 0,
+                  padding: "8px 14px",
+                  borderRadius: "10px",
+                  border: `2px solid ${tocandoAudio ? "var(--huap-rojo)" : "var(--huap-azul)"}`,
+                  backgroundColor: tocandoAudio ? "#FFEBEE" : "#E3F2FD",
+                  color: tocandoAudio ? "var(--huap-rojo)" : "var(--huap-azul)",
+                  fontSize: "15px",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {tocandoAudio ? "⏹ Detener" : "🔊 Escuchar"}
+              </button>
+            </div>
 
             <div className="flex flex-col gap-3">
               {preguntaActual.opciones.map((opcion, idx) => {
@@ -390,12 +498,21 @@ export default function LeccionPage() {
                 style={{
                   marginTop: "20px",
                   padding: "14px 16px",
-                  backgroundColor: "var(--huap-gris-suave)",
+                  backgroundColor: esCorrecta ? "#E8F5E9" : "#FFEBEE",
+                  border: `1.5px solid ${esCorrecta ? "var(--huap-verde)" : "var(--huap-rojo)"}`,
                   borderRadius: "8px",
                 }}
               >
-                <p style={{ color: "#444", fontSize: "16px", lineHeight: 1.5 }}>
-                  💡 {preguntaActual.feedback}
+                <p style={{
+                  color: esCorrecta ? "#1B5E20" : "#7F0000",
+                  fontSize: "15px",
+                  fontWeight: 700,
+                  marginBottom: "6px",
+                }}>
+                  {esCorrecta ? "✓ ¡Muy bien!" : "✗ Incorrecto"}
+                </p>
+                <p style={{ color: esCorrecta ? "#2E7D32" : "#B71C1C", fontSize: "16px", lineHeight: 1.5 }}>
+                  {preguntaActual.feedback}
                 </p>
               </div>
             )}
@@ -466,8 +583,11 @@ export default function LeccionPage() {
             width: "100%",
           }}
         >
-          <div style={{ fontSize: "64px", marginBottom: "16px" }}>
-            {aprobado ? "🎉" : "💪"}
+          <div style={{ marginBottom: "16px", display: "flex", justifyContent: "center" }}>
+            {aprobado
+              ? <Trophy size={72} color="var(--huap-verde)" strokeWidth={1.5} />
+              : <RefreshCw size={72} color="var(--huap-azul)" strokeWidth={1.5} />
+            }
           </div>
           <h2
             style={{
