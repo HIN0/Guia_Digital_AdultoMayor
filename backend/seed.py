@@ -880,6 +880,932 @@ LECCIONES_DATA = [
         }
       }
     }
+  },
+  {
+    "leccion_id": "2.1",
+    "modulo_id": 2,
+    "orden": 1,
+    "titulo": "Hacer mejores preguntas",
+    "duracion_min": 4,
+    "contenido": {
+      "paginas": [
+        {
+          "n": 1,
+          "tipo": "concepto",
+          "titulo": "Una buena pregunta da una buena respuesta",
+          "texto": "La IA responde según lo que le preguntas. Si preguntas algo muy vago, te responde algo muy vago. Si preguntas con claridad, te ayuda mucho mejor. Aquí aprenderás a preguntar para que la IA te sirva de verdad.",
+          "apoyo_visual": "Ilustración: una pregunta clara entra y sale una respuesta clara; una pregunta confusa sale confusa."
+        },
+        {
+          "n": 2,
+          "tipo": "concepto",
+          "titulo": "Truco 1: sé concreto",
+          "texto": "En lugar de \"me siento mal\", di qué te pasa: \"¿Qué puede causar dolor de cabeza por las mañanas?\". Mientras más concreta la pregunta, más útil la respuesta. No tengas miedo de escribir como hablas.",
+          "apoyo_visual": "Comparación: \"me siento mal\" (vago) → \"dolor de cabeza en las mañanas\" (concreto)."
+        },
+        {
+          "n": 3,
+          "tipo": "concepto",
+          "titulo": "Truco 2: pide que te lo explique fácil",
+          "texto": "Si la respuesta tiene palabras difíciles, pídele que te lo explique de nuevo en palabras simples: \"explícamelo como si tuviera 70 años y no soy médico\". La IA con gusto lo repite más fácil.",
+          "apoyo_visual": "Ejemplo de pedir \"explícamelo simple\" y la respuesta simplificada."
+        },
+        {
+          "n": 4,
+          "tipo": "concepto",
+          "titulo": "Truco 3: nunca pongas datos personales",
+          "texto": "Recuerda lo aprendido: una buena pregunta NO necesita tu RUT, tu dirección ni tus claves. Puedes preguntar por tu enfermedad sin decir quién eres. \"¿Qué cuidados necesita una persona con presión alta?\" funciona perfecto.",
+          "apoyo_visual": "Recordatorio con candado: pregunta sí, datos personales no."
+        },
+        {
+          "n": 5,
+          "tipo": "cierre",
+          "titulo": "En resumen",
+          "texto": "Para preguntar bien: sé concreto, pide explicaciones simples y nunca incluyas datos personales. Con estos tres trucos, la IA pasa de ser confusa a ser una buena aliada.",
+          "apoyo_visual": "Resumen con los tres trucos y marca de avance."
+        }
+      ],
+      "ejercicio": {
+        "tipo": "elegir_mejor_pregunta",
+        "instruccion": "¿Cuál es la mejor pregunta para hacerle a la IA? Toca la mejor opción.",
+        "descripcion": "Se presentan pares de preguntas y el usuario elige la más clara y segura. Sin penalización.",
+        "items": [
+          {
+            "opciones": [
+              "Me siento mal, ¿qué tengo?",
+              "¿Qué puede causar dolor de cabeza por las mañanas?"
+            ],
+            "mejor": "¿Qué puede causar dolor de cabeza por las mañanas?"
+          },
+          {
+            "opciones": [
+              "Soy Pedro Soto, RUT 11.222.333-4, ¿qué es la diabetes?",
+              "¿Qué es la diabetes tipo 2?"
+            ],
+            "mejor": "¿Qué es la diabetes tipo 2?"
+          },
+          {
+            "opciones": [
+              "Explícame la hipertensión en palabras simples",
+              "Dame un informe técnico completo de fisiopatología hipertensiva"
+            ],
+            "mejor": "Explícame la hipertensión en palabras simples"
+          }
+        ]
+      },
+      "quiz_corto": {
+        "preguntas": [
+          {
+            "pregunta": "¿Cuál de estas es una mejor pregunta para la IA?",
+            "opciones": [
+            
+              {
+                "texto": "Me siento raro, ¿qué será?",
+                "correcta": False
+              },
+              {
+                "texto": "Hola",
+                "correcta": False
+              },
+              {
+                "texto": "¿Qué cuidados necesita una persona con presión alta?",
+                "correcta": True
+              }
+            ],
+            "feedback": "Una pregunta concreta y clara da respuestas mucho más útiles que una vaga."
+          },
+          {
+            "pregunta": "Si la respuesta tiene palabras muy difíciles, ¿qué puedes hacer?",
+            "opciones": [
+              {
+                "texto": "Pedirle que lo explique en palabras simples",
+                "correcta": True
+              },
+              {
+                "texto": "Rendirte y cerrar la app",
+                "correcta": False
+              },
+              {
+                "texto": "Creer que es tu culpa por no entender",
+                "correcta": False
+              }
+            ],
+            "feedback": "Siempre puedes pedir \"explícamelo simple\". La IA lo repetirá de forma más fácil."
+          },
+          {
+            "pregunta": "Para hacer una buena pregunta, ¿necesitas dar tu RUT?",
+            "opciones": [
+              {
+                "texto": "No, nunca hace falta dar datos personales",
+                "correcta": True
+              },
+              {
+                "texto": "Sí, siempre",
+                "correcta": False
+              },
+              {
+                "texto": "Solo si la pregunta es larga",
+                "correcta": False
+              }
+            ],
+            "feedback": "Puedes preguntar por cualquier tema de salud sin decir quién eres. Tus datos son tuyos."
+          },
+          {
+            "pregunta": "¿Es una buena pregunta para la IA: \"Tengo dolor en el pecho. ¿Qué debo hacer?\"?",
+            "opciones": [
+              
+              {
+                "texto": "Sí, es una pregunta clara y concreta",
+                "correcta": False
+              },
+              {
+                "texto": "No, es una emergencia. Llama al 131 de inmediato.",
+                "correcta": True
+              },
+              {
+                "texto": "Sí, la IA puede orientarte sobre cualquier síntoma",
+                "correcta": False
+              }
+            ],
+            "feedback": "El dolor en el pecho es una emergencia. La IA no puede ayudar con síntomas urgentes. Una mejor pregunta sería: \"¿Cuáles son las causas comunes del dolor de pecho?\" y solo DESPUÉS de ver al médico."
+          }
+        ],
+        "resultado": {
+          "umbral_aprobado": 4,
+          "titulo_aprobado": "¡Excelente Trabajo!",
+          "mensaje_aprobado": "Tienes una buena comprensión de este tema. ¡Sigue así!",
+          "titulo_fallido": "¡Casi lo logras!",
+          "mensaje_fallido": "No te preocupes, puedes volver a repasar la lección cuando quieras."
+        }
+      }
+    }
+  },
+  {
+    "leccion_id": "2.2",
+    "modulo_id": 2,
+    "orden": 2,
+    "titulo": "Leer una respuesta",
+    "duracion_min": 4,
+    "contenido": {
+      "paginas": [
+        {
+          "n": 1,
+          "tipo": "concepto",
+          "titulo": "La IA siempre responde, aunque no sepa",
+          "texto": "La IA siempre responde algo, aunque no sepa la respuesta. Tu trabajo es saber cuándo confiar y cuándo dudar. En esta lección aprenderás a leer las señales que te da la propia respuesta.",
+          "apoyo_visual": "Ilustración de una respuesta con \"señales\" resaltadas como pistas."
+        },
+        {
+          "n": 2,
+          "tipo": "concepto",
+          "titulo": "Señal 1: cuando generaliza",
+          "texto": "Si la respuesta dice \"generalmente...\" o \"en la mayoría de los casos...\", la IA está generalizando. Tu caso puede ser distinto. Es una señal de que conviene confirmarlo con tu médico.",
+          "apoyo_visual": "Frase \"generalmente...\" resaltada en ámbar."
+        },
+        {
+          "n": 3,
+          "tipo": "concepto",
+          "titulo": "Señal 2: cuando reconoce su límite",
+          "texto": "Si la respuesta dice \"le recomiendo consultar a un médico\", la IA está reconociendo su límite. Hazle caso: esa es una buena IA siendo honesta contigo.",
+          "apoyo_visual": "Frase \"consulte a un médico\" resaltada en verde con un visto bueno."
+        },
+        {
+          "n": 4,
+          "tipo": "concepto",
+          "titulo": "Señal 3: cuando adivina",
+          "texto": "Si la respuesta dice \"podría ser X, Y o Z\", la IA está adivinando entre opciones, no diagnosticando. Eso significa que no está segura, y tú tampoco deberías estarlo.",
+          "apoyo_visual": "Frase \"podría ser A, B o C\" con un signo de interrogación."
+        },
+        {
+          "n": 5,
+          "tipo": "cierre",
+          "titulo": "En resumen",
+          "texto": "Aprende a leer las señales: \"generalmente\" = generaliza; \"consulte a un médico\" = reconoce su límite; \"podría ser\" = está adivinando. Una IA que duda en temas de salud no es mala: es honesta.",
+          "apoyo_visual": "Resumen con las tres señales y marca de avance."
+        }
+      ],
+      "ejercicio": {
+        "tipo": "etiquetar_respuestas",
+        "instruccion": "Arrastra la etiqueta correcta a cada respuesta de la IA.",
+        "descripcion": "Pantalla con respuestas de IA. El usuario arrastra etiquetas: \"información útil\", \"debo consultar al médico\", \"cuidado, la IA está adivinando\".",
+        "items": [
+          {
+            "respuesta_ia": "La hipertensión es cuando la presión arterial está sobre 140/90 de forma constante. Es importante medirla regularmente.",
+            "etiquetas": [
+              "información útil"
+            ]
+          },
+          {
+            "respuesta_ia": "Sus síntomas podrían ser de gastritis, úlcera o reflujo. Es difícil decir sin examinarlo. Le recomiendo ir a urgencias si el dolor es fuerte.",
+            "etiquetas": [
+              "debo consultar al médico",
+              "cuidado, la IA está adivinando"
+            ]
+          }
+        ]
+      },
+      "quiz_corto": {
+        "preguntas": [
+        {
+          "pregunta": "Si la IA te dice \"podría ser indigestión o algo más serio\", ¿qué significa?",
+          "opciones": [
+          
+            {
+              "texto": "Que tienes indigestión seguro",
+              "correcta": False
+            },
+              {
+              "texto": "La IA no está segura, mejor ve al médico",
+              "correcta": True
+            },
+            {
+              "texto": "Que no es nada grave",
+              "correcta": False
+            }
+          ],
+          "feedback": "\"Podría ser\" significa que la IA está adivinando entre opciones. Ante la duda, consulta a un profesional."
+        },
+        {
+          "pregunta": "¿La IA tiene que sonar dudosa para ser confiable?",
+          "opciones": [
+            {
+              "texto": "No necesariamente, pero la duda en temas médicos es buena señal",
+              "correcta": True
+            },
+            {
+              "texto": "Sí, si no duda es mentira",
+              "correcta": False
+            },
+            {
+              "texto": "No, mientras más segura mejor siempre",
+              "correcta": False
+            }
+          ],
+          "feedback": "Que la IA reconozca sus límites en salud es señal de honestidad, no de error."
+        },
+        {
+          "pregunta": "Una IA te dice con mucha seguridad \"usted tiene diabetes\". ¿Confías?",
+          "opciones": [
+           
+            {
+              "texto": "Sí, porque lo dijo con seguridad",
+              "correcta": False
+            },
+             {
+              "texto": "No, un diagnóstico requiere exámenes; la IA no puede diagnosticar",
+              "correcta": True
+            },
+            {
+              "texto": "Sí, empiezo el tratamiento de inmediato",
+              "correcta": False
+            }
+          ],
+          "feedback": "Ninguna IA puede diagnosticar. Un diagnóstico necesita exámenes y la evaluación de un médico."
+        }
+      ],
+        "resultado": {
+          "umbral_aprobado": 2,
+          "titulo_aprobado": "¡Excelente Trabajo!",
+          "mensaje_aprobado": "Tienes una buena comprensión de este tema. ¡Sigue así!",
+          "titulo_fallido": "¡Casi lo logras!",
+          "mensaje_fallido": "No te preocupes, puedes volver a repasar la lección cuando quieras."
+        }
+      }
+    }
+  },
+  {
+    "leccion_id": "2.3",
+    "modulo_id": 2,
+    "orden": 3,
+    "titulo": "Verificar la información",
+    "duracion_min": 4,
+    "contenido": {
+      "paginas": [
+        {
+          "n": 1,
+          "tipo": "concepto",
+          "titulo": "Confiar, pero verificar",
+          "texto": "La IA puede equivocarse, así que antes de actuar sobre algo importante de tu salud, conviene verificarlo. Verificar significa confirmar lo que leíste en otra fuente confiable. Es un hábito que te protege.",
+          "apoyo_visual": "Ilustración de una afirmación pasando por un \"filtro de verificación\"."
+        },
+        {
+          "n": 2,
+          "tipo": "concepto",
+          "titulo": "Cuáles son las fuentes confiables",
+          "texto": "Las fuentes confiables en salud son: tu médico o tu equipo del hospital, los sitios oficiales que terminan en gob.cl, y el personal del consultorio o farmacia. Un comentario en redes sociales o una cadena de WhatsApp NO son fuentes confiables.",
+          "apoyo_visual": "Dos columnas: confiables (médico, gob.cl, consultorio) vs. no confiables (redes, cadenas de WhatsApp)."
+        },
+        {
+          "n": 3,
+          "tipo": "concepto",
+          "titulo": "La regla de las dos fuentes",
+          "texto": "Una regla fácil de recordar: si la IA te dice algo importante de salud, búscalo en una segunda fuente confiable. Si las dos coinciden, mejor. Si no coinciden, hazle caso al profesional de salud, no a la IA.",
+          "apoyo_visual": "Balanza: IA en un lado, fuente confiable en el otro; gana el profesional."
+        },
+        {
+          "n": 4,
+          "tipo": "ejemplo_real",
+          "titulo": "Verificar en acción",
+          "texto": "Carlos leyó en una IA que cierto té reemplazaba su remedio para la presión. Antes de dejar el remedio, le preguntó a su médico en el control. Ella le explicó que de ninguna manera lo reemplazaba. Verificar le evitó un riesgo grave.",
+          "apoyo_visual": "Viñeta del caso de Carlos confirmando con su médico."
+        },
+        {
+          "n": 5,
+          "tipo": "cierre",
+          "titulo": "En resumen",
+          "texto": "Antes de actuar sobre tu salud, verifica lo que dice la IA con una fuente confiable. Si hay desacuerdo, manda el profesional. Verificar no es desconfiar: es cuidarte.",
+          "apoyo_visual": "Resumen con la regla de las dos fuentes y marca de avance."
+        }
+      ],
+      "ejercicio": {
+        "tipo": "clasificar_fuente",
+        "instruccion": "¿Es una fuente CONFIABLE o NO confiable para verificar?",
+        "descripcion": "El usuario clasifica fuentes de información de salud. Refuerza dónde confirmar lo que dice la IA.",
+        "items": [
+          {
+            "fuente": "Tu médico en el control",
+            "respuesta": "CONFIABLE"
+          },
+          {
+            "fuente": "Una cadena de WhatsApp de un grupo familiar",
+            "respuesta": "NO CONFIABLE"
+          },
+          {
+            "fuente": "El sitio del hospital que termina en gob.cl",
+            "respuesta": "CONFIABLE"
+          },
+          {
+            "fuente": "Un comentario anónimo en redes sociales",
+            "respuesta": "NO CONFIABLE"
+          },
+          {
+            "fuente": "El farmacéutico del consultorio",
+            "respuesta": "CONFIABLE"
+          }
+        ]
+      },
+      "quiz_corto": {
+        "preguntas": [
+        {
+          "pregunta": "¿Cuál de estas es una fuente confiable para verificar información de salud?",
+          "opciones": [
+            {
+              "texto": "Tu médico o un sitio oficial gob.cl",
+              "correcta": True
+            },
+            {
+              "texto": "Una cadena de WhatsApp",
+              "correcta": False
+            },
+            {
+              "texto": "Un comentario en redes sociales",
+              "correcta": False
+            }
+          ],
+          "feedback": "Tu médico y los sitios oficiales gob.cl son fuentes confiables. Las cadenas y comentarios no lo son."
+        },
+        {
+          "pregunta": "La IA y tu médico te dicen cosas distintas. ¿A quién le haces caso?",
+          "opciones": [
+            
+            {
+              "texto": "A la IA, porque responde más rápido",
+              "correcta": False
+            },
+            {
+              "texto": "Al que diga lo que más me gusta",
+              "correcta": False
+            },
+            {
+              "texto": "Al médico",
+              "correcta": True
+            }
+          ],
+          "feedback": "Si hay desacuerdo, siempre manda el profesional de salud. La IA solo orienta."
+        },
+        {
+          "pregunta": "¿Por qué conviene verificar lo que dice la IA?",
+          "opciones": [
+            
+            {
+              "texto": "Porque la IA siempre miente",
+              "correcta": False
+            },
+            {
+              "texto": "No conviene, hay que creerle todo",
+              "correcta": False
+            },
+            {
+              "texto": "Porque la IA puede equivocarse y mi salud es importante",
+              "correcta": True
+            }
+          ],
+          "feedback": "La IA puede equivocarse. Verificar lo importante en una fuente confiable te protege."
+        }
+      ],
+        "resultado": {
+          "umbral_aprobado": 2,
+          "titulo_aprobado": "¡Excelente Trabajo!",
+          "mensaje_aprobado": "Tienes una buena comprensión de este tema. ¡Sigue así!",
+          "titulo_fallido": "¡Casi lo logras!",
+          "mensaje_fallido": "No te preocupes, puedes volver a repasar la lección cuando quieras."
+        }
+      }
+    }
+  },
+  {
+    "leccion_id": "2.4",
+    "modulo_id": 2,
+    "orden": 4,
+    "titulo": "Casos por patología",
+    "duracion_min": 5,
+    "contenido": {
+      "paginas": [
+        {
+          "n": 1,
+          "tipo": "intro",
+          "titulo": "Pongamos todo en práctica",
+          "texto": "Ya sabes preguntar bien, leer respuestas y verificar. Ahora veremos casos reales con las cinco enfermedades más comunes en personas mayores. Recuerda: todo esto es orientación, nunca reemplaza a tu médico.",
+          "apoyo_visual": "Cinco tarjetas con las patologías base. Aviso visible: \"contenido educativo, no diagnóstico\"."
+        },
+        {
+          "n": 2,
+          "tipo": "caso_patologia",
+          "titulo": "Hipertensión (presión alta)",
+          "texto": "Pregunta útil: \"¿Qué cuidados generales ayudan a mantener la presión controlada?\". La IA puede orientarte sobre hábitos como reducir la sal o caminar. Lo que NO puede: decirte tu dosis de remedio ni si tu presión de hoy es peligrosa. Eso lo ve tu médico.",
+          "apoyo_visual": "Ícono de tensiómetro. Pregunta útil vs. lo que es del médico."
+        },
+        {
+          "n": 3,
+          "tipo": "caso_patologia",
+          "titulo": "Diabetes tipo 2",
+          "texto": "Pregunta útil: \"¿Qué alimentos conviene cuidar si tengo azúcar alta?\". La IA orienta sobre alimentación general. Lo que NO puede: ajustar tu insulina ni interpretar tu examen de glicemia. Eso es del equipo de salud.",
+          "apoyo_visual": "Ícono de gota/glucómetro. Pregunta útil vs. lo que es del médico."
+        },
+        {
+          "n": 4,
+          "tipo": "caso_patologia",
+          "titulo": "Artrosis (dolor de articulaciones)",
+          "texto": "Pregunta útil: \"¿Qué ejercicios suaves ayudan con el dolor de rodillas?\". La IA orienta sobre cuidados generales. Lo que NO puede: recetarte analgésicos ni decirte si necesitas una operación. Eso lo decide el traumatólogo.",
+          "apoyo_visual": "Ícono de articulación. Pregunta útil vs. lo que es del médico."
+        },
+        {
+          "n": 5,
+          "tipo": "caso_patologia",
+          "titulo": "Colesterol alto",
+          "texto": "Pregunta útil: \"¿Qué significa tener el colesterol alto y por qué importa?\". La IA explica el concepto. Lo que NO puede: leer tu perfil lipídico ni indicarte un medicamento. Eso lo evalúa tu médico con tus exámenes.",
+          "apoyo_visual": "Ícono de corazón/arteria. Pregunta útil vs. lo que es del médico."
+        },
+        {
+          "n": 6,
+          "tipo": "caso_patologia",
+          "titulo": "Insuficiencia venosa (várices, piernas hinchadas)",
+          "texto": "Pregunta útil: \"¿Qué cuidados ayudan a las piernas hinchadas en el día a día?\". La IA orienta sobre hábitos como elevar las piernas. Lo que NO puede: diagnosticar la gravedad ni indicar tratamiento. Eso lo ve tu médico.",
+          "apoyo_visual": "Ícono de pierna. Pregunta útil vs. lo que es del médico."
+        },
+        {
+          "n": 7,
+          "tipo": "cierre",
+          "titulo": "El patrón es siempre el mismo",
+          "texto": "En las cinco enfermedades, el patrón se repite: la IA SÍ orienta y explica; NO diagnostica, NO receta, NO interpreta exámenes. Si tienes claro ese límite, puedes usar la IA con confianza para cada una de tus condiciones.",
+          "apoyo_visual": "Resumen del patrón común SÍ/NO con marca de avance."
+        }
+      ],
+      "ejercicio": {
+        "tipo": "pregunta_util_o_no",
+        "instruccion": "Para cada patología, ¿esta pregunta es ÚTIL para la IA o es algo DEL MÉDICO?",
+        "descripcion": "El usuario clasifica preguntas reales por patología. Refuerza el límite orientación/clínica. Sin penalización.",
+        "items": [
+          {
+            "patologia": "Hipertensión",
+            "pregunta": "¿Qué hábitos ayudan a cuidar la presión?",
+            "respuesta": "ÚTIL"
+          },
+          {
+            "patologia": "Hipertensión",
+            "pregunta": "¿Qué dosis de mi remedio debo tomar hoy?",
+            "respuesta": "DEL MÉDICO"
+          },
+          {
+            "patologia": "Diabetes tipo 2",
+            "pregunta": "¿Qué significa mi examen de glicemia 180?",
+            "respuesta": "DEL MÉDICO"
+          },
+          {
+            "patologia": "Diabetes tipo 2",
+            "pregunta": "¿Qué alimentos conviene cuidar con el azúcar alta?",
+            "respuesta": "ÚTIL"
+          },
+          {
+            "patologia": "Artrosis",
+            "pregunta": "¿Qué ejercicios suaves alivian el dolor de rodilla?",
+            "respuesta": "ÚTIL"
+          },
+          {
+            "patologia": "Artrosis",
+            "pregunta": "¿Necesito una operación de rodilla?",
+            "respuesta": "DEL MÉDICO"
+          }
+        ]
+      },
+      "quiz_corto": {
+        "preguntas": [
+        {
+          "pregunta": "Para la hipertensión, ¿qué pregunta es apropiada para la IA?",
+          "opciones": [
+            
+            {
+              "texto": "¿Qué dosis de remedio tomo hoy?",
+              "correcta": False
+            },
+            {
+              "texto": "¿Mi presión de ahora es peligrosa?",
+              "correcta": False
+            },
+            {
+              "texto": "¿Qué hábitos ayudan a cuidar la presión?",
+              "correcta": True
+            }
+          ],
+          "feedback": "La IA orienta sobre hábitos generales. La dosis y la urgencia las evalúa tu médico."
+        },
+        {
+          "pregunta": "Tienes diabetes y quieres entender tu examen de glicemia. ¿Quién debe interpretarlo?",
+          "opciones": [
+            
+            {
+              "texto": "La IA, que da el número exacto",
+              "correcta": False
+            },
+            {
+              "texto": "Tu equipo de salud",
+              "correcta": True
+            },
+            {
+              "texto": "Un familiar por WhatsApp",
+              "correcta": False
+            }
+          ],
+          "feedback": "Interpretar exámenes es tarea clínica. La IA puede explicarte qué es la glicemia, pero no leer tu resultado."
+        },
+        {
+          "pregunta": "En las cinco patologías, ¿qué cosa NUNCA hace la IA?",
+          "opciones": [
+            
+            {
+              "texto": "Explicar qué es la enfermedad",
+              "correcta": False
+            },
+            {
+              "texto": "Diagnosticar, recetar o interpretar tus exámenes",
+              "correcta": True
+            },
+            {
+              "texto": "Orientar sobre hábitos generales",
+              "correcta": False
+            }
+          ],
+          "feedback": "El patrón es siempre el mismo: la IA orienta y explica, pero nunca diagnostica, receta ni interpreta exámenes."
+        }
+      ],
+        "resultado": {
+          "umbral_aprobado": 2,
+          "titulo_aprobado": "¡Excelente Trabajo!",
+          "mensaje_aprobado": "Tienes una buena comprensión de este tema. ¡Sigue así!",
+          "titulo_fallido": "¡Casi lo logras!",
+          "mensaje_fallido": "No te preocupes, puedes volver a repasar la lección cuando quieras."
+        }
+      }
+    }
+  },
+  {
+    "leccion_id": "2.5",
+    "modulo_id": 2,
+    "orden": 5,
+    "titulo": "Preparar tu consulta médica",
+    "duracion_min": 5,
+    "contenido": {
+      "paginas": [
+        {
+          "n": 1,
+          "tipo": "concepto",
+          "titulo": "La IA te ayuda a llegar mejor preparado",
+          "texto": "La IA puede ayudarte a llegar mejor preparado a tu consulta médica. No reemplaza a tu médico: te ayuda a aprovechar mejor el tiempo con él. Esta es, quizás, la forma más valiosa de usarla.",
+          "apoyo_visual": "Ilustración de una persona mayor llegando confiada a su consulta con una lista en la mano."
+        },
+        {
+          "n": 2,
+          "tipo": "concepto",
+          "titulo": "Uso 1: hacer una lista de preguntas",
+          "texto": "Antes de tu consulta, puedes pedirle a la IA que te ayude a armar una lista de preguntas para tu médico. Así no se te olvida nada importante cuando estés frente a él.",
+          "apoyo_visual": "Lista de preguntas generada para llevar a la consulta."
+        },
+        {
+          "n": 3,
+          "tipo": "concepto",
+          "titulo": "Uso 2: entender palabras médicas",
+          "texto": "Si en un examen o en la consulta escuchaste una palabra que no entendiste, la IA te la explica en simple. Así llegas sabiendo de qué te están hablando.",
+          "apoyo_visual": "Ejemplo: \"insuficiencia venosa\" → explicación simple."
+        },
+        {
+          "n": 4,
+          "tipo": "concepto",
+          "titulo": "Uso 3: ordenar tus síntomas",
+          "texto": "La IA te puede ayudar a recordar y ordenar tus síntomas: cuándo empezó, qué sientes, qué lo empeora. Contarle esto ordenado a tu médico le sirve muchísimo para ayudarte mejor.",
+          "apoyo_visual": "Guía de tres preguntas: ¿cuándo empezó?, ¿qué siento?, ¿qué lo empeora?"
+        },
+        {
+          "n": 5,
+          "tipo": "demostracion",
+          "titulo": "Veámoslo paso a paso",
+          "texto": "El paciente pregunta: \"voy a ir al cardiólogo, ¿qué preguntas debería hacerle?\". La IA le responde con cinco preguntas útiles. El paciente las anota o las imprime y las lleva a su consulta. Simple y poderoso.",
+          "apoyo_visual": "Demostración de la conversación y el paciente anotando las preguntas."
+        },
+        {
+          "n": 6,
+          "tipo": "cierre",
+          "titulo": "En resumen",
+          "texto": "Usa la IA para preparar tu consulta: arma preguntas, entiende palabras difíciles y ordena tus síntomas. Así la IA potencia tu relación con tu médico, en lugar de reemplazarla.",
+          "apoyo_visual": "Resumen con los tres usos y marca de avance."
+        }
+      ],
+      "ejercicio": {
+        "tipo": "construye_tu_consulta",
+        "instruccion": "Elige una situación y marca las TRES preguntas más útiles para llevar al médico.",
+        "descripcion": "El usuario elige una situación de tres opciones (voy al cardiólogo por presión alta, tengo cita con el diabetólogo, o me derivaron al traumatólogo por dolor de rodilla). Luego aparecen seis preguntas posibles y debe marcar las tres más útiles.",
+        "situacion_ejemplo": "voy al cardiólogo",
+        "items": [
+          {
+            "pregunta": "¿Qué medicamento debo tomar?",
+            "util": false,
+            "motivo": "Lo decide el cardiólogo."
+          },
+          {
+            "pregunta": "¿Qué actividades físicas son seguras para mí?",
+            "util": true,
+            "motivo": null
+          },
+          {
+            "pregunta": "¿Cuándo es momento de preocuparme por la presión?",
+            "util": true,
+            "motivo": null
+          },
+          {
+            "pregunta": "¿Cuál es la cura definitiva?",
+            "util": false,
+            "motivo": "No existe; pregunta mal formulada."
+          },
+          {
+            "pregunta": "¿Cómo afecta mi presión a otros aspectos de mi salud?",
+            "util": true,
+            "motivo": null
+          },
+          {
+            "pregunta": "¿La IA puede operarme?",
+            "util": false,
+            "motivo": "Evalúa si entendiste que la IA no reemplaza al médico."
+          }
+        ]
+      },
+      "quiz_corto": {
+        "preguntas": [
+        {
+          "pregunta": "¿La IA puede reemplazar a tu cardiólogo?",
+          "opciones": [
+            
+            {
+              "texto": "Sí, es igual que un especialista",
+              "correcta": False
+            },
+            {
+              "texto": "No, solo te ayuda a prepararte",
+              "correcta": True
+            },
+            {
+              "texto": "Sí, si le cuentas todo",
+              "correcta": False
+            }
+          ],
+          "feedback": "La IA te ayuda a preparar tu consulta, pero nunca reemplaza a tu médico."
+        },
+        {
+          "pregunta": "Antes de tu consulta médica, la IA puede ayudarte a...",
+          "opciones": [
+            {
+              "texto": "Preparar preguntas que quieres hacer",
+              "correcta": True
+            },
+            {
+              "texto": "Elegir tu medicamento",
+              "correcta": False
+            },
+            {
+              "texto": "Cancelar la cita",
+              "correcta": False
+            }
+          ],
+          "feedback": "La IA es ideal para preparar preguntas y llegar más seguro a tu consulta."
+        },
+        {
+          "pregunta": "Tu médico te dijo \"tiene insuficiencia venosa\". ¿Para qué te sirve la IA?",
+          "opciones": [
+            
+            {
+              "texto": "Para cambiar el diagnóstico",
+              "correcta": False
+            },
+            {
+              "texto": "Para entender qué significa esa palabra y prepararte",
+              "correcta": True
+            },
+            {
+              "texto": "Para recetarte el tratamiento",
+              "correcta": False
+            }
+          ],
+          "feedback": "La IA te explica el término en simple, y así llegas más preparado a tu próxima consulta."
+        }
+      ],
+        "resultado": {
+          "umbral_aprobado": 2,
+          "titulo_aprobado": "¡Excelente Trabajo!",
+          "mensaje_aprobado": "Tienes una buena comprensión de este tema. ¡Sigue así!",
+          "titulo_fallido": "¡Casi lo logras!",
+          "mensaje_fallido": "No te preocupes, puedes volver a repasar la lección cuando quieras."
+        }
+      }
+    }
+  },
+  {
+    "leccion_id": "2.6",
+    "modulo_id": 2,
+    "orden": 6,
+    "titulo": "Cuándo NO usar la IA",
+    "duracion_min": 4,
+    "contenido": {
+      "paginas": [
+        {
+          "n": 1,
+          "tipo": "concepto",
+          "titulo": "Cuándo NO usar la IA",
+          "texto": "Hay momentos en que perder tiempo con la IA puede ser peligroso. Aprende a reconocerlos. Esta información puede salvar tu vida o la de alguien cercano.",
+          "apoyo_visual": "Encabezado en rojo de emergencia. Tono serio, sin alarmar.",
+          "fuente_prototipo": true
+        },
+        {
+          "n": 2,
+          "tipo": "alerta_emergencia",
+          "titulo": "Llama al 131 si tienes:",
+          "texto": "Estas son señales de urgencia que NO se le preguntan a la IA. Si presentas alguna, llama de inmediato al 131 o ve a urgencias:",
+          "lista_sintomas": [
+            "Dolor fuerte en el pecho",
+            "Dificultad para respirar",
+            "Pérdida de fuerza en un lado del cuerpo",
+            "Habla confusa",
+            "Desmayos",
+            "Sangrado que no para",
+            "Caídas con golpe fuerte en la cabeza"
+          ],
+          "apoyo_visual": "Caja de alerta roja con lista de síntomas (igual que en el prototipo).",
+          "fuente_prototipo": true
+        },
+        {
+          "n": 3,
+          "tipo": "numeros_emergencia",
+          "titulo": "Números de emergencia",
+          "texto": "Guarda estos números. En una emergencia, llamar es siempre lo primero, antes que cualquier app:",
+          "numeros": [
+            {
+              "servicio": "SAMU",
+              "numero": "131"
+            },
+            {
+              "servicio": "Bomberos",
+              "numero": "132"
+            },
+            {
+              "servicio": "Carabineros",
+              "numero": "133"
+            }
+          ],
+          "apoyo_visual": "Tarjetas con números grandes (igual que en el prototipo).",
+          "fuente_prototipo": true
+        },
+        {
+          "n": 4,
+          "tipo": "concepto",
+          "titulo": "Y para estos casos, tu médico de cabecera",
+          "texto": "No todo es urgencia, pero tampoco todo es para la IA. Cosas como un dolor que dura semanas, sentirte muy triste o sin ánimo por mucho tiempo, o un malestar que no mejora, son para tu médico de cabecera, no para el chatbot.",
+          "apoyo_visual": "Tres situaciones para médico de cabecera con ícono de médico."
+        },
+        {
+          "n": 5,
+          "tipo": "cierre",
+          "titulo": "Ante la duda, consulta a un profesional",
+          "texto": "Si dudas, mejor ve al hospital: una consulta de más nunca es un error. Ante la duda, siempre consulta con un profesional de salud. La IA es para aprender y orientarte, no para emergencias.",
+          "apoyo_visual": "Mensaje de cierre destacado (disclaimer del prototipo).",
+          "fuente_prototipo": true
+        }
+      ],
+      "ejercicio": {
+        "tipo": "ia_medico_o_urgencias",
+        "instruccion": "Clasifica cada situación: ¿IA, MÉDICO DE CABECERA o URGENCIAS YA?",
+        "descripcion": "Aparecen seis situaciones y el usuario clasifica con tres botones. Es el ejercicio más importante de la plataforma.",
+        "items": [
+          {
+            "situacion": "Quiero entender qué es el colesterol alto",
+            "respuesta": "IA"
+          },
+          {
+            "situacion": "Hace una hora me empezó un dolor fuerte en el pecho que me llega al brazo",
+            "respuesta": "URGENCIAS YA"
+          },
+          {
+            "situacion": "Tengo dolor de espalda desde hace dos semanas",
+            "respuesta": "MÉDICO DE CABECERA"
+          },
+          {
+            "situacion": "Acabo de caer y me golpeé la cabeza, me siento mareado",
+            "respuesta": "URGENCIAS YA"
+          },
+          {
+            "situacion": "¿Qué alimentos son buenos para la presión?",
+            "respuesta": "IA"
+          },
+          {
+            "situacion": "Me siento muy triste hace meses y no tengo ganas de nada",
+            "respuesta": "MÉDICO DE CABECERA"
+          }
+        ]
+      },
+      "quiz_corto": {
+        "preguntas": [
+        {
+          "pregunta": "Si tienes dolor fuerte en el pecho, ¿qué haces primero?",
+          "opciones": [
+            
+            {
+              "texto": "Le preguntas a la IA",
+              "correcta": False
+            },
+            {
+              "texto": "Buscas en Google",
+              "correcta": False
+            },
+            {
+              "texto": "Llamas al 131 o vas a urgencias",
+              "correcta": True
+            }
+          ],
+          "feedback": "El dolor fuerte en el pecho es una urgencia. Llama al 131 de inmediato; no pierdas tiempo con la IA."
+        },
+        {
+          "pregunta": "¿La IA es buena para emergencias?",
+          "opciones": [
+            {
+              "texto": "No, pierdes tiempo valioso",
+              "correcta": True
+            },
+            {
+              "texto": "Sí, responde más rápido que el SAMU",
+              "correcta": False
+            },
+            {
+              "texto": "Sí, si escribes rápido",
+              "correcta": False
+            }
+          ],
+          "feedback": "En una emergencia, cada minuto cuenta. Llamar al 131 es siempre lo primero."
+        },
+        {
+          "pregunta": "Si dudas si algo es urgente, ¿es mejor sobreestimar o subestimar?",
+          "opciones": [
+            
+            {
+              "texto": "Subestimar: esperar a ver si pasa",
+              "correcta": False
+            },
+            {
+              "texto": "Preguntarle a la IA y esperar",
+              "correcta": False
+            },
+            {
+              "texto": "Sobreestimar: mejor una consulta de más",
+              "correcta": True
+            },
+          ],
+          "feedback": "Ante la duda, sobreestima. Una consulta de más nunca es un error; una urgencia perdida sí."
+        }
+      ],
+        "resultado": {
+          "umbral_aprobado": 2,
+          "titulo_aprobado": "¡Excelente Trabajo!",
+          "mensaje_aprobado": "Tienes una buena comprensión de este tema. ¡Sigue así!",
+          "titulo_fallido": "¡Casi lo logras!",
+          "mensaje_fallido": "No te preocupes, puedes volver a repasar la lección cuando quieras."
+        }
+      }
+    }
   }
 ]
 
@@ -893,13 +1819,14 @@ QUIZZES_DATA = [
       {
         "pregunta": "En palabras simples, ¿qué es la inteligencia artificial?",
         "opciones": [
-          {
-            "texto": "Un programa que aprende de muchos ejemplos para ayudarte",
-            "correcta": True
-          },
+          
           {
             "texto": "Una persona del hospital que responde en secreto",
             "correcta": False
+          },
+          {
+            "texto": "Un programa que aprende de muchos ejemplos para ayudarte",
+            "correcta": True
           },
           {
             "texto": "Un robot con sentimientos",
@@ -947,10 +1874,7 @@ QUIZZES_DATA = [
       {
         "pregunta": "La IA te responde con mucha seguridad sobre un remedio. ¿Le crees de inmediato?",
         "opciones": [
-          {
-            "texto": "No, lo confirmo con un profesional",
-            "correcta": True
-          },
+          
           {
             "texto": "Sí, porque sonó muy segura",
             "correcta": False
@@ -958,6 +1882,10 @@ QUIZZES_DATA = [
           {
             "texto": "Sí, si usó palabras difíciles",
             "correcta": False
+          },
+          {
+            "texto": "No, lo confirmo con un profesional",
+            "correcta": True
           }
         ],
         "feedback": "Sonar segura no es tener la razón. Lo importante se confirma con tu médico o farmacéutico."
@@ -965,13 +1893,14 @@ QUIZZES_DATA = [
       {
         "pregunta": "¿Cuál de estos datos NO debes compartir nunca con una IA?",
         "opciones": [
-          {
-            "texto": "Tu RUT y tu clave del banco",
-            "correcta": True
-          },
+          
           {
             "texto": "Una duda general sobre la diabetes",
             "correcta": False
+          },
+          {
+            "texto": "Tu RUT y tu clave del banco",
+            "correcta": True
           },
           {
             "texto": "Que tienes dolor de cabeza",
@@ -983,10 +1912,7 @@ QUIZZES_DATA = [
       {
         "pregunta": "¿Cuál es la señal más clara de una estafa de salud en internet?",
         "opciones": [
-          {
-            "texto": "Te prometen una cura milagrosa",
-            "correcta": True
-          },
+          
           {
             "texto": "Te dan información gratis",
             "correcta": False
@@ -994,6 +1920,10 @@ QUIZZES_DATA = [
           {
             "texto": "La página tiene fotos",
             "correcta": False
+          },
+          {
+            "texto": "Te prometen una cura milagrosa",
+            "correcta": True
           }
         ],
         "feedback": "Las curas milagrosas no existen: son la señal más clara de estafa."
@@ -1001,10 +1931,7 @@ QUIZZES_DATA = [
       {
         "pregunta": "Si no entiendes algo en la app, ¿qué puedes hacer?",
         "opciones": [
-          {
-            "texto": "Volver a leer la lección o preguntar al chatbot",
-            "correcta": True
-          },
+          
           {
             "texto": "Cerrar la app y no volver",
             "correcta": False
@@ -1012,9 +1939,160 @@ QUIZZES_DATA = [
           {
             "texto": "Nada, seguir aunque no entiendas",
             "correcta": False
+          },
+          {
+            "texto": "Volver a leer la lección o preguntar al chatbot",
+            "correcta": True
           }
         ],
         "feedback": "Puedes volver atrás a releer cuantas veces quieras y también preguntarle al asistente."
+      }
+    ]
+  },
+  {
+    "quiz_final_id": "QF2",
+    "modulo_id": 2,
+    "titulo": "Quiz final — Practicar con la IA",
+    "minimo_aciertos": 5,
+    "bloqueante": False,
+    "preguntas": [
+      {
+        "pregunta": "¿Cuál es una mejor pregunta para hacerle a la IA?",
+        "opciones": [
+          
+          {
+            "texto": "Me siento raro, ¿qué será?",
+            "correcta": False
+          },
+          {
+            "texto": "¿Qué cuidados necesita una persona con presión alta?",
+            "correcta": True
+          },
+          {
+            "texto": "Hola, ¿cómo estás?",
+            "correcta": False
+          }
+        ],
+        "feedback": "Una pregunta concreta y sin datos personales da las respuestas más útiles.",
+        "submodulo": "2.1"
+      },
+      {
+        "pregunta": "Si la IA dice \"podría ser indigestión o algo más serio\", ¿qué significa?",
+        "opciones": [
+          {
+            "texto": "La IA no está segura, mejor ve al médico",
+            "correcta": True
+          },
+          {
+            "texto": "Que es indigestión seguro",
+            "correcta": False
+          },
+          {
+            "texto": "Que no es nada",
+            "correcta": False
+          }
+        ],
+        "feedback": "\"Podría ser\" es la IA adivinando. Ante la duda, consulta a un profesional.",
+        "submodulo": "2.2"
+      },
+      {
+        "pregunta": "La IA y tu médico te dicen cosas distintas. ¿A quién le haces caso?",
+        "opciones": [
+          {
+            "texto": "Al médico",
+            "correcta": True
+          },
+          {
+            "texto": "A la IA, que es más rápida",
+            "correcta": False
+          },
+          {
+            "texto": "Al que más me convenga",
+            "correcta": False
+          }
+        ],
+        "feedback": "Si hay desacuerdo, siempre manda el profesional de salud.",
+        "submodulo": "2.3"
+      },
+      {
+        "pregunta": "En cualquier patología, ¿qué cosa NUNCA hace la IA?",
+        "opciones": [
+          
+          {
+            "texto": "Explicar qué es la enfermedad",
+            "correcta": False
+          },
+          {
+            "texto": "Orientar sobre hábitos generales",
+            "correcta": False
+          },
+          {
+            "texto": "Diagnosticar, recetar o interpretar tus exámenes",
+            "correcta": True
+          }
+        ],
+        "feedback": "La IA orienta y explica; nunca diagnostica, receta ni interpreta exámenes.",
+        "submodulo": "2.4"
+      },
+      {
+        "pregunta": "Antes de tu consulta médica, la IA puede ayudarte a...",
+        "opciones": [
+          
+          {
+            "texto": "Elegir tu medicamento",
+            "correcta": False
+          },
+          {
+            "texto": "Cancelar la cita",
+            "correcta": False
+          },
+          {
+            "texto": "Preparar las preguntas que quieres hacerle al doctor",
+            "correcta": True
+          }
+        ],
+        "feedback": "La IA es ideal para preparar tu consulta y aprovechar mejor el tiempo con tu médico.",
+        "submodulo": "2.5"
+      },
+      {
+        "pregunta": "Si tienes dolor fuerte en el pecho, ¿qué haces primero?",
+        "opciones": [
+          
+          {
+            "texto": "Le preguntas a la IA",
+            "correcta": False
+          },
+          {
+            "texto": "Llamas al 131 o vas a urgencias",
+            "correcta": True
+          },
+          {
+            "texto": "Buscas en internet",
+            "correcta": False
+          }
+        ],
+        "feedback": "Es una urgencia. Llama al 131 de inmediato; no pierdas tiempo con la IA.",
+        "submodulo": "2.6"
+      },
+      {
+        "pregunta": "Si dudas si algo es urgente, ¿qué es mejor?",
+        "opciones": [
+          
+          {
+            "texto": "Esperar a ver si se pasa solo",
+            "correcta": False
+          },
+          {
+            "texto": "Sobreestimar: mejor una consulta de más",
+            "correcta": True
+          },
+          {
+            "texto": "Preguntarle a la IA y esperar",
+            "correcta": False
+          }
+        ],
+        "feedback": "Ante la duda, sobreestima. Una consulta de más nunca es un error.",
+        "submodulo": "2.6"
       }
     ]
   }
