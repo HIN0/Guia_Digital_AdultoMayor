@@ -75,6 +75,7 @@ export default function LeccionPage() {
   const [aprobado, setAprobado] = useState(false)
   const [tocandoAudio, setTocandoAudio] = useState(false)
   const audioRef = useRef<HTMLAudioElement | null>(null)
+  const feedbackRef = useRef<HTMLDivElement>(null)
 
   function detenerAudio() {
     if (audioRef.current) {
@@ -102,6 +103,15 @@ export default function LeccionPage() {
       .then(setLeccion)
       .catch(() => setError(true))
   }, [leccionId])
+
+  useEffect(() => {
+    if (quiz.mostrandoFeedback && feedbackRef.current) {
+      const t = setTimeout(() => {
+        feedbackRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" })
+      }, 80)
+      return () => clearTimeout(t)
+    }
+  }, [quiz.mostrandoFeedback])
 
   function avanzarPagina() {
     if (!leccion) return
@@ -225,95 +235,133 @@ export default function LeccionPage() {
             ← Volver
           </button>
 
-          {/* Progreso y título */}
+          {/* Progreso — pill style (ModuloCard) */}
           <div style={{ marginBottom: "20px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
-              <span style={{ fontSize: "15px", color: "#666" }}>{leccion.titulo}</span>
-              <span style={{ fontSize: "15px", color: "#666" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+              <span style={{ fontSize: "14px", color: "#6B7280" }}>{leccion.titulo}</span>
+              <span style={{ fontSize: "14px", color: "#6B7280", fontWeight: 500 }}>
                 {paginaActual + 1} / {totalPaginas}
               </span>
             </div>
             <div
-              style={{ backgroundColor: "#E0E0E0", borderRadius: "4px", height: "8px", overflow: "hidden" }}
+              role="progressbar"
+              aria-valuenow={paginaActual + 1}
+              aria-valuemin={1}
+              aria-valuemax={totalPaginas}
+              style={{
+                width: "100%",
+                height: "5px",
+                backgroundColor: "#E5E7EB",
+                borderRadius: "999px",
+                overflow: "hidden",
+              }}
             >
               <div
                 style={{
-                  backgroundColor: "var(--huap-azul)",
-                  height: "8px",
-                  borderRadius: "4px",
                   width: `${((paginaActual + 1) / totalPaginas) * 100}%`,
-                  transition: "width 0.3s ease",
+                  height: "100%",
+                  backgroundColor: "var(--huap-azul)",
+                  borderRadius: "999px",
+                  transition: "width 0.6s ease",
                 }}
               />
             </div>
           </div>
 
-          {/* Tarjeta de contenido */}
+          {/* Tarjeta de contenido — ModuloCard: franja izquierda + border sutil */}
           <div
             style={{
-              backgroundColor: "white",
+              background: "#FFFFFF",
               borderRadius: "16px",
-              padding: "28px",
+              border: "0.5px solid #E5E7EB",
+              overflow: "hidden",
               flex: 1,
               minHeight: 0,
               marginBottom: "20px",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-              overflowY: "auto",
+              display: "flex",
+              flexDirection: "row",
             }}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "16px" }}>
-              <h2 style={{ color: "var(--huap-azul)", flex: 1, marginRight: "12px" }}>
-                {pagina.titulo}
-              </h2>
-              <button
-                onClick={() => toggleAudio(paginaActual + 1)}
-                style={{
-                  flexShrink: 0,
-                  padding: "8px 14px",
-                  borderRadius: "10px",
-                  border: `2px solid ${tocandoAudio ? "var(--huap-rojo)" : "var(--huap-azul)"}`,
-                  backgroundColor: tocandoAudio ? "#FFEBEE" : "#E3F2FD",
-                  color: tocandoAudio ? "var(--huap-rojo)" : "var(--huap-azul)",
-                  fontSize: "15px",
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {tocandoAudio ? "⏹ Detener" : "🔊 Escuchar"}
-              </button>
-            </div>
-            <p style={{ color: "#333", fontSize: "18px", lineHeight: 1.7 }}>
-              {pagina.texto}
-            </p>
-            {pagina.apoyo_visual && (
-              IMAGENES_APOYO[pagina.apoyo_visual] ? (
-                <div style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
-                  <Image
-                    src={IMAGENES_APOYO[pagina.apoyo_visual]}
-                    alt="Ilustración de la lección"
-                    width={340}
-                    height={340}
-                    style={{ objectFit: "contain", maxWidth: "100%", maxHeight: "min(55vh, 420px)" }}
-                  />
-                </div>
-              ) : (
-                <p
+            {/* Franja izquierda azul */}
+            <div
+              aria-hidden="true"
+              style={{ width: "6px", backgroundColor: "var(--huap-azul)", flexShrink: 0 }}
+            />
+
+            {/* Contenido */}
+            <div
+              style={{
+                flex: 1,
+                padding: "24px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "16px",
+                overflowY: "auto",
+              }}
+            >
+              {/* Título + botón audio */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "12px" }}>
+                <h2 style={{ color: "#111827", fontSize: "18px", fontWeight: 500, lineHeight: 1.4, margin: 0, flex: 1 }}>
+                  {pagina.titulo}
+                </h2>
+                <button
+                  onClick={() => toggleAudio(paginaActual + 1)}
                   style={{
-                    marginTop: "20px",
-                    padding: "12px 16px",
-                    backgroundColor: "var(--huap-gris-suave)",
-                    borderRadius: "8px",
-                    color: "#555",
-                    fontSize: "15px",
-                    fontStyle: "italic",
-                    lineHeight: 1.5,
+                    flexShrink: 0,
+                    padding: "6px 14px",
+                    borderRadius: "999px",
+                    border: `1px solid ${tocandoAudio ? "var(--huap-rojo)" : "var(--huap-azul)"}`,
+                    backgroundColor: "white",
+                    color: tocandoAudio ? "var(--huap-rojo)" : "var(--huap-azul)",
+                    fontSize: "14px",
+                    fontWeight: 500,
+                    cursor: "pointer",
+                    whiteSpace: "nowrap",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "4px",
                   }}
                 >
-                  {pagina.apoyo_visual}
-                </p>
-              )
-            )}
+                  🔊 {tocandoAudio ? "Detener" : "Escuchar"}
+                </button>
+              </div>
+
+              {/* Texto */}
+              <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>
+                {pagina.texto}
+              </p>
+
+              {/* Imagen o descripción visual */}
+              {pagina.apoyo_visual && (
+                IMAGENES_APOYO[pagina.apoyo_visual] ? (
+                  <div style={{ display: "flex", justifyContent: "center" }}>
+                    <Image
+                      src={IMAGENES_APOYO[pagina.apoyo_visual]}
+                      alt="Ilustración de la lección"
+                      width={340}
+                      height={340}
+                      style={{ objectFit: "contain", maxWidth: "100%", maxHeight: "min(55vh, 420px)" }}
+                    />
+                  </div>
+                ) : (
+                  <p
+                    style={{
+                      padding: "12px 16px",
+                      backgroundColor: "#F9FAFB",
+                      border: "0.5px solid #E5E7EB",
+                      borderRadius: "10px",
+                      color: "#6B7280",
+                      fontSize: "15px",
+                      fontStyle: "italic",
+                      lineHeight: 1.5,
+                      margin: 0,
+                    }}
+                  >
+                    {pagina.apoyo_visual}
+                  </p>
+                )
+              )}
+            </div>
           </div>
 
           {/* Botones de navegación */}
@@ -325,10 +373,10 @@ export default function LeccionPage() {
                   flex: 1,
                   padding: "16px",
                   borderRadius: "12px",
-                  border: "2px solid var(--huap-azul)",
+                  border: "1px solid var(--huap-azul)",
                   backgroundColor: "white",
                   color: "var(--huap-azul)",
-                  fontSize: "18px",
+                  fontSize: "17px",
                   fontWeight: 600,
                   cursor: "pointer",
                 }}
@@ -345,7 +393,7 @@ export default function LeccionPage() {
                 border: "none",
                 backgroundColor: "var(--huap-azul)",
                 color: "white",
-                fontSize: "18px",
+                fontSize: "17px",
                 fontWeight: 600,
                 cursor: "pointer",
               }}
@@ -391,132 +439,202 @@ export default function LeccionPage() {
             ← Volver
           </button>
 
-          {/* Progreso del quiz */}
+          {/* Progreso del quiz — pill style (ModuloCard) */}
           <div style={{ marginBottom: "20px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
-              <span style={{ fontSize: "15px", color: "#666" }}>Quiz rápido</span>
-              <span style={{ fontSize: "15px", color: "#666" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+              <span style={{ fontSize: "14px", color: "#6B7280" }}>Quiz rápido</span>
+              <span style={{ fontSize: "14px", color: "#6B7280", fontWeight: 500 }}>
                 {quiz.indice + 1} / {preguntas.length}
               </span>
             </div>
             <div
-              style={{ backgroundColor: "#E0E0E0", borderRadius: "4px", height: "8px", overflow: "hidden" }}
+              role="progressbar"
+              aria-valuenow={quiz.indice + 1}
+              aria-valuemin={1}
+              aria-valuemax={preguntas.length}
+              style={{
+                width: "100%",
+                height: "5px",
+                backgroundColor: "#E5E7EB",
+                borderRadius: "999px",
+                overflow: "hidden",
+              }}
             >
               <div
                 style={{
-                  backgroundColor: "var(--huap-verde)",
-                  height: "8px",
-                  borderRadius: "4px",
                   width: `${((quiz.indice + 1) / preguntas.length) * 100}%`,
-                  transition: "width 0.3s ease",
+                  height: "100%",
+                  backgroundColor: "var(--huap-verde)",
+                  borderRadius: "999px",
+                  transition: "width 0.6s ease",
                 }}
               />
             </div>
           </div>
 
-          {/* Tarjeta de pregunta */}
+          {/* Tarjeta de pregunta — ModuloCard: franja izquierda + border sutil */}
           <div
             style={{
-              backgroundColor: "white",
+              background: "#FFFFFF",
               borderRadius: "16px",
-              padding: "28px",
-              flex: 1,
-              marginBottom: "20px",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+              border: "0.5px solid #E5E7EB",
+              overflow: "hidden",
+              marginBottom: "12px",
+              display: "flex",
+              flexDirection: "row",
             }}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "24px" }}>
-              <h2 style={{ color: "#333", fontSize: "20px", lineHeight: 1.5, flex: 1, marginRight: "12px" }}>
-                {preguntaActual.pregunta}
-              </h2>
-              <button
-                onClick={() => toggleAudio(leccion.contenido.paginas.length + quiz.indice + 1)}
-                style={{
-                  flexShrink: 0,
-                  padding: "8px 14px",
-                  borderRadius: "10px",
-                  border: `2px solid ${tocandoAudio ? "var(--huap-rojo)" : "var(--huap-azul)"}`,
-                  backgroundColor: tocandoAudio ? "#FFEBEE" : "#E3F2FD",
-                  color: tocandoAudio ? "var(--huap-rojo)" : "var(--huap-azul)",
-                  fontSize: "15px",
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {tocandoAudio ? "⏹ Detener" : "🔊 Escuchar"}
-              </button>
-            </div>
+            {/* Franja izquierda verde (ModuloCard signature) */}
+            <div
+              aria-hidden="true"
+              style={{ width: "6px", backgroundColor: "var(--huap-verde)", flexShrink: 0 }}
+            />
 
-            <div className="flex flex-col gap-3">
-              {preguntaActual.opciones.map((opcion, idx) => {
-                let bgColor = "white"
-                let borderColor = "#E0E0E0"
-                let textColor = "#333"
+            {/* Contenido */}
+            <div style={{ flex: 1, padding: "24px", display: "flex", flexDirection: "column", gap: "20px" }}>
 
-                if (!quiz.mostrandoFeedback && quiz.seleccion === idx) {
-                  bgColor = "#E3F2FD"
-                  borderColor = "var(--huap-azul)"
-                }
-                if (quiz.mostrandoFeedback) {
-                  if (opcion.correcta) {
-                    bgColor = "#E8F5E9"
-                    borderColor = "var(--huap-verde)"
-                    textColor = "#1B5E20"
-                  } else if (quiz.seleccion === idx) {
-                    bgColor = "#FFEBEE"
-                    borderColor = "var(--huap-rojo)"
-                    textColor = "#7F0000"
-                  }
-                }
-
-                return (
-                  <button
-                    key={idx}
-                    onClick={() => seleccionarOpcion(idx)}
-                    disabled={quiz.mostrandoFeedback}
-                    style={{
-                      padding: "16px",
-                      borderRadius: "10px",
-                      border: `2px solid ${borderColor}`,
-                      backgroundColor: bgColor,
-                      fontSize: "17px",
-                      textAlign: "left",
-                      cursor: quiz.mostrandoFeedback ? "default" : "pointer",
-                      color: textColor,
-                      lineHeight: 1.4,
-                    }}
-                  >
-                    {opcion.texto}
-                  </button>
-                )
-              })}
-            </div>
-
-            {quiz.mostrandoFeedback && (
-              <div
-                style={{
-                  marginTop: "20px",
-                  padding: "14px 16px",
-                  backgroundColor: esCorrecta ? "#E8F5E9" : "#FFEBEE",
-                  border: `1.5px solid ${esCorrecta ? "var(--huap-verde)" : "var(--huap-rojo)"}`,
-                  borderRadius: "8px",
-                }}
-              >
-                <p style={{
-                  color: esCorrecta ? "#1B5E20" : "#7F0000",
-                  fontSize: "15px",
-                  fontWeight: 700,
-                  marginBottom: "6px",
-                }}>
-                  {esCorrecta ? "✓ ¡Muy bien!" : "✗ Incorrecto"}
-                </p>
-                <p style={{ color: esCorrecta ? "#2E7D32" : "#B71C1C", fontSize: "16px", lineHeight: 1.5 }}>
-                  {preguntaActual.feedback}
-                </p>
+              {/* Pregunta + botón audio */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "12px" }}>
+                <h2 style={{ color: "#111827", fontSize: "18px", fontWeight: 500, lineHeight: 1.5, margin: 0, flex: 1 }}>
+                  {preguntaActual.pregunta}
+                </h2>
+                <button
+                  onClick={() => toggleAudio(leccion.contenido.paginas.length + quiz.indice + 1)}
+                  style={{
+                    flexShrink: 0,
+                    padding: "6px 14px",
+                    borderRadius: "999px",
+                    border: `1px solid ${tocandoAudio ? "var(--huap-rojo)" : "var(--huap-azul)"}`,
+                    backgroundColor: "white",
+                    color: tocandoAudio ? "var(--huap-rojo)" : "var(--huap-azul)",
+                    fontSize: "14px",
+                    fontWeight: 500,
+                    cursor: "pointer",
+                    whiteSpace: "nowrap",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "4px",
+                  }}
+                >
+                  🔊 {tocandoAudio ? "Detener" : "Escuchar"}
+                </button>
               </div>
-            )}
+
+              {/* Opciones con letra + franja izquierda al seleccionar */}
+              <div className="flex flex-col gap-3">
+                {preguntaActual.opciones.map((opcion, idx) => {
+                  const letra = String.fromCharCode(65 + idx)
+                  let bgColor = "white"
+                  let boxShadow = "none"
+                  let textColor = "#374151"
+                  let letraColor = "#6B7280"
+                  let letraBg = "#F3F4F6"
+
+                  if (!quiz.mostrandoFeedback && quiz.seleccion === idx) {
+                    bgColor = "#F0FDF4"
+                    boxShadow = "inset 4px 0 0 var(--huap-verde)"
+                    letraColor = "#166534"
+                    letraBg = "#DCFCE7"
+                  }
+                  if (quiz.mostrandoFeedback) {
+                    if (opcion.correcta) {
+                      bgColor = "#F0FDF4"
+                      boxShadow = "inset 4px 0 0 var(--huap-verde)"
+                      textColor = "#166534"
+                      letraColor = "#166534"
+                      letraBg = "#DCFCE7"
+                    } else if (quiz.seleccion === idx) {
+                      bgColor = "#FFF5F5"
+                      boxShadow = "inset 4px 0 0 var(--huap-rojo)"
+                      textColor = "#991B1B"
+                      letraColor = "#991B1B"
+                      letraBg = "#FEE2E2"
+                    }
+                  }
+
+                  return (
+                    <button
+                      key={idx}
+                      onClick={() => seleccionarOpcion(idx)}
+                      disabled={quiz.mostrandoFeedback}
+                      style={{
+                        padding: "13px 16px",
+                        borderRadius: "12px",
+                        border: "0.5px solid #E5E7EB",
+                        backgroundColor: bgColor,
+                        boxShadow,
+                        fontSize: "16px",
+                        textAlign: "left",
+                        cursor: quiz.mostrandoFeedback ? "default" : "pointer",
+                        color: textColor,
+                        lineHeight: 1.5,
+                        fontWeight: 400,
+                        transition: "background-color 0.2s ease, box-shadow 0.2s ease",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                      }}
+                    >
+                      <span
+                        style={{
+                          flexShrink: 0,
+                          width: "28px",
+                          height: "28px",
+                          borderRadius: "50%",
+                          backgroundColor: letraBg,
+                          color: letraColor,
+                          fontSize: "13px",
+                          fontWeight: 600,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          transition: "background-color 0.2s ease, color 0.2s ease",
+                        }}
+                      >
+                        {quiz.mostrandoFeedback && opcion.correcta ? "✓" : letra}
+                      </span>
+                      {opcion.texto}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
           </div>
+
+          {/* Animación de entrada para el feedback */}
+          <style>{`
+            @keyframes feedbackSlideIn {
+              from { opacity: 0; transform: translateY(10px); }
+              to   { opacity: 1; transform: translateY(0); }
+            }
+          `}</style>
+
+          {/* Feedback — fuera de la tarjeta, aparece suave y arrastra la vista */}
+          {quiz.mostrandoFeedback && (
+            <div
+              ref={feedbackRef}
+              style={{
+                padding: "14px 16px",
+                backgroundColor: esCorrecta ? "#F0FDF4" : "#FFF5F5",
+                border: `0.5px solid ${esCorrecta ? "#BBF7D0" : "#FECACA"}`,
+                borderRadius: "12px",
+                marginBottom: "12px",
+                animation: "feedbackSlideIn 0.35s ease forwards",
+              }}
+            >
+              <p style={{
+                color: esCorrecta ? "#166534" : "#a92020",
+                fontSize: "14px",
+                fontWeight: 600,
+                marginBottom: "4px",
+              }}>
+                {esCorrecta ? "✓ ¡Muy bien!" : "✗ Incorrecto"}
+              </p>
+              <p style={{ color: esCorrecta ? "#166534" : "#6B7280", fontSize: "15px", lineHeight: 1.5, margin: 0 }}>
+                {preguntaActual.feedback}
+              </p>
+            </div>
+          )}
 
           {/* Botón de acción */}
           {!quiz.mostrandoFeedback ? (
@@ -527,12 +645,13 @@ export default function LeccionPage() {
                 padding: "16px",
                 borderRadius: "12px",
                 border: "none",
-                backgroundColor: quiz.seleccion !== null ? "var(--huap-azul)" : "#D0D0D0",
-                color: quiz.seleccion !== null ? "white" : "#999",
-                fontSize: "18px",
+                backgroundColor: quiz.seleccion !== null ? "var(--huap-azul)" : "#E5E7EB",
+                color: quiz.seleccion !== null ? "white" : "#9CA3AF",
+                fontSize: "17px",
                 fontWeight: 600,
                 cursor: quiz.seleccion !== null ? "pointer" : "not-allowed",
                 width: "100%",
+                transition: "background-color 0.2s ease",
               }}
             >
               Confirmar respuesta
@@ -546,7 +665,7 @@ export default function LeccionPage() {
                 border: "none",
                 backgroundColor: "var(--huap-azul)",
                 color: "white",
-                fontSize: "18px",
+                fontSize: "17px",
                 fontWeight: 600,
                 cursor: "pointer",
                 width: "100%",
