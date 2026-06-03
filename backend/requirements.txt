@@ -1,10 +1,23 @@
+# --- Dependencias Base del Proyecto ---
 fastapi==0.111.0
 uvicorn[standard]==0.30.1
 sqlalchemy==2.0.30
 psycopg2-binary==2.9.9
 python-dotenv==1.0.1
-pydantic[email]==2.7.1
 pydantic-settings==2.3.1
 python-jose[cryptography]==3.3.0
 httpx==0.27.0
 alembic==1.13.1
+
+# --- Actualización crítica para Python 3.12 ---
+pydantic[email]>=2.8.2
+
+# --- Dependencias del Chatbot ---
+langchain==0.2.11
+langchain-openai==0.1.17
+langchain-community==0.2.10
+langchain-text-splitters==0.2.2
+langchain-core==0.2.23
+langsmith==0.1.93
+faiss-cpu==1.8.0
+tiktoken>=0.7.0
