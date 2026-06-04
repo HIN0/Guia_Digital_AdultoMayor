@@ -115,3 +115,33 @@ export async function completarLeccion(leccionId: number): Promise<void> {
     body: JSON.stringify({ leccion_id: leccionId }),
   })
 }
+
+export interface RespuestaItem {
+  pregunta_id: number
+  opcion_id: number
+}
+
+export interface FeedbackPregunta {
+  pregunta_id: number
+  opcion_correcta_id: number
+  opcion_seleccionada_id: number
+  es_correcta: boolean
+  feedback: string
+}
+
+export interface ResultadoQuiz {
+  puntaje: number
+  minimo_aciertos: number
+  aprobado: boolean
+  feedbacks: FeedbackPregunta[]
+}
+
+export async function submitQuizFinal(quizId: number, respuestas: RespuestaItem[]): Promise<ResultadoQuiz> {
+  const res = await fetch(`${API_URL}/progreso/quiz`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ quiz_id: quizId, respuestas }),
+  })
+  if (!res.ok) throw new Error('Error al enviar el quiz')
+  return res.json()
+}

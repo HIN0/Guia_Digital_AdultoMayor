@@ -5,46 +5,85 @@ import { useParams, useRouter } from "next/navigation"
 import Image from "next/image"
 import Header from "@/components/layout/Header"
 import { Trophy, RefreshCw } from "lucide-react"
-import { getLeccion, completarLeccion, type LeccionDetalle, type PreguntaQuizCorto } from "@/lib/api"
+import { getLeccion, getModuloDetalle, completarLeccion, type LeccionDetalle, type PreguntaQuizCorto } from "@/lib/api"
 
 const IMAGENES_APOYO: Record<string, string> = {
   // L1 — Bienvenida y navegación
-  'Ilustración cálida de una persona mayor sonriendo frente a un teléfono. Botón verde grande "Comenzar".': "/lecciones/L1-1.svg",
-  "Flechas animadas señalando: ① la flecha ← para Volver, ② el menú principal (Inicio), ③ el botón de Chat, ④ el botón de progreso, ⑤ el ajuste de tamaño de letra (selector de tamaño de letra).": "/lecciones/L1-2.svg",
-  "Demostración del selector Pequeño / Mediano / Grande cambiando el tamaño del texto en vivo.": "/lecciones/L1-3.svg",
-  "Guía paso a paso con refuerzo positivo después de cada toque.": "/lecciones/L1-4.svg",
-  "Mensaje de felicitación con marca de avance del módulo.": "/lecciones/L1-5.svg",
+  'Ilustración cálida de una persona mayor sonriendo frente a un teléfono. Botón verde grande "Comenzar".': "/lecciones/modulo1/L1-1.svg",
+  "Flechas animadas señalando: ① la flecha ← para Volver, ② el menú principal (Inicio), ③ el botón de Chat, ④ el botón de progreso, ⑤ el ajuste de tamaño de letra (selector de tamaño de letra).": "/lecciones/modulo1/L1-2.svg",
+  "Demostración del selector Pequeño / Mediano / Grande cambiando el tamaño del texto en vivo.": "/lecciones/modulo1/L1-3.svg",
+  "Guía paso a paso con refuerzo positivo después de cada toque.": "/lecciones/modulo1/L1-4.svg",
+  "Mensaje de felicitación con marca de avance del módulo.": "/lecciones/modulo1/L1-5.svg",
   // L2 — ¿Qué es la IA?
-  "Ilustración simple: un computador rodeado de ejemplos con una flecha que sale hacia una respuesta.": "/lecciones/L2-1.svg",
-  "Cuatro tarjetas: 📷 reconocer cara, ✍️ corregir texto, 🗺️ sugerir ruta, 🔊 asistente de voz.": "/lecciones/L2-2.svg",
-  "Analogía visual del aprendizaje por ejemplos.": "/lecciones/L2-3.svg",
-  "Comparación: calculadora 🧮 = herramienta útil / IA 🤖 = herramienta útil.": "/lecciones/L2-4.svg",
-  "Ilustración de un chatbot conversando con un usuario.": "/lecciones/L2-5.svg",
-  "Resumen con tres viñetas y marca de avance.": "/lecciones/L2-6.svg",
+  "Ilustración simple: un computador rodeado de ejemplos con una flecha que sale hacia una respuesta.": "/lecciones/modulo1/L2-1.svg",
+  "Cuatro tarjetas: 📷 reconocer cara, ✍️ corregir texto, 🗺️ sugerir ruta, 🔊 asistente de voz.": "/lecciones/modulo1/L2-2.svg",
+  "Analogía visual del aprendizaje por ejemplos.": "/lecciones/modulo1/L2-3.svg",
+  "Comparación: calculadora 🧮 = herramienta útil / IA 🤖 = herramienta útil.": "/lecciones/modulo1/L2-4.svg",
+  "Ilustración de un chatbot conversando con un usuario.": "/lecciones/modulo1/L2-5.svg",
+  "Resumen con tres viñetas y marca de avance.": "/lecciones/modulo1/L2-6.svg",
   // L3 — La IA en salud
-  "Ícono de corazón con un signo de ayuda.": "/lecciones/L3-1.svg",
-  "Tres tarjetas: 📖 explicar palabras, ℹ️ información general, ⏰ recordatorios.": "/lecciones/L3-2.svg",
-  "Viñeta ilustrada de don Luis consultando la app en casa.": "/lecciones/L3-3.svg",
-  'Lista con íconos rojos de "no" frente a cada límite.': "/lecciones/L3-4.svg",
+  "Ícono de corazón con un signo de ayuda.": "/lecciones/modulo1/L3-1.svg",
+  "Tres tarjetas: 📖 explicar palabras, ℹ️ información general, ⏰ recordatorios.": "/lecciones/modulo1/L3-2.svg",
+  "Viñeta ilustrada de don Luis consultando la app en casa.": "/lecciones/modulo1/L3-3.svg",
+  'Lista con íconos rojos de "no" frente a cada límite.': "/lecciones/modulo1/L3-4.svg",
   // L5 — Privacidad y datos
-  "Ilustración de una plaza con mucha gente escuchando, frente a una consulta médica cerrada.": "/lecciones/L5-1.svg",
-  "Lista verde: síntomas en general, dudas sobre una enfermedad, preguntas de orientación.": "/lecciones/L5-2.svg",
-  "Lista roja: RUT, dirección, Fonasa, fotos con nombre, tarjeta bancaria, contraseñas.": "/lecciones/L5-3.svg",
-  "Viñeta del caso de María recibiendo publicidad no deseada.": "/lecciones/L5-4.svg",
-  "Mensaje de cierre destacado con candado 🔒.": "/lecciones/L5-5.svg",
+  "Ilustración de una plaza con mucha gente escuchando, frente a una consulta médica cerrada.": "/lecciones/modulo1/L5-1.svg",
+  "Lista verde: síntomas en general, dudas sobre una enfermedad, preguntas de orientación.": "/lecciones/modulo1/L5-2.svg",
+  "Lista roja: RUT, dirección, Fonasa, fotos con nombre, tarjeta bancaria, contraseñas.": "/lecciones/modulo1/L5-3.svg",
+  "Viñeta del caso de María recibiendo publicidad no deseada.": "/lecciones/modulo1/L5-4.svg",
+  "Mensaje de cierre destacado con candado 🔒.": "/lecciones/modulo1/L5-5.svg",
   // L6 — Reconocer engaños
-  "Ilustración de un mensaje con disfraz de hospital y una alerta.": "/lecciones/L6-1.svg",
-  "Tres tarjetas de alerta: 🪄 cura milagrosa, ⏱️ te apura, 💳 te pide pagar.": "/lecciones/L6-2.svg",
-  "Pasos ilustrados: buscar en Google, llamar al número oficial, no tocar links de WhatsApp.": "/lecciones/L6-3.svg",
-  "Capturas comparadas: mensaje falso vs. sitio oficial gob.cl.": "/lecciones/L6-4.svg",
-  "Resumen con las tres señales y la acción de verificar.": "/lecciones/L6-5.svg",
+  "Ilustración de un mensaje con disfraz de hospital y una alerta.": "/lecciones/modulo1/L6-1.svg",
+  "Tres tarjetas de alerta: 🪄 cura milagrosa, ⏱️ te apura, 💳 te pide pagar.": "/lecciones/modulo1/L6-2.svg",
+  "Pasos ilustrados: buscar en Google, llamar al número oficial, no tocar links de WhatsApp.": "/lecciones/modulo1/L6-3.svg",
+  "Capturas comparadas: mensaje falso vs. sitio oficial gob.cl.": "/lecciones/modulo1/L6-4.svg",
+  "Resumen con las tres señales y la acción de verificar.": "/lecciones/modulo1/L6-5.svg",
   // L4 — Riesgos y limitaciones
-  "Ilustración de un robot hablando con tono seguro mientras un signo de interrogación flota encima.": "/lecciones/L4-1.svg",
-  "Ejemplo de una respuesta inventada marcada con una lupa y la palabra \"alucinación\".": "/lecciones/L4-2.svg",
-  "Calendario con una fecha de corte y un reloj indicando \"puede estar atrasada\".": "/lecciones/L4-3.svg",
-  "Comparación: una multitud (lo general) frente a una sola persona destacada (tu caso).": "/lecciones/L4-4.svg",
-  "Viñeta del caso con mensaje: \"confirmar la salvó de un error\".": "/lecciones/L4-5.svg",
-  "Resumen con tres riesgos y la regla de oro destacada.": "/lecciones/L4-6.svg",
+  "Ilustración de un robot hablando con tono seguro mientras un signo de interrogación flota encima.": "/lecciones/modulo1/L4-1.svg",
+  "Ejemplo de una respuesta inventada marcada con una lupa y la palabra \"alucinación\".": "/lecciones/modulo1/L4-2.svg",
+  "Calendario con una fecha de corte y un reloj indicando \"puede estar atrasada\".": "/lecciones/modulo1/L4-3.svg",
+  "Comparación: una multitud (lo general) frente a una sola persona destacada (tu caso).": "/lecciones/modulo1/L4-4.svg",
+  "Viñeta del caso con mensaje: \"confirmar la salvó de un error\".": "/lecciones/modulo1/L4-5.svg",
+  "Resumen con tres riesgos y la regla de oro destacada.": "/lecciones/modulo1/L4-6.svg",
+  // L1 — Hacer mejores preguntas (Módulo 2, lección 2.1)
+  "Ilustración: una pregunta clara entra y sale una respuesta clara; una pregunta confusa sale confusa.": "/lecciones/modulo2/L1-1.svg",
+  "Comparación: \"me siento mal\" (vago) → \"dolor de cabeza en las mañanas\" (concreto).": "/lecciones/modulo2/L1-2.svg",
+  "Ejemplo de pedir \"explícamelo simple\" y la respuesta simplificada.": "/lecciones/modulo2/L1-3.svg",
+  "Recordatorio con candado: pregunta sí, datos personales no.": "/lecciones/modulo2/L1-4.svg",
+  "Resumen con los tres trucos y marca de avance.": "/lecciones/modulo2/L1-5.svg",
+  // L2 — Leer una respuesta (Módulo 2, lección 2.2)
+  "Ilustración de una respuesta con \"señales\" resaltadas como pistas.": "/lecciones/modulo2/L2-1.svg",
+  "Frase \"generalmente...\" resaltada en ámbar.": "/lecciones/modulo2/L2-2.svg",
+  "Frase \"consulte a un médico\" resaltada en verde con un visto bueno.": "/lecciones/modulo2/L2-3.svg",
+  "Frase \"podría ser A, B o C\" con un signo de interrogación.": "/lecciones/modulo2/L2-4.svg",
+  "Resumen con las tres señales y marca de avance.": "/lecciones/modulo2/L2-5.svg",
+  // L3 — Verificar la información (Módulo 2, lección 2.3)
+  "Ilustración de una afirmación pasando por un \"filtro de verificación\".": "/lecciones/modulo2/L3-1.svg",
+  "Dos columnas: confiables (médico, gob.cl, consultorio) vs. no confiables (redes, cadenas de WhatsApp).": "/lecciones/modulo2/L3-2.svg",
+  "Balanza: IA en un lado, fuente confiable en el otro; gana el profesional.": "/lecciones/modulo2/L3-3.svg",
+  "Viñeta del caso de Carlos confirmando con su médico.": "/lecciones/modulo2/L3-4.svg",
+  "Resumen con la regla de las dos fuentes y marca de avance.": "/lecciones/modulo2/L3-5.svg",
+  // L4 — Casos por patología (Módulo 2, lección 2.4)
+  "Cinco tarjetas con las patologías base. Aviso visible: \"contenido educativo, no diagnóstico\".": "/lecciones/modulo2/L4-1.svg",
+  "Ícono de tensiómetro. Pregunta útil vs. lo que es del médico.": "/lecciones/modulo2/L4-2.svg",
+  "Ícono de gota/glucómetro. Pregunta útil vs. lo que es del médico.": "/lecciones/modulo2/L4-3.svg",
+  "Ícono de articulación. Pregunta útil vs. lo que es del médico.": "/lecciones/modulo2/L4-4.svg",
+  "Ícono de corazón/arteria. Pregunta útil vs. lo que es del médico.": "/lecciones/modulo2/L4-5.svg",
+  "Ícono de pierna. Pregunta útil vs. lo que es del médico.": "/lecciones/modulo2/L4-6.svg",
+  "Resumen del patrón común SÍ/NO con marca de avance.": "/lecciones/modulo2/L4-7.svg",
+  // L5 — Preparar tu consulta médica (Módulo 2, lección 2.5)
+  "Ilustración de una persona mayor llegando confiada a su consulta con una lista en la mano.": "/lecciones/modulo2/L5-1.svg",
+  "Lista de preguntas generada para llevar a la consulta.": "/lecciones/modulo2/L5-2.svg",
+  "Ejemplo: \"insuficiencia venosa\" → explicación simple.": "/lecciones/modulo2/L5-3.svg",
+  "Guía de tres preguntas: ¿cuándo empezó?, ¿qué siento?, ¿qué lo empeora?": "/lecciones/modulo2/L5-4.svg",
+  "Demostración de la conversación y el paciente anotando las preguntas.": "/lecciones/modulo2/L5-5.svg",
+  "Resumen con los tres usos y marca de avance.": "/lecciones/modulo2/L5-6.svg",
+  // L6 — Cuándo NO usar la IA (Módulo 2, lección 2.6)
+  "Encabezado en rojo de emergencia. Tono serio, sin alarmar.": "/lecciones/modulo2/L6-1.svg",
+  "Caja de alerta roja con lista de síntomas (igual que en el prototipo).": "/lecciones/modulo2/L6-2.svg",
+  "Tarjetas con números grandes (igual que en el prototipo).": "/lecciones/modulo2/L6-3.svg",
+  "Tres situaciones para médico de cabecera con ícono de médico.": "/lecciones/modulo2/L6-4.svg",
+  "Mensaje de cierre destacado (disclaimer del prototipo).": "/lecciones/modulo2/L6-5.svg",
 }
 
 type Fase = "paginas" | "quiz" | "resultado"
@@ -73,6 +112,7 @@ export default function LeccionPage() {
     aciertos: 0,
   })
   const [aprobado, setAprobado] = useState(false)
+  const [moduloOrden, setModuloOrden] = useState(0)
   const [tocandoAudio, setTocandoAudio] = useState(false)
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const feedbackRef = useRef<HTMLDivElement>(null)
@@ -90,8 +130,9 @@ export default function LeccionPage() {
       detenerAudio()
       return
     }
+    if (!leccion || moduloOrden === 0) return
     detenerAudio()
-    const url = `/audio/L${leccionId}/L${leccionId}-${numero}.mp3`
+    const url = `/audio/modulo${moduloOrden}/L${leccion.orden}/L${leccion.orden}-${numero}.mp3`
     const audio = new Audio(url)
     audioRef.current = audio
     audio.play().then(() => setTocandoAudio(true)).catch(() => setTocandoAudio(false))
@@ -102,7 +143,10 @@ export default function LeccionPage() {
     getLeccion(leccionId)
       .then(setLeccion)
       .catch(() => setError(true))
-  }, [leccionId])
+    getModuloDetalle(moduloId)
+      .then(m => setModuloOrden(m.orden))
+      .catch(() => {})
+  }, [leccionId, moduloId])
 
   useEffect(() => {
     if (quiz.mostrandoFeedback && feedbackRef.current) {

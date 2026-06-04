@@ -1537,32 +1537,32 @@ LECCIONES_DATA = [
         "items": [
           {
             "pregunta": "¿Qué medicamento debo tomar?",
-            "util": false,
+            "util": False,
             "motivo": "Lo decide el cardiólogo."
           },
           {
             "pregunta": "¿Qué actividades físicas son seguras para mí?",
-            "util": true,
-            "motivo": null
+            "util": True,
+            "motivo": None
           },
           {
             "pregunta": "¿Cuándo es momento de preocuparme por la presión?",
-            "util": true,
-            "motivo": null
+            "util": True,
+            "motivo": None
           },
           {
             "pregunta": "¿Cuál es la cura definitiva?",
-            "util": false,
+            "util": False,
             "motivo": "No existe; pregunta mal formulada."
           },
           {
             "pregunta": "¿Cómo afecta mi presión a otros aspectos de mi salud?",
-            "util": true,
-            "motivo": null
+            "util": True,
+            "motivo": None
           },
           {
             "pregunta": "¿La IA puede operarme?",
-            "util": false,
+            "util": False,
             "motivo": "Evalúa si entendiste que la IA no reemplaza al médico."
           }
         ]
@@ -1650,7 +1650,7 @@ LECCIONES_DATA = [
           "titulo": "Cuándo NO usar la IA",
           "texto": "Hay momentos en que perder tiempo con la IA puede ser peligroso. Aprende a reconocerlos. Esta información puede salvar tu vida o la de alguien cercano.",
           "apoyo_visual": "Encabezado en rojo de emergencia. Tono serio, sin alarmar.",
-          "fuente_prototipo": true
+          "fuente_prototipo": True
         },
         {
           "n": 2,
@@ -1667,7 +1667,7 @@ LECCIONES_DATA = [
             "Caídas con golpe fuerte en la cabeza"
           ],
           "apoyo_visual": "Caja de alerta roja con lista de síntomas (igual que en el prototipo).",
-          "fuente_prototipo": true
+          "fuente_prototipo": True
         },
         {
           "n": 3,
@@ -1689,7 +1689,7 @@ LECCIONES_DATA = [
             }
           ],
           "apoyo_visual": "Tarjetas con números grandes (igual que en el prototipo).",
-          "fuente_prototipo": true
+          "fuente_prototipo": True
         },
         {
           "n": 4,
@@ -1704,7 +1704,7 @@ LECCIONES_DATA = [
           "titulo": "Ante la duda, consulta a un profesional",
           "texto": "Si dudas, mejor ve al hospital: una consulta de más nunca es un error. Ante la duda, siempre consulta con un profesional de salud. La IA es para aprender y orientarte, no para emergencias.",
           "apoyo_visual": "Mensaje de cierre destacado (disclaimer del prototipo).",
-          "fuente_prototipo": true
+          "fuente_prototipo": True
         }
       ],
       "ejercicio": {

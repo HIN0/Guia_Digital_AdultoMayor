@@ -18,16 +18,15 @@ function construirModulos(apiModulos: ModuloResumen[]): Modulo[] {
   const mod1completado = localStorage.getItem("huap_mod1_completado") === "true"
   const quiz1aprobado  = localStorage.getItem("huap_quiz1_aprobado")  === "true"
 
-  const mod1Lecciones: number[] = JSON.parse(localStorage.getItem("huap_mod1_lecciones_completadas") ?? "[]")
-  const mod2Lecciones: number[] = JSON.parse(localStorage.getItem("huap_mod2_lecciones_completadas") ?? "[]")
-
   return apiModulos.map((m) => {
     const display = DISPLAY[m.orden] ?? { titulo: m.nombre, descripcion: "", leccionesTotales: 0 }
     const leccionesTotales = display.leccionesTotales
+    // Usa el ID real del módulo en BD para leer el progreso guardado por la página de lecciones
+    const guardadas: number[] = JSON.parse(localStorage.getItem(`huap_mod${m.id}_lecciones_completadas`) ?? "[]")
+    const completadas = guardadas.length
+    const progreso = leccionesTotales > 0 ? Math.round((completadas / leccionesTotales) * 100) : 0
 
     if (m.orden === 1) {
-      const completadas = mod1Lecciones.length
-      const progreso = leccionesTotales > 0 ? Math.round((completadas / leccionesTotales) * 100) : 0
       return {
         id: m.id, numero: m.orden, ...display,
         estado: mod1completado ? "completado" : "disponible",
@@ -36,8 +35,6 @@ function construirModulos(apiModulos: ModuloResumen[]): Modulo[] {
       }
     }
     if (m.orden === 2) {
-      const completadas = mod2Lecciones.length
-      const progreso = leccionesTotales > 0 ? Math.round((completadas / leccionesTotales) * 100) : 0
       return {
         id: m.id, numero: m.orden, ...display,
         estado: mod1completado ? "disponible" : "bloqueado",

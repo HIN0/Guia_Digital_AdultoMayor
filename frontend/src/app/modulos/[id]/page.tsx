@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
-import { CheckCircle, ChevronRight, ArrowLeft } from "lucide-react"
+import { CheckCircle, ChevronRight, ArrowLeft, ClipboardCheck } from "lucide-react"
 import Header from "@/components/layout/Header"
 import { getModuloDetalle, type ModuloDetalle } from "@/lib/api"
 
@@ -91,28 +91,79 @@ export default function ModuloDetallePage() {
               </p>
 
               {/* Barra de progreso */}
-              <div style={{ marginTop: "16px" }}>
-                <p style={{ color: "#666", fontSize: "15px", marginBottom: "8px" }}>
-                  {leccionesCompletadas.size} de {modulo.lecciones.length} lecciones completadas
-                </p>
-                <div style={{
-                  backgroundColor: "#E8EDF2",
-                  borderRadius: "999px",
-                  height: "10px",
-                  overflow: "hidden",
-                }}>
+              {modulo.lecciones.length > 0 && (
+                <div style={{ marginTop: "16px" }}>
+                  <p style={{ color: "#666", fontSize: "15px", marginBottom: "8px" }}>
+                    {leccionesCompletadas.size} de {modulo.lecciones.length} lecciones completadas
+                  </p>
                   <div style={{
-                    backgroundColor: "var(--huap-verde)",
-                    height: "100%",
+                    backgroundColor: "#E8EDF2",
                     borderRadius: "999px",
-                    width: `${modulo.lecciones.length > 0
-                      ? (leccionesCompletadas.size / modulo.lecciones.length) * 100
-                      : 0}%`,
-                    transition: "width 0.4s ease",
-                  }} />
+                    height: "10px",
+                    overflow: "hidden",
+                  }}>
+                    <div style={{
+                      backgroundColor: "var(--huap-verde)",
+                      height: "100%",
+                      borderRadius: "999px",
+                      width: `${(leccionesCompletadas.size / modulo.lecciones.length) * 100}%`,
+                      transition: "width 0.4s ease",
+                    }} />
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
+
+            {/* Botón quiz final — aparece cuando todas las lecciones están completadas */}
+            {modulo.quiz_final &&
+              modulo.lecciones.length > 0 &&
+              leccionesCompletadas.size >= modulo.lecciones.length && (
+              <button
+                onClick={() => {
+                  sessionStorage.setItem("huap_quiz_modulo_id", String(moduloId))
+                  router.push(`/quiz/${modulo.quiz_final!.id}`)
+                }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "16px",
+                  padding: "22px 20px",
+                  borderRadius: "16px",
+                  border: "2px solid var(--huap-verde)",
+                  backgroundColor: "#F0FAF4",
+                  cursor: "pointer",
+                  width: "100%",
+                  textAlign: "left",
+                  marginBottom: "8px",
+                  boxShadow: "0 2px 8px rgba(76,175,80,0.15)",
+                }}
+              >
+                <div style={{
+                  width: "52px",
+                  height: "52px",
+                  borderRadius: "50%",
+                  backgroundColor: "var(--huap-verde)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}>
+                  <ClipboardCheck size={28} color="white" strokeWidth={2} />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <p style={{ fontSize: "13px", color: "var(--huap-verde)", marginBottom: "3px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.04em" }}>
+                    ¡Listo para el examen!
+                  </p>
+                  <p style={{ fontSize: "19px", color: "#1a1a1a", fontWeight: 700, lineHeight: 1.3 }}>
+                    Iniciar Quiz Final del Módulo
+                  </p>
+                  <p style={{ fontSize: "14px", color: "#666", marginTop: "2px" }}>
+                    Mínimo {modulo.quiz_final.minimo_aciertos} de {modulo.quiz_final.preguntas.length} correctas para aprobar
+                  </p>
+                </div>
+                <ChevronRight size={26} color="var(--huap-verde)" strokeWidth={2} />
+              </button>
+            )}
 
             {/* Lista de lecciones */}
             <div className="flex flex-col gap-3">

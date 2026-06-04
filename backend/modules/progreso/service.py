@@ -20,6 +20,9 @@ def procesar_leccion_completada(db: Session, usuario_id: int, progreso: schema.P
         
     return registro
 
+def procesar_intento_quiz(db: Session, usuario_id: int, submit: schema.SubmitQuizCreate):
+    return repository.procesar_quiz(db, usuario_id, submit)
+
 def obtener_resumen_usuario(db: Session, usuario_id: int):
     """Compila el estado global del usuario para el dashboard o vistas de perfil."""
     lecciones = repository.obtener_lecciones_usuario(db, usuario_id)
