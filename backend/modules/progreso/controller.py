@@ -21,6 +21,15 @@ def registrar_avance_leccion(
     
     return service.procesar_leccion_completada(db, usuario_id_simulado, progreso)
 
+@router.post("/quiz", response_model=schema.ResultadoQuizResponse)
+def enviar_respuestas_quiz(
+    submit: schema.SubmitQuizCreate,
+    db: Session = Depends(get_db)
+):
+    """Recibe las respuestas del quiz final, valida en BD y devuelve resultado con feedback."""
+    usuario_id_simulado = 1
+    return service.procesar_intento_quiz(db, usuario_id_simulado, submit)
+
 @router.get("/", response_model=schema.ResumenProgresoResponse)
 def consultar_estado_progreso(
     db: Session = Depends(get_db)
