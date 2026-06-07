@@ -12,7 +12,8 @@ export function proxy(request: NextRequest) {
     request.nextUrl.pathname.startsWith("/modulos") ||
     request.nextUrl.pathname.startsWith("/quiz") ||
     request.nextUrl.pathname.startsWith("/chatbot") ||
-    request.nextUrl.pathname.startsWith("/perfil")
+    request.nextUrl.pathname.startsWith("/perfil") ||
+    request.nextUrl.pathname.startsWith("/admin")
 
   if (isProtectedRoute && !sessionToken) {
     return NextResponse.redirect(new URL("/", request.nextUrl))

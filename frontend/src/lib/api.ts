@@ -115,3 +115,132 @@ export async function completarLeccion(leccionId: number): Promise<void> {
     body: JSON.stringify({ leccion_id: leccionId }),
   })
 }
+
+
+// ── Chatbot ──────────────────────────────────────────────────────────────────
+
+export interface ChatResponse {
+  respuesta: string
+  conversacion_id: number
+}
+
+export async function preguntarChatbot(
+  pregunta: string,
+  conversacion_id: number | null,
+  token: string,
+): Promise<ChatResponse> {
+  const res = await fetch(`${API_URL}/chatbot/preguntar`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ pregunta, conversacion_id }),
+  })
+  if (!res.ok) throw new Error('Error al procesar la pregunta')
+  return res.json()
+}
+
+
+// ── Admin — Patologías ────────────────────────────────────────────────────────
+
+export interface PatologiaOut {
+  id: number
+  nombre: string
+  validada: boolean
+}
+
+export async function adminListarPatologias(token: string): Promise<PatologiaOut[]> {
+  const res = await fetch(`${API_URL}/chatbot/admin/patologias`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  if (!res.ok) throw new Error('Error al cargar patologías')
+  return res.json()
+}
+
+export async function adminCrearPatologia(nombre: string, token: string): Promise<PatologiaOut> {
+  const res = await fetch(`${API_URL}/chatbot/admin/patologias`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ nombre }),
+  })
+  if (!res.ok) throw new Error('Error al crear patología')
+  return res.json()
+}
+
+
+// ── Admin — Preguntas validadas (whitelist) ───────────────────────────────────
+
+export interface PreguntaChatbotOut {
+  id: number
+  patologia_id: number
+  texto_pregunta: string
+  respuesta_validada: string
+  variantes: string[]
+  activa: boolean
+}
+
+export interface PreguntaChatbotCreate {
+  patologia_id: number
+  texto_pregunta: string
+  respuesta_validada: string
+  variantes?: string[]
+}
+
+export interface PreguntaChatbotUpdate {
+  texto_pregunta?: string
+  respuesta_validada?: string
+  variantes?: string[]
+  activa?: boolean
+}
+
+export async function adminListarPreguntas(token: string): Promise<PreguntaChatbotOut[]> {
+  const res = await fetch(`${API_URL}/chatbot/admin/preguntas`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  if (!res.ok) throw new Error('Error al cargar preguntas')
+  return res.json()
+}
+
+export async function adminCrearPregunta(
+  data: PreguntaChatbotCreate,
+  token: string,
+): Promise<PreguntaChatbotOut> {
+  const res = await fetch(`${API_URL}/chatbot/admin/preguntas`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    body: JSON.stringify(data),
+  })
+  if (!res.ok) throw new Error('Error al crear pregunta')
+  return res.json()
+}
+
+export async function adminActualizarPregunta(
+  id: number,
+  data: PreguntaChatbotUpdate,
+  token: string,
+): Promise<PreguntaChatbotOut> {
+  const res = await fetch(`${API_URL}/chatbot/admin/preguntas/${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    body: JSON.stringify(data),
+  })
+  if (!res.ok) throw new Error('Error al actualizar pregunta')
+  return res.json()
+}
+
+export async function adminEliminarPregunta(id: number, token: string): Promise<void> {
+  const res = await fetch(`${API_URL}/chatbot/admin/preguntas/${id}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  if (!res.ok) throw new Error('Error al eliminar pregunta')
+}
+
+export async function adminRecargarWhitelist(token: string): Promise<void> {
+  const res = await fetch(`${API_URL}/chatbot/admin/recargar-whitelist`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  if (!res.ok) throw new Error('Error al recargar whitelist')
+}
