@@ -8,6 +8,12 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 
+    # Chatbot — OPCIÓN ACTIVA
+    GROQ_API_KEY: str = ""
+
+    # Chatbot — OPCIÓN FUTURA (OpenAI con billing)
+    # OPENAI_API_KEY: str = ""
+
     class Config:
         env_file = ".env"
 

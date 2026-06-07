@@ -1,245 +1,324 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { Lock } from "lucide-react"
+import { useState, useEffect, useRef } from "react"
+import { useSession } from "next-auth/react"
 import Header from "@/components/layout/Header"
+import { MessageCircle, Send, AlertTriangle } from "lucide-react"
+import { preguntarChatbot } from "@/lib/api"
+
+type TipoMensaje = "usuario" | "bot" | "error"
+
+interface Mensaje {
+  id: number
+  tipo: TipoMensaje
+  contenido: string
+}
+
+const SALUDO: Mensaje = {
+  id: 0,
+  tipo: "bot",
+  contenido:
+    "Hola, soy el asistente de salud del HUAP. Puedo responder preguntas sobre diabetes, síntomas, causas y cómo cuidar tu salud. ¿En qué te puedo ayudar hoy?",
+}
 
 export default function ChatbotPage() {
-  const router = useRouter()
-  const [montado, setMontado] = useState(false)
-  const [desbloqueado, setDesbloqueado] = useState(false)
+  const { data: session } = useSession()
+  const [mensajes, setMensajes] = useState<Mensaje[]>([SALUDO])
+  const [input, setInput] = useState("")
+  const [cargando, setCargando] = useState(false)
+  const [conversacionId, setConversacionId] = useState<number | null>(null)
+  const listaRef = useRef<HTMLDivElement>(null)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
-    setMontado(true)
-    const completadas: number[] = JSON.parse(
-      localStorage.getItem("huap_mod2_lecciones_completadas") ?? "[]"
-    )
-    setDesbloqueado(completadas.length > 0)
-  }, [])
+    if (listaRef.current) {
+      listaRef.current.scrollTop = listaRef.current.scrollHeight
+    }
+  }, [mensajes, cargando])
 
-  const bloqueado = !montado || !desbloqueado
+  async function enviar() {
+    const texto = input.trim()
+    if (!texto || cargando) return
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const token = (session as any)?.accessToken as string | undefined
+    if (!token) {
+      setMensajes((prev) => [
+        ...prev,
+        { id: Date.now(), tipo: "error", contenido: "Sin sesión activa. Recarga la página." },
+      ])
+      return
+    }
+
+    setMensajes((prev) => [...prev, { id: Date.now(), tipo: "usuario", contenido: texto }])
+    setInput("")
+
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto"
+    }
+
+    setCargando(true)
+    try {
+      const data = await preguntarChatbot(texto, conversacionId, token)
+      setConversacionId(data.conversacion_id)
+      setMensajes((prev) => [
+        ...prev,
+        { id: Date.now() + 1, tipo: "bot", contenido: data.respuesta },
+      ])
+    } catch {
+      setMensajes((prev) => [
+        ...prev,
+        {
+          id: Date.now() + 1,
+          tipo: "error",
+          contenido: "No pude conectarme al servidor. Verifica tu conexión e intenta de nuevo.",
+        },
+      ])
+    } finally {
+      setCargando(false)
+    }
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault()
+      enviar()
+    }
+  }
+
+  function autoResize(e: React.FormEvent<HTMLTextAreaElement>) {
+    const t = e.currentTarget
+    t.style.height = "auto"
+    t.style.height = `${Math.min(t.scrollHeight, 120)}px`
+  }
+
+  const puedeEnviar = input.trim().length > 0 && !cargando
 
   return (
-    <div style={{ position: "relative", minHeight: "100vh", backgroundColor: "var(--huap-fondo)" }}>
+    <div
+      style={{
+        height: "100dvh",
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor: "var(--huap-fondo)",
+        overflow: "hidden",
+      }}
+    >
+      {/* Header */}
       <Header />
 
-      {/* Mock de la UI — se difumina cuando está bloqueado */}
+      {/* Aviso educativo */}
       <div
         style={{
-          filter: bloqueado ? "blur(5px)" : "none",
-          pointerEvents: "none",
-          userSelect: "none",
-          transition: "filter 0.3s ease",
+          backgroundColor: "var(--huap-ambar-claro)",
+          borderBottom: "1px solid #f0c07a",
+          padding: "10px 16px",
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+          flexShrink: 0,
         }}
       >
-        <main style={{ maxWidth: "680px", margin: "0 auto", padding: "24px 20px 100px" }}>
-          <h1 style={{ fontSize: "26px", fontWeight: 700, color: "var(--huap-azul)", marginBottom: "20px" }}>
-            Asistente de salud
-          </h1>
-
-          {/* Aviso educativo */}
-          <div
-            style={{
-              padding: "14px 16px",
-              backgroundColor: "#FFFBEB",
-              border: "0.5px solid #FCD34D",
-              borderLeft: "4px solid #F59E0B",
-              borderRadius: "12px",
-              marginBottom: "16px",
-            }}
-          >
-            <p style={{ fontSize: "15px", color: "#92400E", lineHeight: 1.6, margin: 0 }}>
-              💡 <strong>Este asistente es educativo.</strong> No reemplaza la consulta con tu
-              médico o médica. Si tienes síntomas graves, acude a tu centro de salud más cercano
-              o llama al 131.
-            </p>
-          </div>
-
-          {/* Pista */}
-          <div
-            style={{
-              padding: "14px 16px",
-              backgroundColor: "#F0FDF4",
-              border: "0.5px solid #BBF7D0",
-              borderLeft: "4px solid var(--huap-verde)",
-              borderRadius: "12px",
-              marginBottom: "24px",
-            }}
-          >
-            <p style={{ fontSize: "15px", color: "#166534", margin: 0 }}>
-              Toca una pregunta sugerida o escribe la tuya abajo
-            </p>
-          </div>
-
-          {/* Burbuja del asistente */}
-          <div
-            style={{
-              background: "#FFFFFF",
-              border: "0.5px solid #E5E7EB",
-              borderRadius: "16px",
-              padding: "16px 20px",
-              marginBottom: "24px",
-            }}
-          >
-            <p style={{ fontSize: "16px", color: "#374151", lineHeight: 1.6, margin: 0 }}>
-              Hola, estoy aquí para ayudarte a entender información sobre salud.
-              ¿En qué puedo ayudarte?
-            </p>
-          </div>
-
-          {/* Preguntas sugeridas */}
-          <p
-            style={{
-              fontSize: "12px",
-              color: "#9CA3AF",
-              fontWeight: 600,
-              letterSpacing: "0.08em",
-              marginBottom: "12px",
-            }}
-          >
-            PREGUNTAS SUGERIDAS
-          </p>
-          <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "24px" }}>
-            {["¿Qué es la diabetes?", "¿Cómo controlar la presión alta?"].map((q) => (
-              <div
-                key={q}
-                style={{
-                  padding: "16px",
-                  borderRadius: "12px",
-                  border: "1px solid #E5E7EB",
-                  backgroundColor: "white",
-                  fontSize: "16px",
-                  color: "#374151",
-                  textAlign: "center",
-                }}
-              >
-                {q}
-              </div>
-            ))}
-          </div>
-
-          {/* Input falso */}
-          <div
-            style={{
-              padding: "14px 16px",
-              borderRadius: "12px",
-              border: "1px solid #E5E7EB",
-              backgroundColor: "white",
-              color: "#9CA3AF",
-              fontSize: "16px",
-              marginBottom: "12px",
-            }}
-          >
-            Escribe tu pregunta aquí...
-          </div>
-          <div
-            style={{
-              padding: "16px",
-              borderRadius: "12px",
-              backgroundColor: "var(--huap-verde)",
-              color: "white",
-              fontSize: "17px",
-              fontWeight: 600,
-              textAlign: "center",
-            }}
-          >
-            Enviar pregunta
-          </div>
-        </main>
+        <AlertTriangle size={18} color="var(--huap-ambar)" strokeWidth={2} style={{ flexShrink: 0 }} />
+        <p style={{ fontSize: "0.78rem", color: "#7a4a00", lineHeight: 1.4, margin: 0 }}>
+          Información <strong>educativa</strong>, no reemplaza la consulta médica. Emergencias: llama al{" "}
+          <strong>131</strong>.
+        </p>
       </div>
 
-      {/* Overlay de bloqueo */}
-      {bloqueado && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "24px",
-            backgroundColor: "rgba(249, 250, 251, 0.55)",
-          }}
-        >
+      {/* Área de mensajes */}
+      <div
+        ref={listaRef}
+        style={{
+          flex: 1,
+          overflowY: "auto",
+          padding: "16px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "14px",
+        }}
+      >
+        {mensajes.map((msg) => (
           <div
+            key={msg.id}
             style={{
-              background: "#FFFFFF",
-              borderRadius: "16px",
-              border: "0.5px solid #E5E7EB",
-              overflow: "hidden",
-              maxWidth: "360px",
-              width: "100%",
               display: "flex",
-              flexDirection: "row",
+              justifyContent: msg.tipo === "usuario" ? "flex-end" : "flex-start",
+              alignItems: "flex-end",
+              gap: "8px",
             }}
           >
-            {/* Franja gris — bloqueado (igual que ModuloCard bloqueado) */}
-            <div
-              aria-hidden="true"
-              style={{ width: "6px", backgroundColor: "#9CA3AF", flexShrink: 0 }}
-            />
-
-            <div
-              style={{
-                flex: 1,
-                padding: "32px 24px",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: "20px",
-                textAlign: "center",
-              }}
-            >
-              {/* Ícono de candado */}
+            {/* Avatar del bot */}
+            {msg.tipo !== "usuario" && (
               <div
                 style={{
-                  width: "72px",
-                  height: "72px",
+                  width: 34,
+                  height: 34,
                   borderRadius: "50%",
-                  backgroundColor: "#F3F4F6",
-                  border: "0.5px solid #D1D5DB",
+                  flexShrink: 0,
+                  backgroundColor:
+                    msg.tipo === "error" ? "var(--huap-rojo)" : "var(--huap-azul)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                 }}
               >
-                <Lock size={32} color="#9CA3AF" strokeWidth={2} />
+                <MessageCircle size={17} color="white" strokeWidth={2} />
               </div>
+            )}
 
-              {/* Texto */}
-              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                <h2 style={{ fontSize: "18px", fontWeight: 600, color: "#111827", margin: 0 }}>
-                  Contenido bloqueado
-                </h2>
-                <p style={{ fontSize: "15px", color: "#6B7280", lineHeight: 1.6, margin: 0 }}>
-                  Completa el{" "}
-                  <strong style={{ color: "#111827" }}>Módulo 2</strong> para desbloquear
-                  el Asistente de salud.
-                </p>
-              </div>
-
-              {/* Botón */}
-              <button
-                onClick={() => router.push("/modulos")}
-                style={{
-                  width: "100%",
-                  padding: "14px",
-                  borderRadius: "12px",
-                  border: "none",
-                  backgroundColor: "var(--huap-azul)",
-                  color: "white",
-                  fontSize: "16px",
-                  fontWeight: 600,
-                  cursor: "pointer",
-                }}
-              >
-                Ir al Módulo 2
-              </button>
+            {/* Burbuja */}
+            <div
+              style={{
+                maxWidth: "78%",
+                padding: "12px 16px",
+                borderRadius:
+                  msg.tipo === "usuario"
+                    ? "18px 18px 4px 18px"
+                    : "18px 18px 18px 4px",
+                backgroundColor:
+                  msg.tipo === "usuario"
+                    ? "var(--huap-azul)"
+                    : msg.tipo === "error"
+                    ? "#FFEBEE"
+                    : "white",
+                color:
+                  msg.tipo === "usuario"
+                    ? "white"
+                    : msg.tipo === "error"
+                    ? "var(--huap-rojo)"
+                    : "var(--huap-texto)",
+                boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+                fontSize: "1rem",
+                lineHeight: 1.6,
+                whiteSpace: "pre-wrap",
+              }}
+            >
+              {msg.contenido}
             </div>
           </div>
+        ))}
+
+        {/* Indicador "escribiendo..." */}
+        {cargando && (
+          <div style={{ display: "flex", alignItems: "flex-end", gap: "8px" }}>
+            <div
+              style={{
+                width: 34,
+                height: 34,
+                borderRadius: "50%",
+                flexShrink: 0,
+                backgroundColor: "var(--huap-azul)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <MessageCircle size={17} color="white" strokeWidth={2} />
+            </div>
+            <div
+              style={{
+                padding: "14px 18px",
+                backgroundColor: "white",
+                borderRadius: "18px 18px 18px 4px",
+                boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+                display: "flex",
+                gap: "5px",
+                alignItems: "center",
+              }}
+            >
+              {[0, 1, 2].map((i) => (
+                <span
+                  key={i}
+                  style={{
+                    display: "block",
+                    width: 8,
+                    height: 8,
+                    borderRadius: "50%",
+                    backgroundColor: "#aaa",
+                    animation: `typing-bounce 1.2s ease-in-out ${i * 0.2}s infinite`,
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Barra de input */}
+      <div
+        style={{
+          backgroundColor: "white",
+          borderTop: "1px solid #E5E7EB",
+          padding: "12px 16px",
+          paddingBottom: "calc(12px + 88px)", // espacio para NavTabs fijo
+          flexShrink: 0,
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            gap: "10px",
+            alignItems: "flex-end",
+            maxWidth: "680px",
+            margin: "0 auto",
+          }}
+        >
+          <textarea
+            ref={textareaRef}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            onInput={autoResize}
+            placeholder="Escribe tu pregunta…"
+            rows={1}
+            style={{
+              flex: 1,
+              resize: "none",
+              border: "1.5px solid #D1D5DB",
+              borderRadius: "14px",
+              padding: "12px 16px",
+              fontSize: "1rem",
+              fontFamily: "inherit",
+              outline: "none",
+              backgroundColor: "var(--huap-fondo)",
+              color: "var(--huap-texto)",
+              lineHeight: 1.5,
+              overflow: "hidden",
+              transition: "border-color 0.15s",
+            }}
+            onFocus={(e) => (e.currentTarget.style.borderColor = "var(--huap-azul)")}
+            onBlur={(e) => (e.currentTarget.style.borderColor = "#D1D5DB")}
+          />
+          <button
+            onClick={enviar}
+            disabled={!puedeEnviar}
+            aria-label="Enviar pregunta"
+            style={{
+              width: 48,
+              height: 48,
+              borderRadius: "50%",
+              flexShrink: 0,
+              backgroundColor: puedeEnviar ? "var(--huap-azul)" : "#D1D5DB",
+              border: "none",
+              cursor: puedeEnviar ? "pointer" : "not-allowed",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              transition: "background 0.15s",
+            }}
+          >
+            <Send size={20} color="white" strokeWidth={2} />
+          </button>
         </div>
-      )}
+      </div>
+
+      <style>{`
+        @keyframes typing-bounce {
+          0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
+          40% { transform: translateY(-6px); opacity: 1; }
+        }
+      `}</style>
     </div>
   )
 }
