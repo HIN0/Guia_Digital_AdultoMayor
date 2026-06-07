@@ -1,1 +1,76 @@
-Se atiende desde las 8:00 AM hasta 9:00 PM
+## Guía Digital del HUAP — Base de Conocimiento
+
+---
+
+## DIABETES
+
+### ¿Qué es la diabetes?
+La diabetes es una enfermedad crónica que ocurre cuando el páncreas no produce suficiente insulina o cuando el cuerpo no utiliza correctamente la insulina que produce. La insulina es una hormona que regula el azúcar (glucosa) en la sangre. Existen dos tipos principales: Tipo 1 (el cuerpo no produce insulina) y Tipo 2 (el cuerpo no usa bien la insulina), siendo este último el más frecuente en adultos mayores.
+
+### Síntomas de la diabetes
+Los síntomas más comunes de la diabetes son:
+- Sed excesiva y boca seca
+- Necesidad frecuente de orinar, especialmente durante la noche
+- Cansancio y fatiga sin razón aparente
+- Visión borrosa
+- Heridas que tardan mucho en cicatrizar
+- Hormigueo o entumecimiento en manos y pies
+- Pérdida de peso sin dieta
+- Hambre frecuente incluso después de comer
+- Infecciones recurrentes en la piel, encías o vejiga
+
+### Causas de la diabetes
+Las principales causas y factores de riesgo son:
+- Antecedentes familiares (herencia genética)
+- Sobrepeso u obesidad, especialmente en la zona abdominal
+- Sedentarismo y falta de actividad física
+- Alimentación alta en azúcares y harinas refinadas
+- Edad mayor de 45 años
+- Hipertensión arterial
+- Niveles altos de colesterol o triglicéridos
+- Estrés crónico
+
+### Buenas prácticas para prevenir y controlar la diabetes
+Para prevenir la diabetes o mantenerla bajo control se recomienda:
+
+**Alimentación saludable:**
+- Consumir frutas, verduras y legumbres todos los días
+- Preferir cereales integrales como avena, arroz integral y pan integral
+- Reducir el consumo de azúcar, bebidas azucaradas y dulces
+- Disminuir las frituras y alimentos procesados
+- Comer en porciones moderadas y a horarios regulares
+- Beber al menos 8 vasos de agua al día
+
+**Actividad física:**
+- Realizar al menos 30 minutos de caminata diaria
+- Subir escaleras en lugar de ascensores cuando sea posible
+- Practicar actividades físicas suaves como yoga, natación o bicicleta estacionaria
+- Evitar permanecer sentado más de 2 horas seguidas
+
+**Controles médicos:**
+- Medir la glucosa en sangre según indicación médica
+- Asistir a los controles con el médico o enfermera de cabecera
+- Tomar los medicamentos prescritos sin saltarse dosis
+- Controlar la presión arterial regularmente
+- Realizarse el examen de hemoglobina glicosilada (HbA1c) al menos 2 veces al año
+
+**Cuidados generales:**
+- Revisar los pies diariamente para detectar heridas o cambios en la piel
+- Usar calzado cómodo y adecuado
+- No fumar
+- Moderar el consumo de alcohol
+- Dormir entre 7 y 8 horas por noche
+- Gestionar el estrés con actividades de relajación
+
+---
+
+## INFORMACIÓN GENERAL DEL HUAP
+
+### Horarios de atención
+El hospital atiende de lunes a viernes de 8:00 AM a 9:00 PM. Los fines de semana el horario de urgencias es las 24 horas.
+
+### Guía Digital para Adultos Mayores
+La Guía Digital del HUAP es una plataforma educativa en línea diseñada especialmente para personas mayores. Ofrece lecciones interactivas sobre tecnología, salud y bienestar. Cada módulo contiene lecciones con texto, imágenes y audio para facilitar el aprendizaje.
+
+### Soporte técnico
+Si tiene problemas para acceder a la plataforma, puede acercarse al mesón de atención del HUAP en horario de lunes a viernes de 8:00 a 17:00 hrs o llamar al número de soporte indicado en su tarjeta de atención.

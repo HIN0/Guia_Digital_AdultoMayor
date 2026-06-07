@@ -15,6 +15,7 @@ from modules.auth.controller import router as auth_router
 from modules.educacion.controller import router as educacion_router
 from modules.progreso.controller import router as progreso_router
 from modules.chatbot.controller import router as chatbot_router
+from modules.chatbot.service import inicializar_base_conocimiento, cargar_preguntas_validadas
 #from modules.admin.controller import router as admin_router
 
 # Crea las tablas en PostgreSQL si no existen (útil en desarrollo)
@@ -36,6 +37,15 @@ async def lifespan(app: FastAPI):
         print(f"❌ Error en auto-seed: {e}")
     finally:
         db.close()
+
+    print("⏳ Cargando base de conocimiento del chatbot...")
+    try:
+        inicializar_base_conocimiento()
+        cargar_preguntas_validadas()
+        print("✅ Chatbot listo.")
+    except Exception as e:
+        print(f"⚠️  Chatbot no pudo inicializarse: {e}")
+
     yield
 
 
