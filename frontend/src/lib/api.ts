@@ -57,6 +57,7 @@ export interface Pagina {
   titulo: string
   texto: string
   apoyo_visual: string
+  lista_sintomas?: string[]
 }
 
 export interface OpcionQuizCorto {

@@ -402,6 +402,141 @@ export default function LeccionPage() {
                   )
                 }
 
+                // Patrón "El paciente pregunta: "..."
+                const matchPacientePregunta = texto.match(/^(El paciente pregunta):\s*"([^"]+)"\.\s*(.+)$/)
+                if (matchPacientePregunta) {
+                  const [, intro, pregunta, resto] = matchPacientePregunta
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
+                      <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "14px 18px", backgroundColor: "#EFF6FF", borderLeft: "4px solid var(--huap-azul)", borderRadius: "10px" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>?</span>
+                        <p style={{ color: "#1e3a5f", fontSize: "17px", fontStyle: "italic", lineHeight: 1.6, margin: 0 }}>&ldquo;{pregunta}&rdquo;</p>
+                      </div>
+                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{resto.trim()}</p>
+                    </>
+                  )
+                }
+
+                // Patrón resumen usos: "Usa la IA para preparar tu consulta: item1, item2 y item3. [cierre]"
+                const matchResumenUsos = texto.match(/^(Usa la IA para preparar tu consulta:)\s*([^.]+)\.\s*(.+)$/)
+                if (matchResumenUsos) {
+                  const [, intro, itemsStr, cierre] = matchResumenUsos
+                  const items = itemsStr.split(/,\s+|\s+y\s+/).map((s: string) => s.trim()).filter(Boolean)
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        {items.map((item: string, i: number) => (
+                          <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                            <p style={{ color: "#166534", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                          </div>
+                        ))}
+                      </div>
+                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{cierre}</p>
+                    </>
+                  )
+                }
+
+                // Patrón síntomas con ❓: "... síntomas: cuándo empezó, ..."
+                const matchSintomas = texto.match(/^(.+?síntomas:)\s*([^.]+)\.\s*(.+)$/)
+                if (matchSintomas) {
+                  const [, intro, itemsStr, cierre] = matchSintomas
+                  const items = itemsStr.split(/,\s*/).map((s: string) => s.trim())
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro.trim()}</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        {items.map((item: string, i: number) => (
+                          <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#EFF6FF", borderRadius: "10px", border: "1px solid #BFDBFE" }}>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>?</span>
+                            <p style={{ color: "#1e3a5f", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>
+                              {item.startsWith("¿") ? item : `¿${item.charAt(0).toUpperCase()}${item.slice(1)}?`}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{cierre.trim()}</p>
+                    </>
+                  )
+                }
+
+                // Patrón médico de cabecera: "... Cosas como [items], son para tu médico de cabecera, no para el chatbot."
+                const matchCabecera = texto.match(/^(.+?Cosas como)\s+(.+),\s*(son para tu médico de cabecera),\s*(no para el chatbot)\.$/)
+                if (matchCabecera) {
+                  const [, intro, itemsStr, paraMedico, noChat] = matchCabecera
+                  const items = itemsStr.split(/,\s*/).map((s: string) => s.replace(/^o\s+/, '').trim())
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro.trim()}:</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        {items.map((item: string, i: number) => (
+                          <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "6px 0" }}>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>+</span>
+                            <p style={{ color: "#1e3a5f", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                          </div>
+                        ))}
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                        <p style={{ color: "#166534", fontSize: "16px", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{paraMedico.trim().charAt(0).toUpperCase() + paraMedico.trim().slice(1)}</p>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
+                        <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{noChat.trim().charAt(0).toUpperCase() + noChat.trim().slice(1)}</p>
+                      </div>
+                    </>
+                  )
+                }
+
+                // Patrón "No reemplaza / te ayuda": "... No reemplaza a tu médico: [beneficio]. [cierre]."
+                const matchNoReemplaza = texto.match(/^(.+?)\.\s*No reemplaza a tu médico:\s*(.+?)\.\s*(.+)$/)
+                if (matchNoReemplaza) {
+                  const [, intro, beneficio, cierre] = matchNoReemplaza
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro.trim()}.</p>
+                      <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
+                        <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>No reemplaza a tu médico</p>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                        <p style={{ color: "#166534", fontSize: "16px", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{beneficio.trim()}.</p>
+                      </div>
+                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{cierre.trim()}</p>
+                    </>
+                  )
+                }
+
+                // Patrón SÍ/NO: "la IA SÍ ...; NO ..., NO ..."
+                const matchSiNo = texto.match(/^(.+?:\s*)la IA SÍ ([^;]+);\s*((?:NO [^.]+))\.\s*(.+)$/)
+                if (matchSiNo) {
+                  const [, intro, siItem, noItemsStr, cierre] = matchSiNo
+                  const noItems = noItemsStr.split(/,\s*/).map((s: string) => s.trim())
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{intro.trim()}</p>
+                      {/* SÍ */}
+                      <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                        <p style={{ color: "#166534", fontSize: "16px", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>la IA SÍ {siItem.trim()}</p>
+                      </div>
+                      {/* NO items */}
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        {noItems.map((item: string, i: number) => (
+                          <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
+                            <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item}</p>
+                          </div>
+                        ))}
+                      </div>
+                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{cierre.trim()}</p>
+                    </>
+                  )
+                }
+
                 // Patrón "Recuerda:"
                 if (texto.includes("Recuerda:")) {
                   const idx = texto.indexOf("Recuerda:")
@@ -424,18 +559,36 @@ export default function LeccionPage() {
                 return <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{texto}</p>
               })()}
 
+              {/* Lista de síntomas de emergencia */}
+              {pagina.lista_sintomas && pagina.lista_sintomas.length > 0 && (
+                <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                  {pagina.lista_sintomas.map((sintoma: string, i: number) => (
+                    <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "11px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
+                      <span style={{ flexShrink: 0, width: "26px", height: "26px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                      <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.4, margin: 0 }}>{sintoma}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+
               {/* Imagen o descripción visual */}
-              {pagina.apoyo_visual && (
+              {pagina.apoyo_visual && !pagina.texto.includes("la IA SÍ") && !pagina.texto.includes("síntomas:") && !pagina.texto.includes("preparar tu consulta:") && !pagina.lista_sintomas?.length && !pagina.texto.includes("Cosas como") && (
                 IMAGENES_APOYO[pagina.apoyo_visual] ? (
-                  <div style={{ display: "flex", justifyContent: "center" }}>
-                    <Image
-                      src={IMAGENES_APOYO[pagina.apoyo_visual]}
-                      alt="Ilustración de la lección"
-                      width={340}
-                      height={340}
-                      style={{ objectFit: "contain", maxWidth: "100%", maxHeight: "min(55vh, 420px)" }}
-                    />
-                  </div>
+                  (() => {
+                    const src = IMAGENES_APOYO[pagina.apoyo_visual]
+                    const grande = src === "/lecciones/modulo2/L6-1.svg" || src === "/lecciones/modulo2/L6-5.svg"
+                    return (
+                      <div style={{ display: "flex", justifyContent: grande ? "stretch" : "center", width: "100%" }}>
+                        <Image
+                          src={src}
+                          alt="Ilustración de la lección"
+                          width={grande ? 620 : 340}
+                          height={grande ? 620 : 340}
+                          style={{ objectFit: "contain", width: grande ? "100%" : undefined, height: grande ? "auto" : undefined, maxWidth: "100%", maxHeight: grande ? "min(80vh, 700px)" : "min(55vh, 420px)" }}
+                        />
+                      </div>
+                    )
+                  })()
                 ) : (
                   <p
                     style={{

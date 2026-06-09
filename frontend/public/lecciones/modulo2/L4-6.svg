@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="100%" height="100%">
+  <defs>
+    <style>
+      /* Animación de pulso simple y suave (un solo latido constante) */
+      .vein {
+        fill: none;
+        stroke: #009bcf;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        animation: pulse 1.8s infinite ease-in-out;
+      }
+      
+      @keyframes pulse {
+        0% { stroke-width: 5; }
+        50% { stroke-width: 10; }
+        100% { stroke-width: 5; }
+      }
+    </style>
+    
+    <!-- Sombra para la vena para darle profundidad -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="2" stdDeviation="1" flood-color="#a88566" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- Pantalón corto (Azul oscuro) -->
+  <path d="M 30,30 h 40 v 105 a 5,5 0 0 1 -5,5 h -35 z" fill="#0a4b75" />
+
+  <!-- Pierna principal y Pie completado (Sin la sombra oscura, contorno suave) -->
+  <path d="M 70,35 
+           h 80 
+           q 45,0 45,45 
+           v 120 
+           q 0,15 15,20 
+           h 25 
+           q 15,0 15,15 
+           q 0,15 -15,15 
+           h -65 
+           q -15,0 -15,-15 
+           v -15 
+           q 0,-15 -15,-20 
+           v -70 
+           q 0,-25 -25,-25 
+           h -45 
+           z" fill="#e5c19d" />
+
+  <!-- Vena varicosa animada (Contenida estrictamente dentro de la pantorrilla, más centrada) -->
+  <g filter="url(#shadow)">
+    <!-- Rama principal zig-zag, desplazada hacia el interior -->
+    <path d="M 125,75 
+             h 40 
+             a 10,10 0 0 1 10,10 
+             v 15 
+             a 10,10 0 0 1 -10,10 
+             h -10 
+             a 10,10 0 0 0 -10,10 
+             v 20 
+             a 10,10 0 0 0 10,10 
+             h 10 
+             a 10,10 0 0 1 10,10 
+             v 15" class="vein" />
+             
+    <!-- Bifurcación derecha, contenida dentro de la pierna -->
+    <path d="M 175,100 
+             v 10 
+             a 5,5 0 0 0 5,5 
+             h 2 
+             a 5,5 0 0 1 5,5 
+             v 20" class="vein" />
+  </g>
+
+  <!-- Icono de advertencia (Círculo rojo) -->
+  <circle cx="100" cy="180" r="45" fill="#c11244" />
+  
+  <!-- Signo de exclamación (Blanco) -->
+  <rect x="93" y="150" width="14" height="30" rx="7" fill="#ffffff" />
+  <circle cx="100" cy="195" r="7" fill="#ffffff" />
+
+</svg>
