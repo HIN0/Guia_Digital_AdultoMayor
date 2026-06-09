@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 390" width="380" height="390" role="img" aria-label="Mano apuntando con gota de sangre cayendo sobre la cinta de un glucometro">
+  <defs>
+    <style>
+      .ol{fill:none;stroke:#1A1A1A;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;}
+      .ol2{fill:none;stroke:#1A1A1A;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;}
+      .skin{fill:#FBD9C5;}
+      .skinSh{fill:#F4BFA1;}
+      .blue{fill:#1B4F7A;}
+      .gray{fill:#6E727B;}
+      .white{fill:#FAFAF7;}
+      .blood{fill:#F45B69;}
+      .bloodHi{fill:#FF9AA2;}
+    </style>
+  </defs>
+
+  <!-- ============ MANO ============ -->
+  <!-- silueta peach -->
+  <path class="skin" d="
+    M 30 100 L 188 100
+    L 262 100 C 282 100 286 102 286 112 C 286 122 282 124 262 124 L 198 124
+    C 226 126 226 150 198 152
+    C 222 154 220 176 196 178
+    C 214 180 210 196 188 196
+    L 30 196 C 16 196 14 192 14 180 L 14 116 C 14 104 16 100 30 100 Z"/>
+
+  <!-- sombra palma -->
+  <path class="skinSh" d="M 92 126 C 120 150 160 152 188 150 C 182 178 150 186 120 184 C 96 182 78 170 70 150 C 76 140 84 132 92 126 Z"/>
+
+  <!-- contorno exterior -->
+  <path class="ol" d="
+    M 30 100 L 262 100 C 282 100 286 102 286 112 C 286 122 282 124 262 124 L 198 124
+    C 226 126 226 150 198 152
+    C 222 154 220 176 196 178
+    C 214 180 210 196 188 196
+    L 30 196 C 16 196 14 192 14 180 L 14 116 C 14 104 16 100 30 100 Z"/>
+  <!-- pliegue pulgar (arriba) -->
+  <path class="ol2" d="M 150 100 C 158 116 178 124 198 124"/>
+  <!-- línea palma -->
+  <path class="ol2" d="M 92 128 C 122 150 160 152 188 150"/>
+  <!-- divisiones dedos doblados -->
+  <path class="ol2" d="M 150 126 C 176 128 196 138 198 152"/>
+  <path class="ol2" d="M 150 154 C 174 156 192 166 196 178"/>
+
+  <!-- ============ GLUCÓMETRO ============ -->
+  <!-- cinta -->
+  <rect class="white" x="244" y="196" width="30" height="80" rx="6"/>
+  <rect class="blue" x="248" y="200" width="22" height="13" rx="4"/>
+  <rect class="ol" x="244" y="196" width="30" height="80" rx="6"/>
+  <line class="ol2" x1="259" y1="220" x2="259" y2="252"/>
+
+  <!-- cuerpo (azul base) -->
+  <path class="blue" d="M 206 268 Q 206 246 228 246 L 296 246 Q 318 246 318 268 L 318 318 Q 318 372 262 372 Q 206 372 206 318 Z"/>
+  <!-- parte superior gris -->
+  <path class="gray" d="M 206 268 Q 206 246 228 246 L 296 246 Q 318 246 318 268 L 318 300 L 206 300 Z"/>
+  <!-- pantalla -->
+  <rect class="white" x="240" y="272" width="44" height="20" rx="5"/>
+  <!-- botón -->
+  <ellipse class="blue" cx="262" cy="356" rx="16" ry="8"/>
+  <!-- contornos -->
+  <path class="ol" d="M 206 300 Q 206 246 228 246 L 296 246 Q 318 246 318 268 L 318 318 Q 318 372 262 372 Q 206 372 206 318 Z"/>
+  <line class="ol" x1="206" y1="300" x2="318" y2="300"/>
+  <rect class="ol" x="240" y="272" width="44" height="20" rx="5"/>
+  <ellipse class="ol" cx="262" cy="356" rx="16" ry="8"/>
+
+  <!-- ============ GOTA (animada) ============ -->
+  <g>
+    <path class="blood" d="M 0 0 C 9 13 14 20 14 28 a 14 14 0 0 1 -28 0 C -14 20 -9 13 0 0 Z"/>
+    <ellipse class="bloodHi" cx="-4.5" cy="24" rx="3.5" ry="5"/>
+    <path class="ol2" d="M 0 0 C 9 13 14 20 14 28 a 14 14 0 0 1 -28 0 C -14 20 -9 13 0 0 Z"/>
+    <animateMotion path="M 258 126 L 259 160 L 259 160" dur="1.8s" repeatCount="indefinite"
+      calcMode="spline" keyPoints="0;1;1" keyTimes="0;0.62;1" keySplines="0.4 0 0.85 0.3; 0 0 1 1"/>
+    <animate attributeName="opacity" values="0;1;1;1;0;0" keyTimes="0;0.08;0.7;0.82;0.9;1" dur="1.8s" repeatCount="indefinite"/>
+  </g>
+</svg>

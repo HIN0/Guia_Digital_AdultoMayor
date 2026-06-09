@@ -246,26 +246,33 @@ export default function QuizFinalPage() {
               boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
             }}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "24px" }}>
-              <h2 style={{ color: "#333", fontSize: "20px", lineHeight: 1.5, flex: 1, marginRight: "12px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "12px", marginBottom: "24px" }}>
+              <h2 style={{ color: "#111827", fontSize: "18px", fontWeight: 500, lineHeight: 1.5, margin: 0, flex: 1 }}>
                 {preguntaActual.enunciado}
               </h2>
               <button
                 onClick={() => toggleAudio(indice + 1)}
                 style={{
                   flexShrink: 0,
-                  padding: "8px 14px",
-                  borderRadius: "10px",
-                  border: `2px solid ${tocandoAudio ? "var(--huap-rojo)" : "var(--huap-azul)"}`,
-                  backgroundColor: tocandoAudio ? "#FFEBEE" : "#E3F2FD",
+                  alignSelf: "flex-start",
+                  marginTop: "-20px",
+                  marginRight: "-20px",
+                  padding: "2px 10px 2px 8px",
+                  borderRadius: "999px",
+                  border: `1px solid ${tocandoAudio ? "var(--huap-rojo)" : "var(--huap-azul)"}`,
+                  backgroundColor: "white",
                   color: tocandoAudio ? "var(--huap-rojo)" : "var(--huap-azul)",
-                  fontSize: "15px",
-                  fontWeight: 600,
+                  fontSize: "14px",
+                  fontWeight: 500,
                   cursor: "pointer",
                   whiteSpace: "nowrap",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "4px",
                 }}
               >
-                {tocandoAudio ? "⏹ Detener" : "🔊 Escuchar"}
+                <span style={{ fontSize: "22px", lineHeight: 1 }}>🔊</span>
+                <span className="hidden md:inline">{tocandoAudio ? "Detener" : "Escuchar"}</span>
               </button>
             </div>
 

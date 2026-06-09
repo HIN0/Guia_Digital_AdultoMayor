@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Tensiómetro con corazón latiendo">
+  <style>
+    .latido {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: latir 1.6s ease-in-out infinite;
+    }
+    @keyframes latir {
+      0%   { transform: scale(1); }
+      15%  { transform: scale(1.12); }
+      30%  { transform: scale(1); }
+      45%  { transform: scale(1.12); }
+      60%  { transform: scale(1); }
+      100% { transform: scale(1); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .latido { animation: none; }
+    }
+  </style>
+
+  <!-- ====== CABLE (detrás de los conectores) ====== -->
+  <path d="M109 286 C 109 348, 118 372, 150 372 C 188 372, 188 318, 222 282"
+        fill="none" stroke="#13344E" stroke-width="14" stroke-linecap="round"/>
+
+  <!-- ====== BRAZALETE (izquierda) ====== -->
+  <rect x="40" y="72" width="128" height="190" rx="16" fill="#1B4F7A" stroke="#13344E" stroke-width="9"/>
+  <rect x="14" y="96" width="104" height="128" rx="14" fill="#8FB4D1" stroke="#13344E" stroke-width="9"/>
+  <rect x="50" y="120" width="34" height="80" rx="17" fill="none" stroke="#13344E" stroke-width="11"/>
+  <rect x="86" y="252" width="46" height="24" rx="8" fill="#2ECCA7" stroke="#13344E" stroke-width="9"/>
+
+  <!-- Conector / puerto teal del monitor -->
+  <rect x="232" y="234" width="26" height="48" rx="6" fill="#2ECCA7" stroke="#13344E" stroke-width="9"/>
+
+  <!-- ====== MONITOR (derecha) ====== -->
+  <rect x="262" y="140" width="240" height="318" rx="30" fill="#E6EAF6" stroke="#13344E" stroke-width="9"/>
+
+  <!-- Pantalla -->
+  <rect x="292" y="160" width="180" height="208" rx="14" fill="#1B4F7A" stroke="#13344E" stroke-width="9"/>
+  <path d="M306 160 h36 v208 h-36 a14 14 0 0 1 -14 -14 V174 a14 14 0 0 1 14 -14 Z" fill="#2ECCA7" stroke="#13344E" stroke-width="9"/>
+  <g fill="#13344E">
+    <rect x="312" y="184" width="24" height="9" rx="4"/>
+    <rect x="312" y="206" width="24" height="9" rx="4"/>
+    <rect x="312" y="228" width="24" height="9" rx="4"/>
+    <rect x="312" y="250" width="24" height="9" rx="4"/>
+    <rect x="312" y="272" width="24" height="9" rx="4"/>
+    <rect x="312" y="294" width="24" height="9" rx="4"/>
+    <rect x="312" y="316" width="24" height="9" rx="4"/>
+  </g>
+
+  <!-- Corazón rosado (animado) -->
+  <path class="latido"
+        d="M414 188c-8-14-30-12-30 6 0 14 22 28 30 36 8-8 30-22 30-36 0-18-22-20-30-6Z"
+        fill="#FF8FA8" stroke="#13344E" stroke-width="9" stroke-linejoin="round"/>
+
+  <!-- Dígitos rosados -->
+  <rect x="372" y="262" width="24" height="38" rx="7" fill="#FF8FA8" stroke="#13344E" stroke-width="9"/>
+  <rect x="414" y="262" width="24" height="38" rx="7" fill="#FF8FA8" stroke="#13344E" stroke-width="9"/>
+
+  <!-- Diagonal teal -->
+  <path d="M430 322 l24 -24" fill="none" stroke="#2ECCA7" stroke-width="11" stroke-linecap="round"/>
+
+  <!-- Botones inferiores -->
+  <rect x="306" y="398" width="58" height="30" rx="12" fill="#FF8FA8" stroke="#13344E" stroke-width="9"/>
+  <rect x="402" y="398" width="58" height="30" rx="12" fill="#FF8FA8" stroke="#13344E" stroke-width="9"/>
+</svg>

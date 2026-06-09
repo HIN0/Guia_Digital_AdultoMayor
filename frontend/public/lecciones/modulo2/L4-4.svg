@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 250" width="100%" height="100%">
+  <style>
+    /* Animación de la pierna girando sobre un eje perfecto en la rodilla */
+    .lower-leg {
+      transform-origin: 100px 110px; /* Eje de rotación exacto en el centro de la rodilla */
+      animation: bendLeg 3.5s infinite ease-in-out;
+    }
+    
+    /* Animación de los efectos de dolor apareciendo */
+    .pain-fx {
+      animation: showPain 3.5s infinite ease-in-out;
+    }
+    .sparks {
+      transform-origin: 50px 90px;
+    }
+    
+    /* Secuencia: Pierna estirada -> Se dobla -> Vuelve a estirarse */
+    @keyframes bendLeg {
+      0%, 15% { transform: rotate(55deg); }    /* Estirada */
+      45%, 75% { transform: rotate(0deg); }    /* Doblada (Posición del ícono) */
+      100% { transform: rotate(55deg); }       /* Vuelve a estirada */
+    }
+    
+    /* Secuencia: Los íconos de dolor solo aparecen cuando se dobla */
+    @keyframes showPain {
+      0%, 35% { opacity: 0; scale: 0.5; }
+      45%, 75% { opacity: 1; scale: 1; }
+      85%, 100% { opacity: 0; scale: 0.5; }
+    }
+  </style>
+
+  <g id="skin-outlines">
+    <circle cx="100" cy="110" r="38" fill="#121212" />
+    
+    <path d="M 185 35 L 100 110" stroke="#121212" stroke-width="76" stroke-linecap="round" />
+    
+    <g class="lower-leg">
+      <path d="M 100 110 L 80 220" stroke="#121212" stroke-width="66" stroke-linecap="round" />
+    </g>
+  </g>
+
+  <g id="skin-fills">
+    <circle cx="100" cy="110" r="30" fill="#FFC9B9" />
+    
+    <path d="M 185 35 L 100 110" stroke="#FFC9B9" stroke-width="60" stroke-linecap="round" />
+    
+    <g class="lower-leg">
+      <path d="M 100 110 L 80 220" stroke="#FFC9B9" stroke-width="50" stroke-linecap="round" />
+    </g>
+  </g>
+
+  <g id="bone-femur">
+    <g fill="#121212">
+      <path d="M 180 40 L 115 95" stroke="#121212" stroke-width="24" stroke-linecap="round" />
+      <circle cx="118" cy="92" r="15" />
+      <circle cx="103" cy="106" r="15" />
+    </g>
+    <g fill="#FFFFFF">
+      <path d="M 180 40 L 115 95" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" />
+      <circle cx="118" cy="92" r="9" />
+      <circle cx="103" cy="106" r="9" />
+    </g>
+  </g>
+
+  <g class="lower-leg">
+    <g id="bone-tibia">
+      <g fill="#121212">
+        <path d="M 98 130 L 82 210" stroke="#121212" stroke-width="22" stroke-linecap="round" />
+        <circle cx="92" cy="126" r="12" />
+        <circle cx="110" cy="124" r="11" />
+        <circle cx="82" cy="210" r="11" />
+      </g>
+      <g fill="#FFFFFF">
+        <path d="M 98 130 L 82 210" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" />
+        <circle cx="92" cy="126" r="6" />
+        <circle cx="110" cy="124" r="5" />
+        <circle cx="82" cy="210" r="5" />
+      </g>
+    </g>
+  </g>
+
+  <g id="bone-patella" transform="rotate(-15 85 98)">
+    <rect x="78" y="88" width="14" height="20" rx="7" fill="#121212" />
+    <rect x="81" y="91" width="8" height="14" rx="4" fill="#FFFFFF" />
+  </g>
+
+  <g class="pain-fx sparks" stroke="#121212" stroke-width="7" stroke-linecap="round">
+    <path d="M 50 65 L 30 50" />
+    <path d="M 40 90 L 10 85" />
+    <path d="M 50 115 L 30 130" />
+  </g>
+
+  <g class="pain-fx" style="transform-origin: 200px 130px;">
+    <circle cx="200" cy="130" r="30" fill="#FF4D6D" stroke="#121212" stroke-width="8" />
+    <path transform="translate(200,130)" d="M -9,-17 h 18 v 8 h 10 v 18 h -10 v 8 h -18 v -8 h -10 v -18 h 10 z" fill="#FFFFFF" stroke="#121212" stroke-width="6" stroke-linejoin="round" />
+  </g>
+</svg>
