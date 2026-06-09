@@ -1511,7 +1511,7 @@ LECCIONES_DATA = [
           "n": 4,
           "tipo": "concepto",
           "titulo": "Uso 3: ordenar tus síntomas",
-          "texto": "La IA te puede ayudar a recordar y ordenar tus síntomas: cuándo empezó, qué sientes, qué lo empeora. Contarle esto ordenado a tu médico le sirve muchísimo para ayudarte mejor.",
+          "texto": "La IA te puede ayudar a recordar y ordenar tus síntomas: ¿Cuándo empezó?, ¿Qué sientes?, ¿Qué lo empeora?. Contarle esto ordenado a tu médico le sirve muchísimo para ayudarte mejor.",
           "apoyo_visual": "Guía de tres preguntas: ¿cuándo empezó?, ¿qué siento?, ¿qué lo empeora?"
         },
         {
