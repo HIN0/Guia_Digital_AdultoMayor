@@ -352,7 +352,10 @@ export default function LeccionPage() {
                   onClick={() => toggleAudio(paginaActual + 1)}
                   style={{
                     flexShrink: 0,
-                    padding: "6px 14px",
+                    alignSelf: "flex-start",
+                    marginTop: "-20px",
+                    marginRight: "-20px",
+                    padding: "2px 10px 2px 8px",
                     borderRadius: "999px",
                     border: `1px solid ${tocandoAudio ? "var(--huap-rojo)" : "var(--huap-azul)"}`,
                     backgroundColor: "white",
@@ -366,14 +369,60 @@ export default function LeccionPage() {
                     gap: "4px",
                   }}
                 >
-                  🔊 {tocandoAudio ? "Detener" : "Escuchar"}
+                  <span style={{ fontSize: "22px", lineHeight: 1 }}>🔊</span>
+                  <span className="hidden md:inline">{tocandoAudio ? "Detener" : "Escuchar"}</span>
                 </button>
               </div>
 
               {/* Texto */}
-              <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>
-                {pagina.texto}
-              </p>
+              {(() => {
+                const texto = pagina.texto
+
+                // Patrón patología: "Pregunta útil: "..." . [medio] Lo que NO puede: [resto]"
+                const matchPatologia = texto.match(/^(.*?)Pregunta útil:\s*"([^"]+)"\.\s*(.*?)\s*Lo que NO puede:\s*(.+)$/)
+                if (matchPatologia) {
+                  const [, antes, pregunta, medio, noPuede] = matchPatologia
+                  return (
+                    <>
+                      {antes.trim() && <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{antes.trim()}</p>}
+                      <div style={{ backgroundColor: "#F0FDF4", borderLeft: "4px solid var(--huap-verde)", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                        <span style={{ fontSize: "20px", flexShrink: 0, lineHeight: 1.3 }}>💬</span>
+                        <p style={{ color: "#166534", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>
+                          <strong>Pregunta útil:</strong> &ldquo;{pregunta}&rdquo;
+                        </p>
+                      </div>
+                      {medio.trim() && <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{medio.trim()}</p>}
+                      <div style={{ backgroundColor: "#FFF5F5", borderLeft: "4px solid var(--huap-rojo)", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                        <span style={{ fontSize: "20px", flexShrink: 0, lineHeight: 1.3 }}>⚠️</span>
+                        <p style={{ color: "#7f1d1d", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>
+                          <strong>Lo que NO puede:</strong> {noPuede.trim()}
+                        </p>
+                      </div>
+                    </>
+                  )
+                }
+
+                // Patrón "Recuerda:"
+                if (texto.includes("Recuerda:")) {
+                  const idx = texto.indexOf("Recuerda:")
+                  const antes = texto.slice(0, idx).trim()
+                  const despues = texto.slice(idx + "Recuerda:".length).trim()
+                  return (
+                    <>
+                      {antes && <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{antes}</p>}
+                      <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                        <span style={{ fontSize: "22px", flexShrink: 0, lineHeight: 1.3 }}>💡</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>
+                          <strong>Recuerda:</strong> {despues}
+                        </p>
+                      </div>
+                    </>
+                  )
+                }
+
+                // Default
+                return <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{texto}</p>
+              })()}
 
               {/* Imagen o descripción visual */}
               {pagina.apoyo_visual && (
@@ -546,7 +595,10 @@ export default function LeccionPage() {
                   onClick={() => toggleAudio(leccion.contenido.paginas.length + quiz.indice + 1)}
                   style={{
                     flexShrink: 0,
-                    padding: "6px 14px",
+                    alignSelf: "flex-start",
+                    marginTop: "-20px",
+                    marginRight: "-20px",
+                    padding: "2px 10px 2px 8px",
                     borderRadius: "999px",
                     border: `1px solid ${tocandoAudio ? "var(--huap-rojo)" : "var(--huap-azul)"}`,
                     backgroundColor: "white",
@@ -560,7 +612,8 @@ export default function LeccionPage() {
                     gap: "4px",
                   }}
                 >
-                  🔊 {tocandoAudio ? "Detener" : "Escuchar"}
+                  <span style={{ fontSize: "22px", lineHeight: 1 }}>🔊</span>
+                  <span className="hidden md:inline">{tocandoAudio ? "Detener" : "Escuchar"}</span>
                 </button>
               </div>
 
