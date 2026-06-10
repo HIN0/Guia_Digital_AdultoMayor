@@ -16,6 +16,7 @@ const DISPLAY: Record<number, { titulo: string; descripcion: string; leccionesTo
 
 function construirModulos(apiModulos: ModuloResumen[]): Modulo[] {
   const mod1completado = localStorage.getItem("huap_mod1_completado") === "true"
+  const mod2completado = localStorage.getItem("huap_mod2_completado") === "true"
   const quiz1aprobado  = localStorage.getItem("huap_quiz1_aprobado")  === "true"
 
   return apiModulos.map((m) => {
@@ -37,9 +38,9 @@ function construirModulos(apiModulos: ModuloResumen[]): Modulo[] {
     if (m.orden === 2) {
       return {
         id: m.id, numero: m.orden, ...display,
-        estado: mod1completado ? "disponible" : "bloqueado",
-        progreso: mod1completado ? progreso : 0,
-        leccionesCompletadas: mod1completado ? completadas : 0,
+        estado: mod2completado ? "completado" : mod1completado ? "disponible" : "bloqueado",
+        progreso: mod2completado ? 100 : mod1completado ? progreso : 0,
+        leccionesCompletadas: mod2completado ? leccionesTotales : mod1completado ? completadas : 0,
       }
     }
     return {
@@ -95,7 +96,11 @@ export default function ModulosPage() {
           <div className="flex flex-col gap-5">
             {modulos.map((modulo) =>
               modulo.estado !== "bloqueado" ? (
-                <Link key={modulo.id} href={`/modulos/${modulo.id}`} style={{ textDecoration: "none" }}>
+                <Link
+                  key={modulo.id}
+                  href={modulo.numero === 3 ? "/chatbot" : `/modulos/${modulo.id}`}
+                  style={{ textDecoration: "none" }}
+                >
                   <ModuloCard modulo={modulo} />
                 </Link>
               ) : (

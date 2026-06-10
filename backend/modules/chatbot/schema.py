@@ -1,11 +1,11 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List
 
 
 # ── Esquemas de chat (usuario) ──────────────────────────────────────────────
 
 class ChatRequest(BaseModel):
-    pregunta: str
+    pregunta: str = Field(..., min_length=1, max_length=500)
     conversacion_id: Optional[int] = None
 
 class ChatResponse(BaseModel):

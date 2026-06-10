@@ -91,6 +91,11 @@ export default function ModuloCard({ modulo }: ModuloCardProps) {
 
         {/* Progreso o mensaje de bloqueo */}
         {modulo.estado !== "bloqueado" ? (
+          modulo.leccionesTotales === 0 ? (
+            <span style={{ fontSize: "13px", color: accentColor, fontWeight: 500 }}>
+              Abrir asistente →
+            </span>
+          ) : (
           <div>
             <div
               style={{
@@ -147,6 +152,7 @@ export default function ModuloCard({ modulo }: ModuloCardProps) {
               />
             </div>
           </div>
+          )
         ) : (
           <div
             style={{
