@@ -402,6 +402,107 @@ export default function LeccionPage() {
                   )
                 }
 
+                // Patrón contraste vago/claridad: "... Si preguntas algo muy vago... Si preguntas con claridad..."
+                const matchVagoClaridad = texto.match(/^(.+?)\. (Si preguntas algo muy vago[^.]+)\. (Si preguntas con claridad[^.]+)\. (.+)$/)
+                if (matchVagoClaridad) {
+                  const [, intro, vago, claridad, cierre] = matchVagoClaridad
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro.trim()}.</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                        <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "13px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
+                          <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
+                          <p style={{ color: "#7f1d1d", fontSize: "16px", lineHeight: 1.5, margin: 0 }}>{vago.trim()}</p>
+                        </div>
+                        <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "13px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
+                          <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                          <p style={{ color: "#166534", fontSize: "16px", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{claridad.trim()}</p>
+                        </div>
+                      </div>
+                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{cierre.trim()}</p>
+                    </>
+                  )
+                }
+
+                // Patrón "Para preguntar bien: item1, item2 y item3. [cierre]"
+                const matchPreguntar = texto.match(/^(Para preguntar bien:)\s*([^.]+)\.\s*(.+)$/)
+                if (matchPreguntar) {
+                  const [, intro, itemsStr, cierre] = matchPreguntar
+                  const items = itemsStr.split(/,\s+|\s+y\s+/).map((s: string) => s.trim()).filter(Boolean)
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        {items.map((item: string, i: number) => (
+                          <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                            <p style={{ color: "#166534", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                          </div>
+                        ))}
+                      </div>
+                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{cierre}</p>
+                    </>
+                  )
+                }
+
+                // Patrón "NO necesita tu RUT... "[pregunta]" funciona perfecto"
+                const matchNoDatos = texto.match(/^(Recuerda lo aprendido: una buena pregunta NO necesita)\s+([^.]+)\.\s+([^"]+)"([^"]+)"\s+(.+)$/)
+                if (matchNoDatos) {
+                  const [, intro, itemsStr, medio, pregunta, cierre] = matchNoDatos
+                  const items = itemsStr.split(/,\s*|\s+ni\s+/).map((s: string) => s.trim()).filter(Boolean)
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro.trim()}:</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        {items.map((item: string, i: number) => (
+                          <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "10px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
+                            <span style={{ flexShrink: 0, width: "26px", height: "26px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
+                            <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.4, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                          </div>
+                        ))}
+                      </div>
+                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{medio.trim()}</p>
+                      <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "14px 18px", backgroundColor: "#EFF6FF", borderLeft: "4px solid var(--huap-azul)", borderRadius: "10px" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>?</span>
+                        <p style={{ color: "#1e3a5f", fontSize: "17px", fontStyle: "italic", lineHeight: 1.6, margin: 0 }}>&ldquo;{pregunta}&rdquo;</p>
+                      </div>
+                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{cierre.trim()}</p>
+                    </>
+                  )
+                }
+
+                // Patrón "...palabras simples: "[frase]". [resto]"
+                const matchPalabrasSim = texto.match(/^(.+palabras simples:)\s*"([^"]+)"\.\s*(.+)$/)
+                if (matchPalabrasSim) {
+                  const [, intro, frase, resto] = matchPalabrasSim
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro.trim()}</p>
+                      <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "14px 18px", backgroundColor: "#EFF6FF", borderLeft: "4px solid var(--huap-azul)", borderRadius: "10px" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>💬</span>
+                        <p style={{ color: "#1e3a5f", fontSize: "17px", fontStyle: "italic", lineHeight: 1.6, margin: 0 }}>&ldquo;{frase}&rdquo;</p>
+                      </div>
+                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{resto.trim()}</p>
+                    </>
+                  )
+                }
+
+                // Patrón "En lugar de X, di qué te pasa: "[pregunta]". [resto]"
+                const matchEnLugarDe = texto.match(/^(En lugar de[^:]+:)\s*"([^"]+)"\.\s*(.+)$/)
+                if (matchEnLugarDe) {
+                  const [, intro, pregunta, resto] = matchEnLugarDe
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro.trim()}</p>
+                      <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "14px 18px", backgroundColor: "#EFF6FF", borderLeft: "4px solid var(--huap-azul)", borderRadius: "10px" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>?</span>
+                        <p style={{ color: "#1e3a5f", fontSize: "17px", fontStyle: "italic", lineHeight: 1.6, margin: 0 }}>&ldquo;{pregunta}&rdquo;</p>
+                      </div>
+                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{resto.trim()}</p>
+                    </>
+                  )
+                }
+
                 // Patrón "El paciente pregunta: "..."
                 const matchPacientePregunta = texto.match(/^(El paciente pregunta):\s*"([^"]+)"\.\s*(.+)$/)
                 if (matchPacientePregunta) {
