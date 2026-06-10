@@ -48,7 +48,7 @@ def _get_llm() -> ChatGroq:
     # OPCIÓN ACTIVA — Llama 3.1 8B via Groq (gratuito)
     global _llm
     if not _llm:
-        _llm = ChatGroq(model="llama-3.1-8b-instant", temperature=0.0, groq_api_key=settings.GROQ_API_KEY)
+        _llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0.0, groq_api_key=settings.GROQ_API_KEY)
     return _llm
 
 
@@ -86,9 +86,14 @@ def inicializar_base_conocimiento():
     # OPCIÓN ACTIVA — embeddings locales
     _knowledge_store = FAISS.from_texts(chunks, _get_embeddings())
 
-    template = """Eres el asistente virtual de la Guía Digital del HUAP. Hablas con adultos mayores.
-REGLA: Responde ÚNICAMENTE usando la información del Contexto.
-Si la respuesta no está en el Contexto, responde exactamente: 'Lo siento, no tengo esa información. Le sugiero consultar directamente en el mesón de atención.'
+    template = """Eres el asistente virtual de salud de la Guía Digital del HUAP. Tu único rol es responder preguntas de salud usando exclusivamente la información del Contexto proporcionado.
+
+REGLAS ESTRICTAS (debes seguirlas siempre, sin excepción):
+1. Responde ÚNICAMENTE con información que esté literalmente en el Contexto.
+2. Si la pregunta es un saludo, despedida, agradecimiento o conversación casual (ej: "hola", "gracias", "cómo estás"), responde EXACTAMENTE: 'Hola. Estoy aquí para responder preguntas sobre salud. ¿En qué puedo ayudarte?'
+3. Si la pregunta no está relacionada con salud o no tiene respuesta en el Contexto, responde EXACTAMENTE: 'Lo siento, no tengo esa información.'
+4. Nunca inventes información, nunca respondas fuera del Contexto, nunca hagas suposiciones.
+5. Responde en español, con un lenguaje claro y simple, adecuado para adultos mayores.
 
 Contexto:
 {context}
@@ -179,7 +184,7 @@ def generar_y_guardar_respuesta(db: Session, usuario_id: int, pregunta: str, con
     respuesta_obj = _rag_chain.invoke({"question": pregunta, "history": historial_texto})
     respuesta_texto = respuesta_obj.content
 
-    es_fallback = "Lo siento, no tengo esa información" in respuesta_texto
+    es_fallback = "Lo siento, no tengo esa información." in respuesta_texto
     tipo_resp = "fallback" if es_fallback else "bot"
 
     guardar_mensaje(db, conv.id, tipo=tipo_resp, contenido=respuesta_texto)
