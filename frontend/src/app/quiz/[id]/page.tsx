@@ -73,7 +73,7 @@ export default function QuizFinalPage() {
       return
     }
     detenerAudio()
-    const audio = new Audio(`/audio/quiz-final-${quizId}/Q${numero}.mp3`)
+    const audio = new Audio(`/audio/quiz-final-${modulo?.orden}/Q${numero}.mp3`)
     audioRef.current = audio
     audio.play().then(() => setTocandoAudio(true)).catch(() => setTocandoAudio(false))
     audio.onended = () => setTocandoAudio(false)

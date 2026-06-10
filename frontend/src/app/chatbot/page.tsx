@@ -110,20 +110,42 @@ export default function ChatbotPage() {
       {/* Aviso educativo */}
       <div
         style={{
-          backgroundColor: "var(--huap-ambar-claro)",
-          borderBottom: "1px solid #f0c07a",
-          padding: "10px 16px",
-          display: "flex",
-          alignItems: "center",
-          gap: "10px",
+          backgroundColor: "#FFFBF0",
+          borderBottom: "1px solid #F0C97A",
+          padding: "9px 16px",
           flexShrink: 0,
         }}
       >
-        <AlertTriangle size={18} color="var(--huap-ambar)" strokeWidth={2} style={{ flexShrink: 0 }} />
-        <p style={{ fontSize: "0.78rem", color: "#7a4a00", lineHeight: 1.4, margin: 0 }}>
-          Información <strong>educativa</strong>, no reemplaza la consulta médica. Emergencias: llama al{" "}
-          <strong>131</strong>.
-        </p>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            maxWidth: "680px",
+            margin: "0 auto",
+          }}
+        >
+          <AlertTriangle size={16} color="#C47A00" strokeWidth={2.5} style={{ flexShrink: 0 }} />
+          <p style={{ fontSize: "0.82rem", color: "#7a4a00", lineHeight: 1.4, margin: 0, flex: 1 }}>
+            Solo información <strong>educativa</strong>, no reemplaza al médico.
+          </p>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "5px",
+              backgroundColor: "#FEE2E2",
+              border: "1px solid #FCA5A5",
+              borderRadius: "20px",
+              padding: "3px 10px",
+              flexShrink: 0,
+            }}
+          >
+            <span style={{ fontSize: "0.75rem", color: "#B91C1C", fontWeight: 700, whiteSpace: "nowrap" }}>
+              🚨 131
+            </span>
+          </div>
+        </div>
       </div>
 
       {/* Área de mensajes */}
@@ -132,19 +154,28 @@ export default function ChatbotPage() {
         style={{
           flex: 1,
           overflowY: "auto",
-          padding: "16px",
+          padding: "20px 16px",
           display: "flex",
           flexDirection: "column",
-          gap: "14px",
+          alignItems: "center",
         }}
       >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "16px",
+            width: "100%",
+            maxWidth: "680px",
+          }}
+        >
         {mensajes.map((msg) => (
           <div
             key={msg.id}
             style={{
               display: "flex",
               justifyContent: msg.tipo === "usuario" ? "flex-end" : "flex-start",
-              alignItems: "flex-end",
+              alignItems: msg.tipo === "usuario" ? "flex-end" : "flex-start",
               gap: "8px",
             }}
           >
@@ -152,18 +183,21 @@ export default function ChatbotPage() {
             {msg.tipo !== "usuario" && (
               <div
                 style={{
-                  width: 34,
-                  height: 34,
+                  width: 36,
+                  height: 36,
                   borderRadius: "50%",
                   flexShrink: 0,
-                  backgroundColor:
-                    msg.tipo === "error" ? "var(--huap-rojo)" : "var(--huap-azul)",
+                  background:
+                    msg.tipo === "error"
+                      ? "var(--huap-rojo)"
+                      : "linear-gradient(135deg, var(--huap-azul), #3b6fd4)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  boxShadow: "0 2px 6px rgba(26,82,160,0.25)",
                 }}
               >
-                <MessageCircle size={17} color="white" strokeWidth={2} />
+                <MessageCircle size={18} color="white" strokeWidth={2} />
               </div>
             )}
 
@@ -171,16 +205,16 @@ export default function ChatbotPage() {
             <div
               style={{
                 maxWidth: "78%",
-                padding: "12px 16px",
+                padding: "13px 17px",
                 borderRadius:
                   msg.tipo === "usuario"
-                    ? "18px 18px 4px 18px"
-                    : "18px 18px 18px 4px",
-                backgroundColor:
+                    ? "20px 20px 5px 20px"
+                    : "20px 20px 20px 5px",
+                background:
                   msg.tipo === "usuario"
-                    ? "var(--huap-azul)"
+                    ? "linear-gradient(135deg, var(--huap-azul), #3b6fd4)"
                     : msg.tipo === "error"
-                    ? "#FFEBEE"
+                    ? "#FFF0F0"
                     : "white",
                 color:
                   msg.tipo === "usuario"
@@ -188,10 +222,14 @@ export default function ChatbotPage() {
                     : msg.tipo === "error"
                     ? "var(--huap-rojo)"
                     : "var(--huap-texto)",
-                boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+                boxShadow:
+                  msg.tipo === "usuario"
+                    ? "0 2px 8px rgba(26,82,160,0.25)"
+                    : "0 1px 6px rgba(0,0,0,0.07)",
                 fontSize: "1rem",
-                lineHeight: 1.6,
+                lineHeight: 1.65,
                 whiteSpace: "pre-wrap",
+                border: msg.tipo === "bot" ? "1px solid rgba(0,0,0,0.05)" : "none",
               }}
             >
               {msg.contenido}
@@ -201,27 +239,29 @@ export default function ChatbotPage() {
 
         {/* Indicador "escribiendo..." */}
         {cargando && (
-          <div style={{ display: "flex", alignItems: "flex-end", gap: "8px" }}>
+          <div style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
             <div
               style={{
-                width: 34,
-                height: 34,
+                width: 36,
+                height: 36,
                 borderRadius: "50%",
                 flexShrink: 0,
-                backgroundColor: "var(--huap-azul)",
+                background: "linear-gradient(135deg, var(--huap-azul), #3b6fd4)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                boxShadow: "0 2px 6px rgba(26,82,160,0.25)",
               }}
             >
-              <MessageCircle size={17} color="white" strokeWidth={2} />
+              <MessageCircle size={18} color="white" strokeWidth={2} />
             </div>
             <div
               style={{
                 padding: "14px 18px",
                 backgroundColor: "white",
-                borderRadius: "18px 18px 18px 4px",
-                boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+                borderRadius: "20px 20px 20px 5px",
+                boxShadow: "0 1px 6px rgba(0,0,0,0.07)",
+                border: "1px solid rgba(0,0,0,0.05)",
                 display: "flex",
                 gap: "5px",
                 alignItems: "center",
@@ -235,7 +275,7 @@ export default function ChatbotPage() {
                     width: 8,
                     height: 8,
                     borderRadius: "50%",
-                    backgroundColor: "#aaa",
+                    backgroundColor: "#bbb",
                     animation: `typing-bounce 1.2s ease-in-out ${i * 0.2}s infinite`,
                   }}
                 />
@@ -243,6 +283,7 @@ export default function ChatbotPage() {
             </div>
           </div>
         )}
+        </div>
       </div>
 
       {/* Barra de input */}
@@ -251,8 +292,9 @@ export default function ChatbotPage() {
           backgroundColor: "white",
           borderTop: "1px solid #E5E7EB",
           padding: "12px 16px",
-          paddingBottom: "calc(12px + 88px)", // espacio para NavTabs fijo
+          paddingBottom: "calc(12px + 104px)",
           flexShrink: 0,
+          boxShadow: "0 -2px 12px rgba(0,0,0,0.06)",
         }}
       >
         <div
@@ -276,19 +318,25 @@ export default function ChatbotPage() {
               flex: 1,
               resize: "none",
               border: "1.5px solid #D1D5DB",
-              borderRadius: "14px",
+              borderRadius: "16px",
               padding: "12px 16px",
               fontSize: "1rem",
               fontFamily: "inherit",
               outline: "none",
-              backgroundColor: "var(--huap-fondo)",
+              backgroundColor: "#F8F9FB",
               color: "var(--huap-texto)",
               lineHeight: 1.5,
               overflow: "hidden",
-              transition: "border-color 0.15s",
+              transition: "border-color 0.15s, box-shadow 0.15s",
             }}
-            onFocus={(e) => (e.currentTarget.style.borderColor = "var(--huap-azul)")}
-            onBlur={(e) => (e.currentTarget.style.borderColor = "#D1D5DB")}
+            onFocus={(e) => {
+              e.currentTarget.style.borderColor = "var(--huap-azul)"
+              e.currentTarget.style.boxShadow = "0 0 0 3px rgba(26,82,160,0.1)"
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.borderColor = "#D1D5DB"
+              e.currentTarget.style.boxShadow = "none"
+            }}
           />
           <button
             onClick={enviar}
@@ -305,7 +353,8 @@ export default function ChatbotPage() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              transition: "background 0.15s",
+              transition: "background 0.15s, transform 0.1s",
+              boxShadow: puedeEnviar ? "0 2px 8px rgba(26,82,160,0.3)" : "none",
             }}
           >
             <Send size={20} color="white" strokeWidth={2} />

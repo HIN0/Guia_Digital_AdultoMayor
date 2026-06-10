@@ -32,6 +32,17 @@ def guardar_mensaje(db: Session, conversacion_id: int, tipo: str, contenido: str
     return mensaje
 
 
+def obtener_mensajes_recientes(db: Session, conversacion_id: int, limite: int = 6) -> list[MensajeChat]:
+    mensajes = (
+        db.query(MensajeChat)
+        .filter(MensajeChat.conversacion_id == conversacion_id)
+        .order_by(MensajeChat.fecha.desc())
+        .limit(limite)
+        .all()
+    )
+    return list(reversed(mensajes))
+
+
 # ── Preguntas (whitelist) — lectura ─────────────────────────────────────────
 
 def obtener_preguntas_activas(db: Session) -> list[PreguntaChatbot]:
