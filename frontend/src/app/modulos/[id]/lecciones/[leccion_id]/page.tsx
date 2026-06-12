@@ -638,6 +638,579 @@ export default function LeccionPage() {
                   )
                 }
 
+                // Patrón "La IA es una herramienta útil, no un reemplazo de tu médico. Úsala para..."
+                const matchHerramientaUtil = texto.match(/^(La IA es una herramienta útil[^.]+)\.\s*Úsala para\s*([^,]+)\s*y\s*([^,]+),\s*pero\s*(.+)\.$/)
+                if (matchHerramientaUtil) {
+                  const [, intro, item1, item2, advertencia] = matchHerramientaUtil
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}.</p>
+                      <p style={{ color: "#374151", fontSize: "17px", fontWeight: 600, lineHeight: 1.7, margin: 0 }}>Úsala para:</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        {[item1, item2].map((item: string, i: number) => (
+                          <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                            <p style={{ color: "#166534", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.trim().charAt(0).toUpperCase() + item.trim().slice(1)}</p>
+                          </div>
+                        ))}
+                      </div>
+                      <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{advertencia.charAt(0).toUpperCase() + advertencia.slice(1)}.</p>
+                      </div>
+                    </>
+                  )
+                }
+
+                // Patrón "Los chatbots como ChatGPT... Suenan muy seguros... Siempre verifica..."
+                const matchChatbots = texto.match(/^(Los chatbots como ChatGPT[^.]+)\.\s*(Suenan muy seguros[^.]+)\.\s*(Siempre verifica[^.]+)\.$/)
+                if (matchChatbots) {
+                  const [, intro, advertencia, consejo] = matchChatbots
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}.</p>
+                      <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{advertencia}.</p>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                        <p style={{ color: "#166534", fontSize: "16px", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{consejo}.</p>
+                      </div>
+                    </>
+                  )
+                }
+
+                // Patrón "Es importante recordar: la IA no sabe todo... Es una herramienta útil..."
+                const matchNoMagica = texto.match(/^(Es importante recordar):\s*(.+?)\.\s*(.+)\.$/)
+                if (matchNoMagica) {
+                  const [, intro, itemsStr, cierre] = matchNoMagica
+                  const items = itemsStr.split(/,\s*(?:y\s+)?/).map((s: string) => s.trim()).filter(Boolean)
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        {items.map((item: string, i: number) => (
+                          <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
+                            <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                          </div>
+                        ))}
+                      </div>
+                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{cierre}.</p>
+                    </>
+                  )
+                }
+
+                // Patrón "La IA en salud sirve para X, Y y Z. Nunca para A ni B."
+                const matchIASalud = texto.match(/^(La IA en salud sirve para)\s+(.+?)\.\s*(Nunca para)\s+(.+)\.$/)
+                if (matchIASalud) {
+                  const [, introVerde, verdesStr, introRojo, rojosStr] = matchIASalud
+                  const verdes = verdesStr.split(/,\s*|\s+y\s+/).map((s: string) => s.trim()).filter(Boolean)
+                  const rojos = rojosStr.split(/\s+ni\s+/).map((s: string) => s.trim()).filter(Boolean)
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "17px", fontWeight: 600, lineHeight: 1.7, margin: 0 }}>{introVerde}:</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        {verdes.map((item: string, i: number) => (
+                          <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                            <p style={{ color: "#166534", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                          </div>
+                        ))}
+                      </div>
+                      <p style={{ color: "#374151", fontSize: "17px", fontWeight: 600, lineHeight: 1.7, margin: 0 }}>{introRojo}:</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        {rojos.map((item: string, i: number) => (
+                          <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
+                            <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )
+                }
+
+                // Patrón "Un médico de verdad nunca... Una página oficial... Un anuncio..."
+                const matchCasosReales = texto.match(/^(Un médico de verdad.+?)\. (Una página oficial.+?)\. (Un anuncio.+)\.$/)
+                if (matchCasosReales) {
+                  const [, rojo1, verde, rojo2] = matchCasosReales
+                  return (
+                    <>
+                      <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{rojo1}.</p>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                        <p style={{ color: "#166534", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{verde}.</p>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{rojo2}.</p>
+                      </div>
+                    </>
+                  )
+                }
+
+                // Patrón "Para saber si una página o mensaje es real: X, Y, y Z."
+                const matchParaSaber = texto.match(/^(Para saber si una página o mensaje es real):\s*(.+)\.$/)
+                if (matchParaSaber) {
+                  const [, intro, itemsStr] = matchParaSaber
+                  const items = itemsStr.split(/,\s*(?:y\s+)?/).map((s: string) => s.trim()).filter(Boolean)
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        {items.map((item: string, i: number) => (
+                          <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#EFF6FF", borderRadius: "10px", border: "1px solid #BFDBFE" }}>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>+</span>
+                            <p style={{ color: "#1e3a5f", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )
+                }
+
+                // Patrón "Las estafas de salud... Ante cualquier duda: X, Y, Z. Más vale confirmar..."
+                const matchEstafas = texto.match(/^(Las estafas de salud[^.]+)\.\s*Ante cualquier duda:\s*(.+?)\.\s*(Más vale[^.]+)\.$/)
+                if (matchEstafas) {
+                  const [, ambar, itemsStr, cierre] = matchEstafas
+                  const items = itemsStr.split(/,\s*(?:y\s+)?/).map((s: string) => s.trim()).filter(Boolean)
+                  return (
+                    <>
+                      <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{ambar}.</p>
+                      </div>
+                      <p style={{ color: "#374151", fontSize: "17px", fontWeight: 600, lineHeight: 1.7, margin: 0 }}>Ante cualquier duda:</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        {items.map((item: string, i: number) => (
+                          <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#EFF6FF", borderRadius: "10px", border: "1px solid #BFDBFE" }}>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>+</span>
+                            <p style={{ color: "#1e3a5f", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                          </div>
+                        ))}
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                        <p style={{ color: "#166534", fontSize: "16px", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{cierre}.</p>
+                      </div>
+                    </>
+                  )
+                }
+
+                // Patrón "Desconfía siempre que algo: X, Y, o Z. Los servicios de salud..."
+                const matchDesconfia = texto.match(/^(Desconfía siempre que algo):\s*(.+)\.\s*(Los servicios de salud[^.]+)\.$/)
+                if (matchDesconfia) {
+                  const [, intro, itemsStr, cierre] = matchDesconfia
+                  const items = itemsStr.split(/,\s*o\s+|,\s+/).map((s: string) => s.trim()).filter(Boolean)
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        {items.map((item: string, i: number) => (
+                          <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                            <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                          </div>
+                        ))}
+                      </div>
+                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{cierre}.</p>
+                    </>
+                  )
+                }
+
+                // Patrón "No todo lo que parece un hospital... Hay personas... Aprender a reconocerlos..."
+                const matchNoTodoHospital = texto.match(/^(No todo lo que parece[^.]+)\.\s*(Hay personas[^.]+)\.\s*(Aprender a reconocerlos[^.]+)\.$/)
+                if (matchNoTodoHospital) {
+                  const [, ambar, normal, verde] = matchNoTodoHospital
+                  return (
+                    <>
+                      <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{ambar}.</p>
+                      </div>
+                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{normal}.</p>
+                      <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                        <p style={{ color: "#166534", fontSize: "16px", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{verde}.</p>
+                      </div>
+                    </>
+                  )
+                }
+
+                // Patrón "Los datos personales se guardan para ti... Si una IA te pide... desconfía:..."
+                const matchDatosPersonales = texto.match(/^(Los datos personales[^.]+)\.\s*(Si una IA te pide[^:]+),\s*desconfía:\s*(.+)\.$/)
+                if (matchDatosPersonales) {
+                  const [, verde, ambar, rojo] = matchDatosPersonales
+                  return (
+                    <>
+                      <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                        <p style={{ color: "#166534", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{verde}.</p>
+                      </div>
+                      <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{ambar}, desconfía.</p>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
+                        <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{rojo.charAt(0).toUpperCase() + rojo.slice(1)}.</p>
+                      </div>
+                    </>
+                  )
+                }
+
+                // Patrón "Nunca uses la IA para: X, Y, Z. Cierre."
+                const matchNuncaUses = texto.match(/^(Nunca uses la IA para):\s*(.+?)\.\s*(.+)\.$/)
+                if (matchNuncaUses) {
+                  const [, intro, itemsStr, cierre] = matchNuncaUses
+                  const items = itemsStr.split(/,\s*(?:o\s+)?/).map((s: string) => s.trim()).filter(Boolean)
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        {items.map((item: string, i: number) => (
+                          <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
+                            <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                          </div>
+                        ))}
+                      </div>
+                      <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                        <span style={{ fontSize: "22px", flexShrink: 0, lineHeight: 1.3 }}>💡</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{cierre}.</p>
+                      </div>
+                    </>
+                  )
+                }
+
+                // Patrón caso real "María le contó..."
+                const matchCasoMaria = texto.match(/^(María le contó.+medicamentos)\.\s*(¿Por qué pasó\?.+)\.$/)
+                if (matchCasoMaria) {
+                  const [, historia, conclusion] = matchCasoMaria
+                  return (
+                    <>
+                      <div style={{ backgroundColor: "#F8FAFC", border: "1px solid #E2E8F0", borderRadius: "12px", padding: "16px 18px", display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                        <span style={{ flexShrink: 0, fontSize: "28px", lineHeight: 1 }}>👤</span>
+                        <p style={{ color: "#374151", fontSize: "16px", lineHeight: 1.7, margin: 0 }}>{historia}.</p>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{conclusion}.</p>
+                      </div>
+                    </>
+                  )
+                }
+
+                // Patrón caso real "Don Luis empezó..."
+                if (texto.startsWith("Don Luis empezó")) {
+                  return (
+                    <div style={{ backgroundColor: "#F8FAFC", border: "1px solid #E2E8F0", borderRadius: "12px", padding: "16px 18px", display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                      <span style={{ flexShrink: 0, fontSize: "28px", lineHeight: 1 }}>👤</span>
+                      <p style={{ color: "#374151", fontSize: "16px", lineHeight: 1.7, margin: 0 }}>{texto}</p>
+                    </div>
+                  )
+                }
+
+                // Patrón "Usa la IA para: X, Y, Z, o W."
+                const matchUsaIAPara = texto.match(/^(Usa la IA para):\s*(.+)\.$/)
+                if (matchUsaIAPara) {
+                  const [, intro, itemsStr] = matchUsaIAPara
+                  const items = itemsStr.split(/,\s*(?:o\s+)?/).map((s: string) => s.trim()).filter(Boolean)
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        {items.map((item: string, i: number) => (
+                          <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                            <p style={{ color: "#166534", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )
+                }
+
+                // Patrón "La IA lee millones... Puede escribir respuestas útiles, pero también puede cometer errores..."
+                const matchIAPatrones = texto.match(/^(La IA lee millones[^.]+)\.\s*(Puede escribir respuestas útiles),\s*pero también\s*(.+)\.$/)
+                if (matchIAPatrones) {
+                  const [, intro, positivo, negativo] = matchIAPatrones
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}.</p>
+                      <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                        <p style={{ color: "#166534", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{positivo}.</p>
+                      </div>
+                      <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>También {negativo}.</p>
+                      </div>
+                    </>
+                  )
+                }
+
+                // Patrón "Probablemente ya conviviste con la IA: cuando X, cuando Y... Todo eso es IA."
+                const matchConviviste = texto.match(/^(Probablemente ya conviviste con la IA):\s*(.+)\.\s*(Todo eso es inteligencia artificial)\.$/)
+                if (matchConviviste) {
+                  const [, intro, itemsStr, cierre] = matchConviviste
+                  const items = itemsStr.split(/,\s*(?=cuando)|o\s+(?=cuando)/).map((s: string) => s.trim()).filter(Boolean)
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        {items.map((item: string, i: number) => (
+                          <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#EFF6FF", borderRadius: "10px", border: "1px solid #BFDBFE" }}>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                            <p style={{ color: "#1e3a5f", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                          </div>
+                        ))}
+                      </div>
+                      <p style={{ color: "#374151", fontSize: "17px", fontWeight: 600, lineHeight: 1.7, margin: 0 }}>{cierre}.</p>
+                    </>
+                  )
+                }
+
+                // Patrón definición IA "La inteligencia artificial, o "IA"..."
+                const matchDefIA = texto.match(/^(La inteligencia artificial[^.]+)\.\s*(No piensa[^.]+)\.$/)
+                if (matchDefIA) {
+                  const [, definicion, aclaracion] = matchDefIA
+                  return (
+                    <>
+                      <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "14px 18px", backgroundColor: "#EFF6FF", borderLeft: "4px solid var(--huap-azul)", borderRadius: "10px" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>💬</span>
+                        <p style={{ color: "#1e3a5f", fontSize: "17px", lineHeight: 1.6, margin: 0 }}>{definicion}.</p>
+                      </div>
+                      <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{aclaracion}.</p>
+                      </div>
+                    </>
+                  )
+                }
+
+                // Patrón caso real "La señora Rosa..."
+                const matchCasoRosa = texto.match(/^(La señora Rosa.+tomaba)\.\s*(Confirmar le evitó[^.]+)\.$/)
+                if (matchCasoRosa) {
+                  const [, historia, conclusion] = matchCasoRosa
+                  return (
+                    <>
+                      <div style={{ backgroundColor: "#F8FAFC", border: "1px solid #E2E8F0", borderRadius: "12px", padding: "16px 18px", display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                        <span style={{ flexShrink: 0, fontSize: "28px", lineHeight: 1 }}>👤</span>
+                        <p style={{ color: "#374151", fontSize: "16px", lineHeight: 1.7, margin: 0 }}>{historia}.</p>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                        <p style={{ color: "#166534", fontSize: "16px", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{conclusion}.</p>
+                      </div>
+                    </>
+                  )
+                }
+
+                // Patrón "La IA da respuestas generales. Pero tú tienes X, Y, Z. Algo que sirve... Tu médico sí..."
+                const matchIACasoPersonal = texto.match(/^(La IA da respuestas generales)\.\s*Pero tú tienes\s*(.+?)\.\s*(.+?)\.\s*(.+)\.$/)
+                if (matchIACasoPersonal) {
+                  const [, intro, itemsStr, advertencia, cierre] = matchIACasoPersonal
+                  const items = itemsStr.split(/,\s*/).map((s: string) => s.trim()).filter(Boolean)
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}. Pero tú tienes:</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        {items.map((item: string, i: number) => (
+                          <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#EFF6FF", borderRadius: "10px", border: "1px solid #BFDBFE" }}>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>+</span>
+                            <p style={{ color: "#1e3a5f", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                          </div>
+                        ))}
+                      </div>
+                      <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{advertencia}.</p>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                        <p style={{ color: "#166534", fontSize: "16px", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{cierre}.</p>
+                      </div>
+                    </>
+                  )
+                }
+
+                // Patrón "Nunca compartas datos que te identifican...: X, Y, Z."
+                const matchNuncaCompartas = texto.match(/^(Nunca compartas datos[^:]+):\s*(.+)\.$/)
+                if (matchNuncaCompartas) {
+                  const [, intro, itemsStr] = matchNuncaCompartas
+                  const items = itemsStr.split(/,\s*|\s+y\s+/).map((s: string) => s.trim()).filter(Boolean)
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        {items.map((item: string, i: number) => (
+                          <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
+                            <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )
+                }
+
+                // Patrón "Puedes compartir sin problema...: X, Y y Z."
+                const matchPuedesCompartir = texto.match(/^(Puedes compartir sin problema[^:]+):\s*(.+)\.$/)
+                if (matchPuedesCompartir) {
+                  const [, intro, itemsStr] = matchPuedesCompartir
+                  const items = itemsStr.split(/,\s*|\s+y\s+/).map((s: string) => s.trim()).filter(Boolean)
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        {items.map((item: string, i: number) => (
+                          <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                            <p style={{ color: "#166534", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )
+                }
+
+                // Patrón "Cuando le hablas a la IA, es como gritar..."
+                const matchPlazaGente = texto.match(/^(Cuando le hablas a la IA[^.]+)\.\s*(.+)$/)
+                if (matchPlazaGente) {
+                  const [, advertencia, resto] = matchPlazaGente
+                  return (
+                    <>
+                      <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{advertencia}.</p>
+                      </div>
+                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{resto}</p>
+                    </>
+                  )
+                }
+
+                // Patrón "La IA puede inventar datos, estar desactualizada y no conocer tu caso. Regla de oro:..."
+                const matchResumenRiesgos = texto.match(/^La IA puede\s+(.+?)\.\s*Regla de oro:\s*(.+)\.$/)
+                if (matchResumenRiesgos) {
+                  const [, itemsStr, regladeoro] = matchResumenRiesgos
+                  const items = itemsStr.split(/,\s*|\s+y\s+/).map((s: string) => s.trim()).filter(Boolean)
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "17px", fontWeight: 600, lineHeight: 1.7, margin: 0 }}>La IA puede:</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        {items.map((item: string, i: number) => (
+                          <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
+                            <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                          </div>
+                        ))}
+                      </div>
+                      <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                        <span style={{ fontSize: "22px", flexShrink: 0, lineHeight: 1.3 }}>💡</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}><strong>Regla de oro:</strong> {regladeoro}.</p>
+                      </div>
+                    </>
+                  )
+                }
+
+                // Patrón "La IA aprendió hasta cierta fecha. Puede no saber de X, Y o Z. Cierre."
+                const matchIADesactualizada = texto.match(/^(La IA aprendió hasta cierta fecha)\.\s*Puede no saber de\s*(.+?)\.\s*(.+)\.$/)
+                if (matchIADesactualizada) {
+                  const [, intro, itemsStr, cierre] = matchIADesactualizada
+                  const items = itemsStr.split(/,\s*(?:de\s+)?|\s+o\s+(?:de\s+)?/).map((s: string) => s.replace(/^de\s+/, "").trim()).filter(Boolean)
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}. Puede no saber de:</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        {items.map((item: string, i: number) => (
+                          <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#EFF6FF", borderRadius: "10px", border: "1px solid #BFDBFE" }}>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>+</span>
+                            <p style={{ color: "#1e3a5f", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                          </div>
+                        ))}
+                      </div>
+                      <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                        <span style={{ fontSize: "22px", flexShrink: 0, lineHeight: 1.3 }}>💡</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{cierre.charAt(0).toUpperCase() + cierre.slice(1)}.</p>
+                      </div>
+                    </>
+                  )
+                }
+
+                // Patrón "A veces la IA inventa información... Puede inventar X, Y o Z. Por eso..."
+                const matchIAInventa = texto.match(/^(A veces la IA inventa[^.]+)\.\s*(Se le llama alucinación)\.\s*Puede inventar\s*(.+?)\.\s*(.+)\.$/)
+                if (matchIAInventa) {
+                  const [, intro, definicion, itemsStr, cierre] = matchIAInventa
+                  const items = itemsStr.split(/,\s*|\s+o\s+/).map((s: string) => s.trim()).filter(Boolean)
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}. <strong>{definicion}.</strong></p>
+                      <p style={{ color: "#374151", fontSize: "17px", fontWeight: 600, lineHeight: 1.7, margin: 0 }}>Puede inventar:</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        {items.map((item: string, i: number) => (
+                          <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#EFF6FF", borderRadius: "10px", border: "1px solid #BFDBFE" }}>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>+</span>
+                            <p style={{ color: "#1e3a5f", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                          </div>
+                        ))}
+                      </div>
+                      <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                        <span style={{ fontSize: "22px", flexShrink: 0, lineHeight: 1.3 }}>💡</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{cierre.charAt(0).toUpperCase() + cierre.slice(1)}.</p>
+                      </div>
+                    </>
+                  )
+                }
+
+                // Patrón "Lo más importante de esta lección: [advertencia]. [conclusión]."
+                const matchLoMasImportante = texto.match(/^(Lo más importante de esta lección):\s*(.+?)\.\s*(.+)\.$/)
+                if (matchLoMasImportante) {
+                  const [, intro, advertencia, conclusion] = matchLoMasImportante
+                  return (
+                    <>
+                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
+                      <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{advertencia.charAt(0).toUpperCase() + advertencia.slice(1)}.</p>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
+                        <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{(conclusion.charAt(0).toUpperCase() + conclusion.slice(1)).replace(/\bno\b/, "NO")}.</p>
+                      </div>
+                    </>
+                  )
+                }
+
+                // Patrón bienvenida "Hola, te vamos a enseñar..."
+                const matchBienvenida = texto.match(/^(Hola, te vamos a enseñar[^.]+)\.\s*No te preocupes si te equivocas:\s*([^.]+)\.\s*(.+)\.$/)
+                if (matchBienvenida) {
+                  const [, intro, item1, item2] = matchBienvenida
+                  return (
+                    <>
+                      <div style={{ backgroundColor: "#EFF6FF", borderLeft: "4px solid var(--huap-azul)", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                        <span style={{ flexShrink: 0, fontSize: "24px", lineHeight: 1.2 }}>👋</span>
+                        <p style={{ color: "#1e3a5f", fontSize: "17px", lineHeight: 1.6, margin: 0 }}>{intro}.</p>
+                      </div>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
+                          <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                          <p style={{ color: "#166534", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item1.charAt(0).toUpperCase() + item1.slice(1)}.</p>
+                        </div>
+                        <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
+                          <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                          <p style={{ color: "#166534", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item2.charAt(0).toUpperCase() + item2.slice(1)}.</p>
+                        </div>
+                      </div>
+                    </>
+                  )
+                }
+
                 // Patrón "Si la respuesta dice "X", explicación. Hazle caso: cierre."
                 const matchRespuestaDiceUno = texto.match(/^(Si la respuesta dice)\s+"([^"]+)",\s+(.+?)\.\s+(.+)$/)
                 if (matchRespuestaDiceUno) {
@@ -841,18 +1414,19 @@ export default function LeccionPage() {
                   )
                 }
 
-                // Patrón "Recuerda:"
-                if (texto.includes("Recuerda:")) {
-                  const idx = texto.indexOf("Recuerda:")
+                // Patrón "Recuerda:" o "Recuerda siempre:"
+                const recuerdaKeyword = texto.includes("Recuerda siempre:") ? "Recuerda siempre:" : texto.includes("Recuerda:") ? "Recuerda:" : null
+                if (recuerdaKeyword) {
+                  const idx = texto.indexOf(recuerdaKeyword)
                   const antes = texto.slice(0, idx).trim()
-                  const despues = texto.slice(idx + "Recuerda:".length).trim()
+                  const despues = texto.slice(idx + recuerdaKeyword.length).trim()
                   return (
                     <>
                       {antes && <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{antes}</p>}
                       <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
                         <span style={{ fontSize: "22px", flexShrink: 0, lineHeight: 1.3 }}>💡</span>
                         <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>
-                          <strong>Recuerda:</strong> {despues}
+                          <strong>{recuerdaKeyword}</strong> {despues}
                         </p>
                       </div>
                     </>

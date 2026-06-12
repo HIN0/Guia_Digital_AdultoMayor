@@ -491,7 +491,7 @@ LECCIONES_DATA = [
           "n": 5,
           "tipo": "ejemplo_real",
           "titulo": "Un caso para recordar",
-          "texto": "La señora Rosa le preguntó a una IA por un dolor y la IA le sugirió un remedio con mucha seguridad. Por suerte, Rosa lo consultó con su médica, quien le explicó que ese remedio le hacía mal por otro medicamento que ya tomaba. Confirmar le evitó un problema serio.",
+          "texto": "La señora Rosa le preguntó a una IA por un dolor y la IA le sugirió un remedio con mucha seguridad. Por suerte, Rosa lo consultó con su médico, quien le explicó que ese remedio le hacía mal por otro medicamento que ya tomaba. Confirmar le evitó un problema serio.",
           "apoyo_visual": "Viñeta del caso con mensaje: \"confirmar la salvó de un error\"."
         },
         {
