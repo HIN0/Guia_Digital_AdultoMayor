@@ -6,12 +6,22 @@ import Link from "next/link"
 import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
 
+const TAMANOS = ["pequeño", "mediano", "grande"] as const
+type Tamano = typeof TAMANOS[number]
+const FONT_MAP: Record<Tamano, string> = { pequeño: "16px", mediano: "18px", grande: "22px" }
+
 export default function Header() {
   const { data: session } = useSession()
   const router = useRouter()
   const [open, setOpen] = useState(false)
+  const [tamano, setTamano] = useState<Tamano>("mediano")
   const buttonRef = useRef<HTMLDivElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const saved = (localStorage.getItem("fontTamano") ?? "mediano") as Tamano
+    setTamano(saved)
+  }, [])
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -26,6 +36,17 @@ export default function Header() {
     if (open) document.addEventListener("mousedown", handleClickOutside)
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [open])
+
+  function cambiarTamano(dir: -1 | 1) {
+    const idx = TAMANOS.indexOf(tamano)
+    const nuevoIdx = idx + dir
+    if (nuevoIdx < 0 || nuevoIdx >= TAMANOS.length) return
+    const nuevo = TAMANOS[nuevoIdx]
+    setTamano(nuevo)
+    localStorage.setItem("fontTamano", nuevo)
+    document.documentElement.style.fontSize = FONT_MAP[nuevo]
+    window.dispatchEvent(new Event("huap-font-change"))
+  }
 
   return (
     <header style={{ position: "relative" }}>
@@ -42,11 +63,14 @@ export default function Header() {
           backgroundColor: "rgba(255,255,255,0.06)", pointerEvents: "none",
         }} />
 
-        {/* Contenido */}
+        {/* Contenido — grid 3 cols para centrar el control de fuente */}
         <div style={{
-          display: "flex", alignItems: "center", justifyContent: "space-between",
+          display: "grid",
+          gridTemplateColumns: "1fr auto 1fr",
+          alignItems: "center",
           position: "relative", zIndex: 1, padding: "10px 16px 0",
         }}>
+          {/* Columna izquierda: logo */}
           <Link href="/inicio" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
             <Image src="/logo-huap.png" alt="Logo HUAP" width={52} height={52} style={{ borderRadius: "50%" }} />
             <div style={{ lineHeight: 1.2 }}>
@@ -55,25 +79,85 @@ export default function Header() {
             </div>
           </Link>
 
-          <div ref={buttonRef}>
+          {/* Columna central: control de tamaño de fuente */}
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            backgroundColor: "rgba(255,255,255,0.13)",
+            borderRadius: "24px",
+            border: "1px solid rgba(255,255,255,0.22)",
+            overflow: "hidden",
+          }}>
             <button
-              onClick={() => setOpen(v => !v)}
-              title="Mi perfil"
+              onClick={() => cambiarTamano(-1)}
+              disabled={tamano === "pequeño"}
+              title="Reducir letra"
               style={{
-                width: 46, height: 46, borderRadius: "50%", flexShrink: 0,
-                backgroundColor: "rgba(255,255,255,0.12)",
-                border: "none", outline: "none", boxShadow: "none",
-                cursor: "pointer", padding: 0, overflow: "hidden",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                color: "white", fontWeight: 700, fontSize: "15px",
+                padding: "8px 13px",
+                background: "none", border: "none",
+                cursor: tamano === "pequeño" ? "default" : "pointer",
+                color: tamano === "pequeño" ? "rgba(255,255,255,0.3)" : "white",
+                fontSize: "20px", fontWeight: 700, lineHeight: 1,
+                transition: "color 0.15s",
               }}
             >
-              {session?.user?.image ? (
-                <Image src={session.user.image} alt="Foto de perfil" width={46} height={46} style={{ borderRadius: "50%", display: "block" }} />
-              ) : (
-                session?.user?.name?.[0]?.toUpperCase() ?? "U"
-              )}
+              −
             </button>
+            <div style={{
+              width: "32px",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              borderLeft: "1px solid rgba(255,255,255,0.18)",
+              borderRight: "1px solid rgba(255,255,255,0.18)",
+              padding: "6px 0",
+              userSelect: "none",
+            }}>
+              <span style={{
+                color: "white",
+                fontWeight: 700,
+                lineHeight: 1,
+                fontSize: tamano === "pequeño" ? "13px" : tamano === "grande" ? "21px" : "17px",
+                transition: "font-size 0.15s",
+              }}>A</span>
+            </div>
+            <button
+              onClick={() => cambiarTamano(1)}
+              disabled={tamano === "grande"}
+              title="Aumentar letra"
+              style={{
+                padding: "8px 13px",
+                background: "none", border: "none",
+                cursor: tamano === "grande" ? "default" : "pointer",
+                color: tamano === "grande" ? "rgba(255,255,255,0.3)" : "white",
+                fontSize: "20px", fontWeight: 700, lineHeight: 1,
+                transition: "color 0.15s",
+              }}
+            >
+              +
+            </button>
+          </div>
+
+          {/* Columna derecha: botón de perfil */}
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <div ref={buttonRef}>
+              <button
+                onClick={() => setOpen(v => !v)}
+                title="Mi perfil"
+                style={{
+                  width: 46, height: 46, borderRadius: "50%", flexShrink: 0,
+                  backgroundColor: "rgba(255,255,255,0.12)",
+                  border: "none", outline: "none", boxShadow: "none",
+                  cursor: "pointer", padding: 0, overflow: "hidden",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  color: "white", fontWeight: 700, fontSize: "15px",
+                }}
+              >
+                {session?.user?.image ? (
+                  <Image src={session.user.image} alt="Foto de perfil" width={46} height={46} style={{ borderRadius: "50%", display: "block" }} />
+                ) : (
+                  session?.user?.name?.[0]?.toUpperCase() ?? "U"
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </div>

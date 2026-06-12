@@ -23,6 +23,12 @@ export default function AjustesPage() {
   useEffect(() => {
     const saved = localStorage.getItem("fontTamano") ?? "mediano"
     setTamano(saved)
+
+    function syncDesdeHeader() {
+      setTamano(localStorage.getItem("fontTamano") ?? "mediano")
+    }
+    window.addEventListener("huap-font-change", syncDesdeHeader)
+    return () => window.removeEventListener("huap-font-change", syncDesdeHeader)
   }, [])
 
   function handleSelect(id: string) {
