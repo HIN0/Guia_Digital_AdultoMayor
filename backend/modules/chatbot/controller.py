@@ -1,4 +1,4 @@
-import traceback
+import logging
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from core.database import get_db
@@ -12,6 +12,8 @@ from .schema import (
 )
 from .service import generar_y_guardar_respuesta, cargar_preguntas_validadas
 from . import repository as repo
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/chatbot", tags=["Chatbot"])
 
@@ -32,9 +34,12 @@ def hacer_pregunta(
             conversacion_id=request.conversacion_id,
         )
         return resultado
-    except Exception as e:
-        traceback.print_exc()
-        raise HTTPException(status_code=500, detail=str(e))
+    except Exception:
+        logger.exception("Error en /chatbot/preguntar (usuario_id=%s)", usuario.id)
+        raise HTTPException(
+            status_code=503,
+            detail="El asistente no está disponible en este momento. Por favor intente de nuevo en unos minutos.",
+        )
 
 
 # ── Endpoints admin — Patologías ─────────────────────────────────────────────
@@ -113,5 +118,6 @@ def recargar_whitelist(_: Usuario = Depends(requiere_admin)):
     try:
         cargar_preguntas_validadas()
         return {"detail": "Whitelist recargada correctamente"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    except Exception:
+        logger.exception("Error recargando whitelist")
+        raise HTTPException(status_code=500, detail="No se pudo recargar la whitelist")
