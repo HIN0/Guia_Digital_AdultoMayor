@@ -1,11 +1,7 @@
 import os
+import threading
 from sqlalchemy.orm import Session
 
-# ── LLM ──────────────────────────────────────────────────────────────────────
-# OPCIÓN FUTURA — OpenAI (requiere OPENAI_API_KEY con billing activado)
-# from langchain_openai import ChatOpenAI, OpenAIEmbeddings
-
-# OPCIÓN ACTIVA — Groq (gratuito) + embeddings locales (sin API key)
 from langchain_groq import ChatGroq
 from langchain_huggingface import HuggingFaceEmbeddings
 
@@ -13,43 +9,56 @@ from core.config import settings
 
 from langchain_community.vectorstores import FAISS
 from langchain_core.prompts import PromptTemplate
-from langchain_core.runnables import RunnablePassthrough
 from langchain_text_splitters import CharacterTextSplitter
 
 from core.database import SessionLocal
-from .repository import obtener_o_crear_conversacion, guardar_mensaje, obtener_preguntas_activas, obtener_mensajes_recientes
+from .repository import (
+    obtener_o_crear_conversacion,
+    guardar_mensaje,
+    obtener_preguntas_activas,
+    obtener_mensajes_recientes,
+)
 
-# Umbral de similitud para considerar un match en la whitelist (0-1)
-SIMILARITY_THRESHOLD = 0.82
+# Umbral de distancia L2 para FAISS: menor distancia = más similar.
+# Con paraphrase-multilingual-MiniLM-L12-v2, distancias < 0.8 son buenos matches.
+# Ajustar con preguntas reales antes del test si hay falsos positivos/negativos.
+DISTANCE_THRESHOLD = 0.8
 
-# Singletons de módulo — se inicializan una sola vez al primer request
-_knowledge_store = None   # FAISS sobre conocimiento.txt (RAG)
-_pregunta_store = None    # FAISS sobre PREGUNTA_CHATBOT (whitelist)
-_embeddings = None        # modelo de embeddings compartido
-_llm = None
-_rag_chain = None
+MODELO_PRIMARIO = "llama-3.1-8b-instant"
+MODELO_RESPALDO = "llama-3.3-70b-versatile"
+
+MENSAJE_SOBRECARGA = (
+    "En este momento estamos recibiendo muchas consultas. "
+    "Por favor, espere un momento e intente de nuevo."
+)
+
+_knowledge_store = None
+_pregunta_store = None
+_embeddings = None
+_prompt = None
+_retriever = None
+_init_lock = threading.Lock()
 
 
 def _get_embeddings() -> HuggingFaceEmbeddings:
-    # OPCIÓN FUTURA — OpenAI embeddings
-    # return OpenAIEmbeddings()
-
-    # OPCIÓN ACTIVA — modelo local, primer uso descarga ~90 MB, luego queda en caché
     global _embeddings
     if not _embeddings:
-        _embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+        # paraphrase-multilingual-MiniLM-L12-v2 maneja bien el español;
+        # all-MiniLM-L6-v2 (anterior) era principalmente inglés y daba scores erráticos.
+        _embeddings = HuggingFaceEmbeddings(
+            model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+        )
     return _embeddings
 
 
-def _get_llm() -> ChatGroq:
-    # OPCIÓN FUTURA — OpenAI GPT-4o-mini
-    # return ChatOpenAI(model="gpt-4o-mini", temperature=0.0)
-
-    # OPCIÓN ACTIVA — Llama 3.1 8B via Groq (gratuito)
-    global _llm
-    if not _llm:
-        _llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0.0, groq_api_key=settings.GROQ_API_KEY)
-    return _llm
+def _crear_llm(modelo: str) -> ChatGroq:
+    return ChatGroq(
+        model=modelo,
+        temperature=0.0,
+        groq_api_key=settings.GROQ_API_KEY,
+        max_retries=2,
+        timeout=30,
+    )
 
 
 def _formatear_historial(mensajes: list) -> str:
@@ -63,7 +72,7 @@ def _formatear_historial(mensajes: list) -> str:
 
 
 def inicializar_base_conocimiento():
-    global _knowledge_store, _rag_chain
+    global _knowledge_store, _prompt, _retriever
 
     directorio_actual = os.path.dirname(os.path.abspath(__file__))
     carpeta_data = os.path.join(directorio_actual, "data")
@@ -72,7 +81,10 @@ def inicializar_base_conocimiento():
 
     if not os.path.exists(base_path):
         with open(base_path, "w", encoding="utf-8") as f:
-            f.write("La Guía Digital del HUAP ayuda a los adultos mayores a aprender tecnología. El horario de soporte es de 8:00 a 17:00 hrs.")
+            f.write(
+                "La Guía Digital del HUAP ayuda a los adultos mayores a aprender "
+                "tecnología. El horario de soporte es de 8:00 a 17:00 hrs."
+            )
 
     with open(base_path, "r", encoding="utf-8") as f:
         texto = f.read()
@@ -80,11 +92,8 @@ def inicializar_base_conocimiento():
     splitter = CharacterTextSplitter(chunk_size=500, chunk_overlap=50)
     chunks = splitter.split_text(texto)
 
-    # OPCIÓN FUTURA — OpenAI embeddings
-    # embeddings = OpenAIEmbeddings()
-
-    # OPCIÓN ACTIVA — embeddings locales
     _knowledge_store = FAISS.from_texts(chunks, _get_embeddings())
+    _retriever = _knowledge_store.as_retriever(search_kwargs={"k": 3})
 
     template = """Eres el asistente virtual de salud de la Guía Digital del HUAP. Tu único rol es responder preguntas de salud usando exclusivamente la información del Contexto proporcionado.
 
@@ -101,25 +110,11 @@ Contexto:
 {history}Pregunta actual:
 {question}
 """
-    prompt = PromptTemplate.from_template(template)
-    retriever = _knowledge_store.as_retriever(search_kwargs={"k": 3})
-
-    def _format_docs(docs):
-        return "\n\n".join(d.page_content for d in docs)
-
-    _rag_chain = (
-        {
-            "context": (lambda x: x["question"]) | retriever | _format_docs,
-            "question": lambda x: x["question"],
-            "history": lambda x: x.get("history", ""),
-        }
-        | prompt
-        | _get_llm()
-    )
+    _prompt = PromptTemplate.from_template(template)
 
 
 def cargar_preguntas_validadas():
-    """Construye el índice FAISS a partir de PREGUNTA_CHATBOT. Llama tras agregar preguntas a la BD."""
+    """Construye el índice FAISS a partir de PREGUNTA_CHATBOT. Llamar tras agregar preguntas a la BD."""
     global _pregunta_store
     db = SessionLocal()
     try:
@@ -133,56 +128,74 @@ def cargar_preguntas_validadas():
                 texts.append(texto)
                 metadatas.append({"pregunta_id": p.id, "respuesta": p.respuesta_validada})
 
-        # OPCIÓN FUTURA — OpenAI embeddings
-        # embeddings = OpenAIEmbeddings()
-
-        # OPCIÓN ACTIVA — embeddings locales (mismo modelo que el knowledge store)
         _pregunta_store = FAISS.from_texts(texts, _get_embeddings(), metadatas=metadatas)
     finally:
         db.close()
 
 
+def inicializar_chatbot():
+    """Inicializa embeddings e índices FAISS de forma thread-safe.
+    Llamar desde el startup de FastAPI antes de aceptar tráfico."""
+    with _init_lock:
+        if not _knowledge_store:
+            inicializar_base_conocimiento()
+        if not _pregunta_store:
+            cargar_preguntas_validadas()
+
+
 def _buscar_en_whitelist(pregunta: str) -> tuple:
-    """Retorna (pregunta_id, respuesta_validada) si hay match, o (None, None)."""
+    """Retorna (pregunta_id, respuesta_validada) si hay match, o (None, None).
+    Usa distancia L2 de FAISS: menor valor = más similar (opuesto a un score de similitud)."""
     if not _pregunta_store:
         return None, None
 
-    results = _pregunta_store.similarity_search_with_relevance_scores(pregunta, k=1)
+    results = _pregunta_store.similarity_search_with_score(pregunta, k=1)
     if not results:
         return None, None
 
-    doc, score = results[0]
-    if score >= SIMILARITY_THRESHOLD:
+    doc, distance = results[0]
+    if distance <= DISTANCE_THRESHOLD:
         return doc.metadata["pregunta_id"], doc.metadata["respuesta"]
 
     return None, None
 
 
-def generar_y_guardar_respuesta(db: Session, usuario_id: int, pregunta: str, conversacion_id: int = None) -> dict:
-    global _knowledge_store, _pregunta_store
+def _invocar_llm(pregunta: str, historial: str) -> str:
+    """Invoca RAG con el modelo primario; si falla (ej. 429), intenta con el respaldo.
+    Los límites de Groq son por modelo, así que el respaldo tiene cuota propia."""
+    docs = _retriever.invoke(pregunta)
+    contexto = "\n\n".join(d.page_content for d in docs)
+    mensaje = _prompt.format(context=contexto, history=historial, question=pregunta)
 
-    if not _knowledge_store:
-        inicializar_base_conocimiento()
-    if not _pregunta_store:
-        cargar_preguntas_validadas()
+    try:
+        return _crear_llm(MODELO_PRIMARIO).invoke(mensaje).content
+    except Exception:
+        return _crear_llm(MODELO_RESPALDO).invoke(mensaje).content
+
+
+def generar_y_guardar_respuesta(db: Session, usuario_id: int, pregunta: str, conversacion_id: int = None) -> dict:
+    if not _knowledge_store or not _pregunta_store:
+        inicializar_chatbot()
 
     conv = obtener_o_crear_conversacion(db, usuario_id, conversacion_id)
 
-    # Obtener historial antes de guardar el mensaje actual
     mensajes_previos = obtener_mensajes_recientes(db, conv.id, limite=6)
     historial_texto = _formatear_historial(mensajes_previos)
 
     guardar_mensaje(db, conv.id, tipo="usuario", contenido=pregunta)
 
-    # 1. Buscar primero en la whitelist de respuestas validadas
+    # 1. Whitelist primero — no consume cuota de Groq
     pregunta_id, respuesta_validada = _buscar_en_whitelist(pregunta)
     if respuesta_validada:
         guardar_mensaje(db, conv.id, tipo="bot", contenido=respuesta_validada, pregunta_chatbot_id=pregunta_id)
         return {"respuesta": respuesta_validada, "conversacion_id": conv.id}
 
-    # 2. Fallback: RAG sobre conocimiento.txt con LLM (incluye historial)
-    respuesta_obj = _rag_chain.invoke({"question": pregunta, "history": historial_texto})
-    respuesta_texto = respuesta_obj.content
+    # 2. RAG con LLM (primario → respaldo). Si ambos fallan, mensaje amable.
+    try:
+        respuesta_texto = _invocar_llm(pregunta, historial_texto)
+    except Exception:
+        guardar_mensaje(db, conv.id, tipo="fallback", contenido=MENSAJE_SOBRECARGA)
+        return {"respuesta": MENSAJE_SOBRECARGA, "conversacion_id": conv.id}
 
     es_fallback = "Lo siento, no tengo esa información." in respuesta_texto
     tipo_resp = "fallback" if es_fallback else "bot"

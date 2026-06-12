@@ -36,7 +36,7 @@ def obtener_mensajes_recientes(db: Session, conversacion_id: int, limite: int = 
     mensajes = (
         db.query(MensajeChat)
         .filter(MensajeChat.conversacion_id == conversacion_id)
-        .order_by(MensajeChat.fecha.desc())
+        .order_by(MensajeChat.id.desc())
         .limit(limite)
         .all()
     )
