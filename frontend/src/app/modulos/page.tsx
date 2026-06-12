@@ -67,10 +67,10 @@ export default function ModulosPage() {
 
       <main className="flex-1 px-5 py-8 pb-28 w-full mx-auto" style={{ maxWidth: "680px" }}>
         <div style={{ marginBottom: "36px" }}>
-          <h1 style={{ color: "var(--huap-azul)", fontSize: "32px", fontWeight: 800, lineHeight: 1.2 }}>
+          <h1 style={{ color: "var(--huap-azul)", fontSize: "1.75rem", fontWeight: 800, lineHeight: 1.2 }}>
             Mis módulos
           </h1>
-          <p style={{ color: "#555", marginTop: "10px", fontSize: "18px", lineHeight: 1.6 }}>
+          <p style={{ color: "#555", marginTop: "10px", fontSize: "1rem", lineHeight: 1.6 }}>
             Completa los módulos en orden para aprender sobre inteligencia artificial y salud.
           </p>
         </div>

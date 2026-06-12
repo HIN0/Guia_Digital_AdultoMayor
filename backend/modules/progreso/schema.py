@@ -48,3 +48,4 @@ class ResumenProgresoResponse(BaseModel):
     lecciones_completadas: List[int]
     quizzes_aprobados: List[int]
     insignias: List[InsigniaResponse]
+

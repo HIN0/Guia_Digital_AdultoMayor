@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
-import { CheckCircle, ChevronRight, ArrowLeft, ClipboardCheck } from "lucide-react"
+import { CheckCircle, ChevronRight, ArrowLeft, Trophy, Lock } from "lucide-react"
 import Header from "@/components/layout/Header"
 import { getModuloDetalle, type ModuloDetalle } from "@/lib/api"
 
@@ -14,6 +14,7 @@ export default function ModuloDetallePage() {
   const [modulo, setModulo] = useState<ModuloDetalle | null>(null)
   const [error, setError] = useState(false)
   const [leccionesCompletadas, setLeccionesCompletadas] = useState<Set<number>>(new Set())
+  const [quizAprobado, setQuizAprobado] = useState(false)
 
   useEffect(() => {
     const guardadas: number[] = JSON.parse(
@@ -22,7 +23,10 @@ export default function ModuloDetallePage() {
     setLeccionesCompletadas(new Set(guardadas))
 
     getModuloDetalle(moduloId)
-      .then(setModulo)
+      .then((m) => {
+        setModulo(m)
+        setQuizAprobado(localStorage.getItem(`huap_mod${m.orden}_completado`) === "true")
+      })
       .catch(() => setError(true))
   }, [moduloId])
 
@@ -31,7 +35,7 @@ export default function ModuloDetallePage() {
       <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--huap-fondo)" }}>
         <Header />
         <main className="flex-1 flex items-center justify-center px-5">
-          <p style={{ color: "var(--huap-rojo)", fontSize: "18px", textAlign: "center" }}>
+          <p style={{ color: "var(--huap-rojo)", fontSize: "1rem", textAlign: "center" }}>
             No se pudo cargar el módulo. Verifica que el servidor esté activo e intenta de nuevo.
           </p>
         </main>
@@ -73,7 +77,7 @@ export default function ModuloDetallePage() {
                   border: "none",
                   backgroundColor: "var(--huap-azul)",
                   color: "white",
-                  fontSize: "17px",
+                  fontSize: "0.95rem",
                   fontWeight: 600,
                   cursor: "pointer",
                   marginBottom: "20px",
@@ -83,17 +87,17 @@ export default function ModuloDetallePage() {
                 Volver a módulos
               </button>
 
-              <h1 style={{ color: "var(--huap-azul)", fontSize: "28px", fontWeight: 700 }}>
+              <h1 style={{ color: "var(--huap-azul)", fontSize: "1.55rem", fontWeight: 700 }}>
                 Módulo {modulo.orden}
               </h1>
-              <p style={{ color: "#4A4A4A", fontSize: "19px", marginTop: "6px", fontWeight: 500 }}>
+              <p style={{ color: "#4A4A4A", fontSize: "1.05rem", marginTop: "6px", fontWeight: 500 }}>
                 {modulo.nombre}
               </p>
 
               {/* Barra de progreso */}
               {modulo.lecciones.length > 0 && (
                 <div style={{ marginTop: "16px" }}>
-                  <p style={{ color: "#666", fontSize: "15px", marginBottom: "8px" }}>
+                  <p style={{ color: "#666", fontSize: "0.85rem", marginBottom: "8px" }}>
                     {leccionesCompletadas.size} de {modulo.lecciones.length} lecciones completadas
                   </p>
                   <div style={{
@@ -114,58 +118,7 @@ export default function ModuloDetallePage() {
               )}
             </div>
 
-            {/* Botón quiz final — aparece cuando todas las lecciones están completadas */}
-            {modulo.quiz_final &&
-              modulo.lecciones.length > 0 &&
-              leccionesCompletadas.size >= modulo.lecciones.length && (
-              <button
-                onClick={() => {
-                  sessionStorage.setItem("huap_quiz_modulo_id", String(moduloId))
-                  router.push(`/quiz/${modulo.quiz_final!.id}`)
-                }}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "16px",
-                  padding: "22px 20px",
-                  borderRadius: "16px",
-                  border: "2px solid var(--huap-verde)",
-                  backgroundColor: "#F0FAF4",
-                  cursor: "pointer",
-                  width: "100%",
-                  textAlign: "left",
-                  marginBottom: "8px",
-                  boxShadow: "0 2px 8px rgba(76,175,80,0.15)",
-                }}
-              >
-                <div style={{
-                  width: "52px",
-                  height: "52px",
-                  borderRadius: "50%",
-                  backgroundColor: "var(--huap-verde)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexShrink: 0,
-                }}>
-                  <ClipboardCheck size={28} color="white" strokeWidth={2} />
-                </div>
-                <div style={{ flex: 1 }}>
-                  <p style={{ fontSize: "13px", color: "var(--huap-verde)", marginBottom: "3px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.04em" }}>
-                    ¡Listo para el examen!
-                  </p>
-                  <p style={{ fontSize: "19px", color: "#1a1a1a", fontWeight: 700, lineHeight: 1.3 }}>
-                    Iniciar Quiz Final del Módulo
-                  </p>
-                  <p style={{ fontSize: "14px", color: "#666", marginTop: "2px" }}>
-                    Mínimo {modulo.quiz_final.minimo_aciertos} de {modulo.quiz_final.preguntas.length} correctas para aprobar
-                  </p>
-                </div>
-                <ChevronRight size={26} color="var(--huap-verde)" strokeWidth={2} />
-              </button>
-            )}
-
-            {/* Lista de lecciones */}
+            {/* Lista de lecciones + quiz final al final */}
             <div className="flex flex-col gap-3">
               {modulo.lecciones.map((leccion) => {
                 const completada = leccionesCompletadas.has(leccion.id)
@@ -204,7 +157,7 @@ export default function ModuloDetallePage() {
                     }}>
                       {completada
                         ? <CheckCircle size={26} color="white" strokeWidth={2.5} />
-                        : <span style={{ fontSize: "17px", fontWeight: 700, color: "#999" }}>
+                        : <span style={{ fontSize: "0.95rem", fontWeight: 700, color: "#999" }}>
                             {leccion.orden}
                           </span>
                       }
@@ -212,10 +165,10 @@ export default function ModuloDetallePage() {
 
                     {/* Texto */}
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <p style={{ fontSize: "13px", color: completada ? "var(--huap-verde)" : "#999", marginBottom: "3px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em" }}>
+                      <p style={{ fontSize: "0.75rem", color: completada ? "var(--huap-verde)" : "#999", marginBottom: "3px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em" }}>
                         Lección {leccion.orden}
                       </p>
-                      <p style={{ fontSize: "18px", color: completada ? "#1a1a1a" : "#333", fontWeight: 600, lineHeight: 1.3 }}>
+                      <p style={{ fontSize: "1rem", color: completada ? "#1a1a1a" : "#333", fontWeight: 600, lineHeight: 1.3 }}>
                         {leccion.titulo}
                       </p>
                     </div>
@@ -224,6 +177,133 @@ export default function ModuloDetallePage() {
                   </button>
                 )
               })}
+
+              {/* Quiz final — siempre visible al final de la lista */}
+              {modulo.quiz_final && modulo.lecciones.length > 0 && (() => {
+                const desbloqueado = leccionesCompletadas.size >= modulo.lecciones.length
+                const bloqueado = !desbloqueado
+
+                return (
+                  <>
+                    {/* Separador */}
+                    <div style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "12px",
+                      margin: "4px 0",
+                    }}>
+                      <div style={{ flex: 1, height: "1px", backgroundColor: "#D0D0D0" }} />
+                      <span style={{ fontSize: "0.75rem", color: "#999", fontWeight: 600, whiteSpace: "nowrap" }}>
+                        QUIZ FINAL
+                      </span>
+                      <div style={{ flex: 1, height: "1px", backgroundColor: "#D0D0D0" }} />
+                    </div>
+
+                    <button
+                      disabled={bloqueado}
+                      onClick={() => {
+                        if (desbloqueado && !quizAprobado) {
+                          sessionStorage.setItem("huap_quiz_modulo_id", String(moduloId))
+                          router.push(`/quiz/${modulo.quiz_final!.id}`)
+                        }
+                      }}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "16px",
+                        padding: "20px",
+                        borderRadius: "16px",
+                        width: "100%",
+                        textAlign: "left",
+                        // Bloqueado
+                        ...(bloqueado && {
+                          backgroundColor: "#F5F5F5",
+                          border: "2px solid #E0E0E0",
+                          cursor: "not-allowed",
+                          opacity: 0.7,
+                          boxShadow: "none",
+                        }),
+                        // Desbloqueado y pendiente
+                        ...(desbloqueado && !quizAprobado && {
+                          backgroundColor: "white",
+                          border: "2px dashed var(--huap-azul)",
+                          cursor: "pointer",
+                          boxShadow: "0 1px 6px rgba(0,80,180,0.10)",
+                        }),
+                        // Aprobado
+                        ...(quizAprobado && {
+                          backgroundColor: "#F0FAF4",
+                          border: "2px solid var(--huap-verde)",
+                          cursor: "default",
+                          boxShadow: "0 1px 6px rgba(76,175,80,0.12)",
+                        }),
+                      }}
+                    >
+                      {/* Ícono */}
+                      <div style={{
+                        width: "52px",
+                        height: "52px",
+                        borderRadius: "50%",
+                        flexShrink: 0,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        ...(bloqueado && { backgroundColor: "#E8E8E8" }),
+                        ...(desbloqueado && !quizAprobado && { backgroundColor: "#EBF3FF", border: "2px solid var(--huap-azul)" }),
+                        ...(quizAprobado && { backgroundColor: "var(--huap-verde)" }),
+                      }}>
+                        {bloqueado && <Lock size={24} color="#AAAAAA" strokeWidth={2} />}
+                        {desbloqueado && !quizAprobado && <Trophy size={26} color="var(--huap-azul)" strokeWidth={2} />}
+                        {quizAprobado && <CheckCircle size={28} color="white" strokeWidth={2.5} />}
+                      </div>
+
+                      {/* Texto */}
+                      <div style={{ flex: 1 }}>
+                        <p style={{
+                          fontSize: "0.75rem",
+                          fontWeight: 700,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.05em",
+                          marginBottom: "3px",
+                          ...(bloqueado && { color: "#BBBBBB" }),
+                          ...(desbloqueado && !quizAprobado && { color: "var(--huap-azul)" }),
+                          ...(quizAprobado && { color: "var(--huap-verde)" }),
+                        }}>
+                          {bloqueado && "Bloqueado"}
+                          {desbloqueado && !quizAprobado && "Pendiente"}
+                          {quizAprobado && "✓ Aprobado"}
+                        </p>
+                        <p style={{
+                          fontSize: "1rem",
+                          fontWeight: 700,
+                          lineHeight: 1.3,
+                          color: bloqueado ? "#AAAAAA" : "#1a1a1a",
+                        }}>
+                          Quiz Final del Módulo
+                        </p>
+                        <p style={{
+                          fontSize: "0.8rem",
+                          marginTop: "2px",
+                          ...(bloqueado && { color: "#BBBBBB" }),
+                          ...(desbloqueado && !quizAprobado && { color: "#555" }),
+                          ...(quizAprobado && { color: "#666" }),
+                        }}>
+                          {bloqueado
+                            ? `Completa las ${modulo.lecciones.length} lecciones para desbloquearlo`
+                            : quizAprobado
+                              ? "Has superado el quiz de este módulo"
+                              : `Mínimo ${modulo.quiz_final.minimo_aciertos} de ${modulo.quiz_final.preguntas.length} correctas para aprobar`
+                          }
+                        </p>
+                      </div>
+
+                      {desbloqueado && !quizAprobado && (
+                        <ChevronRight size={26} color="var(--huap-azul)" strokeWidth={2} />
+                      )}
+                    </button>
+                  </>
+                )
+              })()}
             </div>
           </>
         )}

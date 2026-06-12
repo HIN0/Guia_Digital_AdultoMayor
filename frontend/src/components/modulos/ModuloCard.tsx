@@ -64,7 +64,7 @@ export default function ModuloCard({ modulo }: ModuloCardProps) {
             {modulo.estado === "bloqueado" ? (
               <Lock size={20} color="#9CA3AF" strokeWidth={2} />
             ) : (
-              <span style={{ fontSize: "18px", fontWeight: 500, color: "#FFFFFF" }}>
+              <span style={{ fontSize: "1rem", fontWeight: 500, color: "#FFFFFF" }}>
                 {modulo.numero}
               </span>
             )}
@@ -74,7 +74,7 @@ export default function ModuloCard({ modulo }: ModuloCardProps) {
           <div style={{ flex: 1, minWidth: 0 }}>
             <h2
               style={{
-                fontSize: "16px",
+                fontSize: "0.9rem",
                 fontWeight: 500,
                 color: modulo.estado === "bloqueado" ? "#9CA3AF" : "#111827",
                 margin: "0 0 4px 0",
@@ -83,7 +83,7 @@ export default function ModuloCard({ modulo }: ModuloCardProps) {
             >
               {modulo.titulo}
             </h2>
-            <p style={{ fontSize: "13px", color: "#6B7280", margin: 0, lineHeight: 1.5 }}>
+            <p style={{ fontSize: "0.75rem", color: "#6B7280", margin: 0, lineHeight: 1.5 }}>
               {modulo.descripcion}
             </p>
           </div>
@@ -92,7 +92,7 @@ export default function ModuloCard({ modulo }: ModuloCardProps) {
         {/* Progreso o mensaje de bloqueo */}
         {modulo.estado !== "bloqueado" ? (
           modulo.leccionesTotales === 0 ? (
-            <span style={{ fontSize: "13px", color: accentColor, fontWeight: 500 }}>
+            <span style={{ fontSize: "0.75rem", color: accentColor, fontWeight: 500 }}>
               Abrir asistente →
             </span>
           ) : (
@@ -111,7 +111,7 @@ export default function ModuloCard({ modulo }: ModuloCardProps) {
                     display: "inline-flex",
                     alignItems: "center",
                     gap: "4px",
-                    fontSize: "13px",
+                    fontSize: "0.75rem",
                     color: accentColor,
                   }}
                 >
@@ -119,11 +119,11 @@ export default function ModuloCard({ modulo }: ModuloCardProps) {
                   Completado
                 </span>
               ) : (
-                <span style={{ fontSize: "13px", color: "#6B7280" }}>
+                <span style={{ fontSize: "0.75rem", color: "#6B7280" }}>
                   {modulo.leccionesCompletadas} de {modulo.leccionesTotales} lecciones
                 </span>
               )}
-              <span style={{ fontSize: "13px", fontWeight: 500, color: accentColor }}>
+              <span style={{ fontSize: "0.75rem", fontWeight: 500, color: accentColor }}>
                 {modulo.progreso}%
               </span>
             </div>
@@ -165,7 +165,7 @@ export default function ModuloCard({ modulo }: ModuloCardProps) {
             }}
           >
             <Lock size={16} color="#9CA3AF" strokeWidth={2} />
-            <p style={{ fontSize: "13px", color: "#6B7280", margin: 0 }}>
+            <p style={{ fontSize: "0.75rem", color: "#6B7280", margin: 0 }}>
               Completa el Módulo {modulo.numero - 1} para desbloquearlo
             </p>
           </div>
