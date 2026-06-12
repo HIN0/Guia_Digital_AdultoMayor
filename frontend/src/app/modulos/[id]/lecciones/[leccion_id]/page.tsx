@@ -151,8 +151,8 @@ export default function LeccionPage() {
   useEffect(() => {
     if (quiz.mostrandoFeedback && feedbackRef.current) {
       const t = setTimeout(() => {
-        feedbackRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" })
-      }, 80)
+        feedbackRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+      }, 50)
       return () => clearTimeout(t)
     }
   }, [quiz.mostrandoFeedback])
@@ -196,12 +196,15 @@ export default function LeccionPage() {
       setFase("resultado")
       if (paso) guardarProgreso()
     } else {
-      setQuiz((q) => ({
-        ...q,
-        indice: siguiente,
-        seleccion: null,
-        mostrandoFeedback: false,
-      }))
+      window.scrollTo({ top: 0, behavior: "smooth" })
+      setTimeout(() => {
+        setQuiz((q) => ({
+          ...q,
+          indice: siguiente,
+          seleccion: null,
+          mostrandoFeedback: false,
+        }))
+      }, 450)
     }
   }
 
@@ -228,7 +231,7 @@ export default function LeccionPage() {
       <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--huap-fondo)" }}>
         <Header />
         <main className="flex-1 flex items-center justify-center px-5">
-          <p style={{ color: "var(--huap-rojo)", fontSize: "18px", textAlign: "center" }}>
+          <p style={{ color: "var(--huap-rojo)", fontSize: "1rem", textAlign: "center" }}>
             No se pudo cargar la lección. Verifica que el servidor esté activo.
           </p>
         </main>
@@ -241,7 +244,7 @@ export default function LeccionPage() {
       <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--huap-fondo)" }}>
         <Header />
         <main className="flex-1 flex items-center justify-center">
-          <p style={{ color: "#888", fontSize: "18px" }}>Cargando lección...</p>
+          <p style={{ color: "#888", fontSize: "1rem" }}>Cargando lección...</p>
         </main>
       </div>
     )
@@ -270,7 +273,7 @@ export default function LeccionPage() {
               border: "none",
               backgroundColor: "var(--huap-azul)",
               color: "white",
-              fontSize: "17px",
+              fontSize: "0.95rem",
               fontWeight: 600,
               cursor: "pointer",
               marginBottom: "16px",
@@ -282,8 +285,8 @@ export default function LeccionPage() {
           {/* Progreso — pill style (ModuloCard) */}
           <div style={{ marginBottom: "20px" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-              <span style={{ fontSize: "14px", color: "#6B7280" }}>{leccion.titulo}</span>
-              <span style={{ fontSize: "14px", color: "#6B7280", fontWeight: 500 }}>
+              <span style={{ fontSize: "0.8rem", color: "#6B7280" }}>{leccion.titulo}</span>
+              <span style={{ fontSize: "0.8rem", color: "#6B7280", fontWeight: 500 }}>
                 {paginaActual + 1} / {totalPaginas}
               </span>
             </div>
@@ -345,7 +348,7 @@ export default function LeccionPage() {
             >
               {/* Título + botón audio */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "12px" }}>
-                <h2 style={{ color: "#111827", fontSize: "18px", fontWeight: 500, lineHeight: 1.4, margin: 0, flex: 1 }}>
+                <h2 style={{ color: "#111827", fontSize: "1rem", fontWeight: 500, lineHeight: 1.4, margin: 0, flex: 1 }}>
                   {pagina.titulo}
                 </h2>
                 <button
@@ -360,7 +363,7 @@ export default function LeccionPage() {
                     border: `1px solid ${tocandoAudio ? "var(--huap-rojo)" : "var(--huap-azul)"}`,
                     backgroundColor: "white",
                     color: tocandoAudio ? "var(--huap-rojo)" : "var(--huap-azul)",
-                    fontSize: "14px",
+                    fontSize: "0.8rem",
                     fontWeight: 500,
                     cursor: "pointer",
                     whiteSpace: "nowrap",
@@ -369,7 +372,7 @@ export default function LeccionPage() {
                     gap: "4px",
                   }}
                 >
-                  <span style={{ fontSize: "22px", lineHeight: 1 }}>🔊</span>
+                  <span style={{ fontSize: "1.2rem", lineHeight: 1 }}>🔊</span>
                   <span className="hidden md:inline">{tocandoAudio ? "Detener" : "Escuchar"}</span>
                 </button>
               </div>
@@ -384,17 +387,17 @@ export default function LeccionPage() {
                   const [, antes, pregunta, medio, noPuede] = matchPatologia
                   return (
                     <>
-                      {antes.trim() && <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{antes.trim()}</p>}
+                      {antes.trim() && <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{antes.trim()}</p>}
                       <div style={{ backgroundColor: "#F0FDF4", borderLeft: "4px solid var(--huap-verde)", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                        <span style={{ fontSize: "20px", flexShrink: 0, lineHeight: 1.3 }}>💬</span>
-                        <p style={{ color: "#166534", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>
+                        <span style={{ fontSize: "1.1rem", flexShrink: 0, lineHeight: 1.3 }}>💬</span>
+                        <p style={{ color: "#166534", fontSize: "0.9rem", lineHeight: 1.6, margin: 0 }}>
                           <strong>Pregunta útil:</strong> &ldquo;{pregunta}&rdquo;
                         </p>
                       </div>
-                      {medio.trim() && <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{medio.trim()}</p>}
+                      {medio.trim() && <p style={{ color: "#374151", fontSize: "0.95rem", lineHeight: 1.7, margin: 0 }}>{medio.trim()}</p>}
                       <div style={{ backgroundColor: "#FFF5F5", borderLeft: "4px solid var(--huap-rojo)", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                        <span style={{ fontSize: "20px", flexShrink: 0, lineHeight: 1.3 }}>⚠️</span>
-                        <p style={{ color: "#7f1d1d", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>
+                        <span style={{ fontSize: "1.1rem", flexShrink: 0, lineHeight: 1.3 }}>⚠️</span>
+                        <p style={{ color: "#7f1d1d", fontSize: "0.9rem", lineHeight: 1.6, margin: 0 }}>
                           <strong>Lo que NO puede:</strong> {noPuede.trim()}
                         </p>
                       </div>
@@ -408,18 +411,18 @@ export default function LeccionPage() {
                   const [, intro, vago, claridad, cierre] = matchVagoClaridad
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro.trim()}.</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro.trim()}.</p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                         <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "13px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
-                          <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
-                          <p style={{ color: "#7f1d1d", fontSize: "16px", lineHeight: 1.5, margin: 0 }}>{vago.trim()}</p>
+                          <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
+                          <p style={{ color: "#7f1d1d", fontSize: "0.9rem", lineHeight: 1.5, margin: 0 }}>{vago.trim()}</p>
                         </div>
                         <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "13px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
-                          <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
-                          <p style={{ color: "#166534", fontSize: "16px", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{claridad.trim()}</p>
+                          <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                          <p style={{ color: "#166534", fontSize: "0.9rem", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{claridad.trim()}</p>
                         </div>
                       </div>
-                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{cierre.trim()}</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", lineHeight: 1.7, margin: 0 }}>{cierre.trim()}</p>
                     </>
                   )
                 }
@@ -431,16 +434,16 @@ export default function LeccionPage() {
                   const items = itemsStr.split(/,\s+|\s+y\s+/).map((s: string) => s.trim()).filter(Boolean)
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro}</p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         {items.map((item: string, i: number) => (
                           <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
-                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
-                            <p style={{ color: "#166534", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                            <p style={{ color: "#166534", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
                           </div>
                         ))}
                       </div>
-                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{cierre}</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", lineHeight: 1.7, margin: 0 }}>{cierre}</p>
                     </>
                   )
                 }
@@ -452,21 +455,21 @@ export default function LeccionPage() {
                   const items = itemsStr.split(/,\s*|\s+ni\s+/).map((s: string) => s.trim()).filter(Boolean)
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro.trim()}:</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro.trim()}:</p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         {items.map((item: string, i: number) => (
                           <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "10px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
-                            <span style={{ flexShrink: 0, width: "26px", height: "26px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
-                            <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.4, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                            <span style={{ flexShrink: 0, width: "26px", height: "26px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "0.8rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
+                            <p style={{ color: "#7f1d1d", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.4, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
                           </div>
                         ))}
                       </div>
-                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{medio.trim()}</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", lineHeight: 1.7, margin: 0 }}>{medio.trim()}</p>
                       <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "14px 18px", backgroundColor: "#EFF6FF", borderLeft: "4px solid var(--huap-azul)", borderRadius: "10px" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>?</span>
-                        <p style={{ color: "#1e3a5f", fontSize: "17px", fontStyle: "italic", lineHeight: 1.6, margin: 0 }}>&ldquo;{pregunta}&rdquo;</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>?</span>
+                        <p style={{ color: "#1e3a5f", fontSize: "0.95rem", fontStyle: "italic", lineHeight: 1.6, margin: 0 }}>&ldquo;{pregunta}&rdquo;</p>
                       </div>
-                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{cierre.trim()}</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", lineHeight: 1.7, margin: 0 }}>{cierre.trim()}</p>
                     </>
                   )
                 }
@@ -477,12 +480,12 @@ export default function LeccionPage() {
                   const [, intro, frase, resto] = matchPalabrasSim
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro.trim()}</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro.trim()}</p>
                       <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "14px 18px", backgroundColor: "#EFF6FF", borderLeft: "4px solid var(--huap-azul)", borderRadius: "10px" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>💬</span>
-                        <p style={{ color: "#1e3a5f", fontSize: "17px", fontStyle: "italic", lineHeight: 1.6, margin: 0 }}>&ldquo;{frase}&rdquo;</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>💬</span>
+                        <p style={{ color: "#1e3a5f", fontSize: "0.95rem", fontStyle: "italic", lineHeight: 1.6, margin: 0 }}>&ldquo;{frase}&rdquo;</p>
                       </div>
-                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{resto.trim()}</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", lineHeight: 1.7, margin: 0 }}>{resto.trim()}</p>
                     </>
                   )
                 }
@@ -493,12 +496,12 @@ export default function LeccionPage() {
                   const [, intro, pregunta, resto] = matchEnLugarDe
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro.trim()}</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro.trim()}</p>
                       <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "14px 18px", backgroundColor: "#EFF6FF", borderLeft: "4px solid var(--huap-azul)", borderRadius: "10px" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>?</span>
-                        <p style={{ color: "#1e3a5f", fontSize: "17px", fontStyle: "italic", lineHeight: 1.6, margin: 0 }}>&ldquo;{pregunta}&rdquo;</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>?</span>
+                        <p style={{ color: "#1e3a5f", fontSize: "0.95rem", fontStyle: "italic", lineHeight: 1.6, margin: 0 }}>&ldquo;{pregunta}&rdquo;</p>
                       </div>
-                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{resto.trim()}</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", lineHeight: 1.7, margin: 0 }}>{resto.trim()}</p>
                     </>
                   )
                 }
@@ -509,12 +512,12 @@ export default function LeccionPage() {
                   const [, intro, pregunta, resto] = matchPacientePregunta
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
                       <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "14px 18px", backgroundColor: "#EFF6FF", borderLeft: "4px solid var(--huap-azul)", borderRadius: "10px" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>?</span>
-                        <p style={{ color: "#1e3a5f", fontSize: "17px", fontStyle: "italic", lineHeight: 1.6, margin: 0 }}>&ldquo;{pregunta}&rdquo;</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>?</span>
+                        <p style={{ color: "#1e3a5f", fontSize: "0.95rem", fontStyle: "italic", lineHeight: 1.6, margin: 0 }}>&ldquo;{pregunta}&rdquo;</p>
                       </div>
-                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{resto.trim()}</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", lineHeight: 1.7, margin: 0 }}>{resto.trim()}</p>
                     </>
                   )
                 }
@@ -526,16 +529,16 @@ export default function LeccionPage() {
                   const items = itemsStr.split(/,\s+|\s+y\s+/).map((s: string) => s.trim()).filter(Boolean)
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro}</p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         {items.map((item: string, i: number) => (
                           <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
-                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
-                            <p style={{ color: "#166534", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                            <p style={{ color: "#166534", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
                           </div>
                         ))}
                       </div>
-                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{cierre}</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", lineHeight: 1.7, margin: 0 }}>{cierre}</p>
                     </>
                   )
                 }
@@ -547,18 +550,18 @@ export default function LeccionPage() {
                   const items = itemsStr.split(/,\s*/).map((s: string) => s.trim())
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro.trim()}</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro.trim()}</p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         {items.map((item: string, i: number) => (
                           <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#EFF6FF", borderRadius: "10px", border: "1px solid #BFDBFE" }}>
-                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>?</span>
-                            <p style={{ color: "#1e3a5f", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>?</span>
+                            <p style={{ color: "#1e3a5f", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>
                               {item.startsWith("¿") ? item : `¿${item.charAt(0).toUpperCase()}${item.slice(1)}?`}
                             </p>
                           </div>
                         ))}
                       </div>
-                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{cierre.trim()}</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", lineHeight: 1.7, margin: 0 }}>{cierre.trim()}</p>
                     </>
                   )
                 }
@@ -570,22 +573,22 @@ export default function LeccionPage() {
                   const items = itemsStr.split(/,\s*/).map((s: string) => s.replace(/^o\s+/, '').trim())
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro.trim()}:</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro.trim()}:</p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         {items.map((item: string, i: number) => (
                           <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "6px 0" }}>
-                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>+</span>
-                            <p style={{ color: "#1e3a5f", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>+</span>
+                            <p style={{ color: "#1e3a5f", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
                           </div>
                         ))}
                       </div>
                       <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
-                        <p style={{ color: "#166534", fontSize: "16px", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{paraMedico.trim().charAt(0).toUpperCase() + paraMedico.trim().slice(1)}</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                        <p style={{ color: "#166534", fontSize: "0.9rem", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{paraMedico.trim().charAt(0).toUpperCase() + paraMedico.trim().slice(1)}</p>
                       </div>
                       <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
-                        <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{noChat.trim().charAt(0).toUpperCase() + noChat.trim().slice(1)}</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
+                        <p style={{ color: "#7f1d1d", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{noChat.trim().charAt(0).toUpperCase() + noChat.trim().slice(1)}</p>
                       </div>
                     </>
                   )
@@ -597,16 +600,16 @@ export default function LeccionPage() {
                   const [, intro, beneficio, cierre] = matchNoReemplaza
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro.trim()}.</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro.trim()}.</p>
                       <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
-                        <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>No reemplaza a tu médico</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
+                        <p style={{ color: "#7f1d1d", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>No reemplaza a tu médico</p>
                       </div>
                       <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
-                        <p style={{ color: "#166534", fontSize: "16px", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{beneficio.trim()}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                        <p style={{ color: "#166534", fontSize: "0.9rem", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{beneficio.trim()}.</p>
                       </div>
-                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{cierre.trim()}</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", lineHeight: 1.7, margin: 0 }}>{cierre.trim()}</p>
                     </>
                   )
                 }
@@ -618,22 +621,22 @@ export default function LeccionPage() {
                   const noItems = noItemsStr.split(/,\s*/).map((s: string) => s.trim())
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{intro.trim()}</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", lineHeight: 1.7, margin: 0 }}>{intro.trim()}</p>
                       {/* SÍ */}
                       <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
-                        <p style={{ color: "#166534", fontSize: "16px", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>la IA SÍ {siItem.trim()}</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                        <p style={{ color: "#166534", fontSize: "0.9rem", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>la IA SÍ {siItem.trim()}</p>
                       </div>
                       {/* NO items */}
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         {noItems.map((item: string, i: number) => (
                           <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
-                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
-                            <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item}</p>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
+                            <p style={{ color: "#7f1d1d", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item}</p>
                           </div>
                         ))}
                       </div>
-                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{cierre.trim()}</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", lineHeight: 1.7, margin: 0 }}>{cierre.trim()}</p>
                     </>
                   )
                 }
@@ -644,19 +647,19 @@ export default function LeccionPage() {
                   const [, intro, item1, item2, advertencia] = matchHerramientaUtil
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}.</p>
-                      <p style={{ color: "#374151", fontSize: "17px", fontWeight: 600, lineHeight: 1.7, margin: 0 }}>Úsala para:</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro}.</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", fontWeight: 600, lineHeight: 1.7, margin: 0 }}>Úsala para:</p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         {[item1, item2].map((item: string, i: number) => (
                           <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
-                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
-                            <p style={{ color: "#166534", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.trim().charAt(0).toUpperCase() + item.trim().slice(1)}</p>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                            <p style={{ color: "#166534", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.trim().charAt(0).toUpperCase() + item.trim().slice(1)}</p>
                           </div>
                         ))}
                       </div>
                       <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
-                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{advertencia.charAt(0).toUpperCase() + advertencia.slice(1)}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "0.9rem", lineHeight: 1.6, margin: 0 }}>{advertencia.charAt(0).toUpperCase() + advertencia.slice(1)}.</p>
                       </div>
                     </>
                   )
@@ -668,14 +671,14 @@ export default function LeccionPage() {
                   const [, intro, advertencia, consejo] = matchChatbots
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}.</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro}.</p>
                       <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
-                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{advertencia}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "0.9rem", lineHeight: 1.6, margin: 0 }}>{advertencia}.</p>
                       </div>
                       <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
-                        <p style={{ color: "#166534", fontSize: "16px", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{consejo}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                        <p style={{ color: "#166534", fontSize: "0.9rem", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{consejo}.</p>
                       </div>
                     </>
                   )
@@ -688,16 +691,16 @@ export default function LeccionPage() {
                   const items = itemsStr.split(/,\s*(?:y\s+)?/).map((s: string) => s.trim()).filter(Boolean)
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         {items.map((item: string, i: number) => (
                           <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
-                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
-                            <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "0.8rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
+                            <p style={{ color: "#7f1d1d", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
                           </div>
                         ))}
                       </div>
-                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{cierre}.</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", lineHeight: 1.7, margin: 0 }}>{cierre}.</p>
                     </>
                   )
                 }
@@ -710,21 +713,21 @@ export default function LeccionPage() {
                   const rojos = rojosStr.split(/\s+ni\s+/).map((s: string) => s.trim()).filter(Boolean)
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "17px", fontWeight: 600, lineHeight: 1.7, margin: 0 }}>{introVerde}:</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", fontWeight: 600, lineHeight: 1.7, margin: 0 }}>{introVerde}:</p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         {verdes.map((item: string, i: number) => (
                           <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
-                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
-                            <p style={{ color: "#166534", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                            <p style={{ color: "#166534", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
                           </div>
                         ))}
                       </div>
-                      <p style={{ color: "#374151", fontSize: "17px", fontWeight: 600, lineHeight: 1.7, margin: 0 }}>{introRojo}:</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", fontWeight: 600, lineHeight: 1.7, margin: 0 }}>{introRojo}:</p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         {rojos.map((item: string, i: number) => (
                           <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
-                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
-                            <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "0.8rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
+                            <p style={{ color: "#7f1d1d", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
                           </div>
                         ))}
                       </div>
@@ -739,16 +742,16 @@ export default function LeccionPage() {
                   return (
                     <>
                       <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
-                        <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{rojo1}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#7f1d1d", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{rojo1}.</p>
                       </div>
                       <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
-                        <p style={{ color: "#166534", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{verde}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                        <p style={{ color: "#166534", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{verde}.</p>
                       </div>
                       <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
-                        <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{rojo2}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#7f1d1d", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{rojo2}.</p>
                       </div>
                     </>
                   )
@@ -761,12 +764,12 @@ export default function LeccionPage() {
                   const items = itemsStr.split(/,\s*(?:y\s+)?/).map((s: string) => s.trim()).filter(Boolean)
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         {items.map((item: string, i: number) => (
                           <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#EFF6FF", borderRadius: "10px", border: "1px solid #BFDBFE" }}>
-                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>+</span>
-                            <p style={{ color: "#1e3a5f", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>+</span>
+                            <p style={{ color: "#1e3a5f", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
                           </div>
                         ))}
                       </div>
@@ -782,21 +785,21 @@ export default function LeccionPage() {
                   return (
                     <>
                       <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
-                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{ambar}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "0.9rem", lineHeight: 1.6, margin: 0 }}>{ambar}.</p>
                       </div>
-                      <p style={{ color: "#374151", fontSize: "17px", fontWeight: 600, lineHeight: 1.7, margin: 0 }}>Ante cualquier duda:</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", fontWeight: 600, lineHeight: 1.7, margin: 0 }}>Ante cualquier duda:</p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         {items.map((item: string, i: number) => (
                           <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#EFF6FF", borderRadius: "10px", border: "1px solid #BFDBFE" }}>
-                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>+</span>
-                            <p style={{ color: "#1e3a5f", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>+</span>
+                            <p style={{ color: "#1e3a5f", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
                           </div>
                         ))}
                       </div>
                       <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
-                        <p style={{ color: "#166534", fontSize: "16px", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{cierre}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                        <p style={{ color: "#166534", fontSize: "0.9rem", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{cierre}.</p>
                       </div>
                     </>
                   )
@@ -809,16 +812,16 @@ export default function LeccionPage() {
                   const items = itemsStr.split(/,\s*o\s+|,\s+/).map((s: string) => s.trim()).filter(Boolean)
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         {items.map((item: string, i: number) => (
                           <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
-                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
-                            <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                            <p style={{ color: "#7f1d1d", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
                           </div>
                         ))}
                       </div>
-                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{cierre}.</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", lineHeight: 1.7, margin: 0 }}>{cierre}.</p>
                     </>
                   )
                 }
@@ -830,13 +833,13 @@ export default function LeccionPage() {
                   return (
                     <>
                       <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
-                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{ambar}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "0.9rem", lineHeight: 1.6, margin: 0 }}>{ambar}.</p>
                       </div>
-                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{normal}.</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", lineHeight: 1.7, margin: 0 }}>{normal}.</p>
                       <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
-                        <p style={{ color: "#166534", fontSize: "16px", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{verde}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                        <p style={{ color: "#166534", fontSize: "0.9rem", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{verde}.</p>
                       </div>
                     </>
                   )
@@ -849,16 +852,16 @@ export default function LeccionPage() {
                   return (
                     <>
                       <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
-                        <p style={{ color: "#166534", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{verde}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                        <p style={{ color: "#166534", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{verde}.</p>
                       </div>
                       <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
-                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{ambar}, desconfía.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "0.9rem", lineHeight: 1.6, margin: 0 }}>{ambar}, desconfía.</p>
                       </div>
                       <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
-                        <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{rojo.charAt(0).toUpperCase() + rojo.slice(1)}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "0.8rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
+                        <p style={{ color: "#7f1d1d", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{rojo.charAt(0).toUpperCase() + rojo.slice(1)}.</p>
                       </div>
                     </>
                   )
@@ -871,18 +874,18 @@ export default function LeccionPage() {
                   const items = itemsStr.split(/,\s*(?:o\s+)?/).map((s: string) => s.trim()).filter(Boolean)
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         {items.map((item: string, i: number) => (
                           <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
-                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
-                            <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "0.8rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
+                            <p style={{ color: "#7f1d1d", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
                           </div>
                         ))}
                       </div>
                       <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                        <span style={{ fontSize: "22px", flexShrink: 0, lineHeight: 1.3 }}>💡</span>
-                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{cierre}.</p>
+                        <span style={{ fontSize: "1.2rem", flexShrink: 0, lineHeight: 1.3 }}>💡</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "0.9rem", lineHeight: 1.6, margin: 0 }}>{cierre}.</p>
                       </div>
                     </>
                   )
@@ -895,12 +898,12 @@ export default function LeccionPage() {
                   return (
                     <>
                       <div style={{ backgroundColor: "#F8FAFC", border: "1px solid #E2E8F0", borderRadius: "12px", padding: "16px 18px", display: "flex", gap: "12px", alignItems: "flex-start" }}>
-                        <span style={{ flexShrink: 0, fontSize: "28px", lineHeight: 1 }}>👤</span>
-                        <p style={{ color: "#374151", fontSize: "16px", lineHeight: 1.7, margin: 0 }}>{historia}.</p>
+                        <span style={{ flexShrink: 0, fontSize: "1.55rem", lineHeight: 1 }}>👤</span>
+                        <p style={{ color: "#374151", fontSize: "0.9rem", lineHeight: 1.7, margin: 0 }}>{historia}.</p>
                       </div>
                       <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
-                        <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{conclusion}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#7f1d1d", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{conclusion}.</p>
                       </div>
                     </>
                   )
@@ -910,8 +913,8 @@ export default function LeccionPage() {
                 if (texto.startsWith("Don Luis empezó")) {
                   return (
                     <div style={{ backgroundColor: "#F8FAFC", border: "1px solid #E2E8F0", borderRadius: "12px", padding: "16px 18px", display: "flex", gap: "12px", alignItems: "flex-start" }}>
-                      <span style={{ flexShrink: 0, fontSize: "28px", lineHeight: 1 }}>👤</span>
-                      <p style={{ color: "#374151", fontSize: "16px", lineHeight: 1.7, margin: 0 }}>{texto}</p>
+                      <span style={{ flexShrink: 0, fontSize: "1.55rem", lineHeight: 1 }}>👤</span>
+                      <p style={{ color: "#374151", fontSize: "0.9rem", lineHeight: 1.7, margin: 0 }}>{texto}</p>
                     </div>
                   )
                 }
@@ -923,12 +926,12 @@ export default function LeccionPage() {
                   const items = itemsStr.split(/,\s*(?:o\s+)?/).map((s: string) => s.trim()).filter(Boolean)
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         {items.map((item: string, i: number) => (
                           <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
-                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
-                            <p style={{ color: "#166534", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                            <p style={{ color: "#166534", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
                           </div>
                         ))}
                       </div>
@@ -942,14 +945,14 @@ export default function LeccionPage() {
                   const [, intro, positivo, negativo] = matchIAPatrones
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}.</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro}.</p>
                       <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
-                        <p style={{ color: "#166534", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{positivo}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                        <p style={{ color: "#166534", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{positivo}.</p>
                       </div>
                       <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
-                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>También {negativo}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "0.9rem", lineHeight: 1.6, margin: 0 }}>También {negativo}.</p>
                       </div>
                     </>
                   )
@@ -962,16 +965,16 @@ export default function LeccionPage() {
                   const items = itemsStr.split(/,\s*(?=cuando)|o\s+(?=cuando)/).map((s: string) => s.trim()).filter(Boolean)
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         {items.map((item: string, i: number) => (
                           <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#EFF6FF", borderRadius: "10px", border: "1px solid #BFDBFE" }}>
-                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
-                            <p style={{ color: "#1e3a5f", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                            <p style={{ color: "#1e3a5f", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
                           </div>
                         ))}
                       </div>
-                      <p style={{ color: "#374151", fontSize: "17px", fontWeight: 600, lineHeight: 1.7, margin: 0 }}>{cierre}.</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", fontWeight: 600, lineHeight: 1.7, margin: 0 }}>{cierre}.</p>
                     </>
                   )
                 }
@@ -983,12 +986,12 @@ export default function LeccionPage() {
                   return (
                     <>
                       <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "14px 18px", backgroundColor: "#EFF6FF", borderLeft: "4px solid var(--huap-azul)", borderRadius: "10px" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>💬</span>
-                        <p style={{ color: "#1e3a5f", fontSize: "17px", lineHeight: 1.6, margin: 0 }}>{definicion}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>💬</span>
+                        <p style={{ color: "#1e3a5f", fontSize: "0.95rem", lineHeight: 1.6, margin: 0 }}>{definicion}.</p>
                       </div>
                       <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
-                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{aclaracion}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "0.9rem", lineHeight: 1.6, margin: 0 }}>{aclaracion}.</p>
                       </div>
                     </>
                   )
@@ -1001,12 +1004,12 @@ export default function LeccionPage() {
                   return (
                     <>
                       <div style={{ backgroundColor: "#F8FAFC", border: "1px solid #E2E8F0", borderRadius: "12px", padding: "16px 18px", display: "flex", gap: "12px", alignItems: "flex-start" }}>
-                        <span style={{ flexShrink: 0, fontSize: "28px", lineHeight: 1 }}>👤</span>
-                        <p style={{ color: "#374151", fontSize: "16px", lineHeight: 1.7, margin: 0 }}>{historia}.</p>
+                        <span style={{ flexShrink: 0, fontSize: "1.55rem", lineHeight: 1 }}>👤</span>
+                        <p style={{ color: "#374151", fontSize: "0.9rem", lineHeight: 1.7, margin: 0 }}>{historia}.</p>
                       </div>
                       <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
-                        <p style={{ color: "#166534", fontSize: "16px", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{conclusion}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                        <p style={{ color: "#166534", fontSize: "0.9rem", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{conclusion}.</p>
                       </div>
                     </>
                   )
@@ -1019,22 +1022,22 @@ export default function LeccionPage() {
                   const items = itemsStr.split(/,\s*/).map((s: string) => s.trim()).filter(Boolean)
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}. Pero tú tienes:</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro}. Pero tú tienes:</p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         {items.map((item: string, i: number) => (
                           <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#EFF6FF", borderRadius: "10px", border: "1px solid #BFDBFE" }}>
-                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>+</span>
-                            <p style={{ color: "#1e3a5f", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>+</span>
+                            <p style={{ color: "#1e3a5f", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
                           </div>
                         ))}
                       </div>
                       <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
-                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{advertencia}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "0.9rem", lineHeight: 1.6, margin: 0 }}>{advertencia}.</p>
                       </div>
                       <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
-                        <p style={{ color: "#166534", fontSize: "16px", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{cierre}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                        <p style={{ color: "#166534", fontSize: "0.9rem", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{cierre}.</p>
                       </div>
                     </>
                   )
@@ -1047,12 +1050,12 @@ export default function LeccionPage() {
                   const items = itemsStr.split(/,\s*|\s+y\s+/).map((s: string) => s.trim()).filter(Boolean)
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         {items.map((item: string, i: number) => (
                           <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
-                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
-                            <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "0.8rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
+                            <p style={{ color: "#7f1d1d", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
                           </div>
                         ))}
                       </div>
@@ -1067,12 +1070,12 @@ export default function LeccionPage() {
                   const items = itemsStr.split(/,\s*|\s+y\s+/).map((s: string) => s.trim()).filter(Boolean)
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         {items.map((item: string, i: number) => (
                           <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
-                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
-                            <p style={{ color: "#166534", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                            <p style={{ color: "#166534", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
                           </div>
                         ))}
                       </div>
@@ -1087,10 +1090,10 @@ export default function LeccionPage() {
                   return (
                     <>
                       <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
-                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{advertencia}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "0.9rem", lineHeight: 1.6, margin: 0 }}>{advertencia}.</p>
                       </div>
-                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{resto}</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", lineHeight: 1.7, margin: 0 }}>{resto}</p>
                     </>
                   )
                 }
@@ -1102,18 +1105,18 @@ export default function LeccionPage() {
                   const items = itemsStr.split(/,\s*|\s+y\s+/).map((s: string) => s.trim()).filter(Boolean)
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "17px", fontWeight: 600, lineHeight: 1.7, margin: 0 }}>La IA puede:</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", fontWeight: 600, lineHeight: 1.7, margin: 0 }}>La IA puede:</p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         {items.map((item: string, i: number) => (
                           <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
-                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
-                            <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "0.8rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
+                            <p style={{ color: "#7f1d1d", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
                           </div>
                         ))}
                       </div>
                       <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                        <span style={{ fontSize: "22px", flexShrink: 0, lineHeight: 1.3 }}>💡</span>
-                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}><strong>Regla de oro:</strong> {regladeoro}.</p>
+                        <span style={{ fontSize: "1.2rem", flexShrink: 0, lineHeight: 1.3 }}>💡</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "0.9rem", lineHeight: 1.6, margin: 0 }}><strong>Regla de oro:</strong> {regladeoro}.</p>
                       </div>
                     </>
                   )
@@ -1126,18 +1129,18 @@ export default function LeccionPage() {
                   const items = itemsStr.split(/,\s*(?:de\s+)?|\s+o\s+(?:de\s+)?/).map((s: string) => s.replace(/^de\s+/, "").trim()).filter(Boolean)
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}. Puede no saber de:</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro}. Puede no saber de:</p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         {items.map((item: string, i: number) => (
                           <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#EFF6FF", borderRadius: "10px", border: "1px solid #BFDBFE" }}>
-                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>+</span>
-                            <p style={{ color: "#1e3a5f", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>+</span>
+                            <p style={{ color: "#1e3a5f", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
                           </div>
                         ))}
                       </div>
                       <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                        <span style={{ fontSize: "22px", flexShrink: 0, lineHeight: 1.3 }}>💡</span>
-                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{cierre.charAt(0).toUpperCase() + cierre.slice(1)}.</p>
+                        <span style={{ fontSize: "1.2rem", flexShrink: 0, lineHeight: 1.3 }}>💡</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "0.9rem", lineHeight: 1.6, margin: 0 }}>{cierre.charAt(0).toUpperCase() + cierre.slice(1)}.</p>
                       </div>
                     </>
                   )
@@ -1150,19 +1153,19 @@ export default function LeccionPage() {
                   const items = itemsStr.split(/,\s*|\s+o\s+/).map((s: string) => s.trim()).filter(Boolean)
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}. <strong>{definicion}.</strong></p>
-                      <p style={{ color: "#374151", fontSize: "17px", fontWeight: 600, lineHeight: 1.7, margin: 0 }}>Puede inventar:</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro}. <strong>{definicion}.</strong></p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", fontWeight: 600, lineHeight: 1.7, margin: 0 }}>Puede inventar:</p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         {items.map((item: string, i: number) => (
                           <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#EFF6FF", borderRadius: "10px", border: "1px solid #BFDBFE" }}>
-                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>+</span>
-                            <p style={{ color: "#1e3a5f", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>+</span>
+                            <p style={{ color: "#1e3a5f", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
                           </div>
                         ))}
                       </div>
                       <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                        <span style={{ fontSize: "22px", flexShrink: 0, lineHeight: 1.3 }}>💡</span>
-                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{cierre.charAt(0).toUpperCase() + cierre.slice(1)}.</p>
+                        <span style={{ fontSize: "1.2rem", flexShrink: 0, lineHeight: 1.3 }}>💡</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "0.9rem", lineHeight: 1.6, margin: 0 }}>{cierre.charAt(0).toUpperCase() + cierre.slice(1)}.</p>
                       </div>
                     </>
                   )
@@ -1174,14 +1177,14 @@ export default function LeccionPage() {
                   const [, intro, advertencia, conclusion] = matchLoMasImportante
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
                       <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
-                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{advertencia.charAt(0).toUpperCase() + advertencia.slice(1)}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "0.9rem", lineHeight: 1.6, margin: 0 }}>{advertencia.charAt(0).toUpperCase() + advertencia.slice(1)}.</p>
                       </div>
                       <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
-                        <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{(conclusion.charAt(0).toUpperCase() + conclusion.slice(1)).replace(/\bno\b/, "NO")}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "0.8rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
+                        <p style={{ color: "#7f1d1d", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{(conclusion.charAt(0).toUpperCase() + conclusion.slice(1)).replace(/\bno\b/, "NO")}.</p>
                       </div>
                     </>
                   )
@@ -1194,17 +1197,17 @@ export default function LeccionPage() {
                   return (
                     <>
                       <div style={{ backgroundColor: "#EFF6FF", borderLeft: "4px solid var(--huap-azul)", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                        <span style={{ flexShrink: 0, fontSize: "24px", lineHeight: 1.2 }}>👋</span>
-                        <p style={{ color: "#1e3a5f", fontSize: "17px", lineHeight: 1.6, margin: 0 }}>{intro}.</p>
+                        <span style={{ flexShrink: 0, fontSize: "1.33rem", lineHeight: 1.2 }}>👋</span>
+                        <p style={{ color: "#1e3a5f", fontSize: "0.95rem", lineHeight: 1.6, margin: 0 }}>{intro}.</p>
                       </div>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
-                          <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
-                          <p style={{ color: "#166534", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item1.charAt(0).toUpperCase() + item1.slice(1)}.</p>
+                          <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                          <p style={{ color: "#166534", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item1.charAt(0).toUpperCase() + item1.slice(1)}.</p>
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
-                          <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
-                          <p style={{ color: "#166534", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item2.charAt(0).toUpperCase() + item2.slice(1)}.</p>
+                          <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                          <p style={{ color: "#166534", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item2.charAt(0).toUpperCase() + item2.slice(1)}.</p>
                         </div>
                       </div>
                     </>
@@ -1217,15 +1220,15 @@ export default function LeccionPage() {
                   const [, intro, cita, explicacion, cierre] = matchRespuestaDiceUno
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
                       <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "14px 18px", backgroundColor: "#EFF6FF", borderLeft: "4px solid var(--huap-azul)", borderRadius: "10px" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>🤖</span>
-                        <p style={{ color: "#1e3a5f", fontSize: "17px", fontStyle: "italic", lineHeight: 1.6, margin: 0 }}>&ldquo;{cita}&rdquo;</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>🤖</span>
+                        <p style={{ color: "#1e3a5f", fontSize: "0.95rem", fontStyle: "italic", lineHeight: 1.6, margin: 0 }}>&ldquo;{cita}&rdquo;</p>
                       </div>
-                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{explicacion}.</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", lineHeight: 1.7, margin: 0 }}>{explicacion}.</p>
                       <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                        <span style={{ fontSize: "22px", flexShrink: 0, lineHeight: 1.3 }}>💡</span>
-                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{cierre}</p>
+                        <span style={{ fontSize: "1.2rem", flexShrink: 0, lineHeight: 1.3 }}>💡</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "0.9rem", lineHeight: 1.6, margin: 0 }}>{cierre}</p>
                       </div>
                     </>
                   )
@@ -1237,19 +1240,19 @@ export default function LeccionPage() {
                   const [, intro, item1, item2, explicacion, senal] = matchRespuestaDice
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         {[item1, item2].map((item: string, i: number) => (
                           <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#EFF6FF", borderRadius: "10px", border: "1px solid #BFDBFE" }}>
-                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>–</span>
-                            <p style={{ color: "#1e3a5f", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>"{item}"</p>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>–</span>
+                            <p style={{ color: "#1e3a5f", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>"{item}"</p>
                           </div>
                         ))}
                       </div>
-                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{explicacion}.</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", lineHeight: 1.7, margin: 0 }}>{explicacion}.</p>
                       <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                        <span style={{ fontSize: "22px", flexShrink: 0, lineHeight: 1.3 }}>⚠️</span>
-                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{senal}</p>
+                        <span style={{ fontSize: "1.2rem", flexShrink: 0, lineHeight: 1.3 }}>⚠️</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "0.9rem", lineHeight: 1.6, margin: 0 }}>{senal}</p>
                       </div>
                     </>
                   )
@@ -1262,17 +1265,17 @@ export default function LeccionPage() {
                   const lista = items.split(/\s+y\s+/).map((s: string) => s.trim()).filter(Boolean)
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}.</p>
-                      <p style={{ color: "#374151", fontSize: "17px", fontWeight: 600, lineHeight: 1.7, margin: 0 }}>{encabezado}:</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro}.</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", fontWeight: 600, lineHeight: 1.7, margin: 0 }}>{encabezado}:</p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         {lista.map((item: string, i: number) => (
                           <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#EFF6FF", borderRadius: "10px", border: "1px solid #BFDBFE" }}>
-                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>–</span>
-                            <p style={{ color: "#1e3a5f", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0, textTransform: "capitalize" }}>{item}</p>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>–</span>
+                            <p style={{ color: "#1e3a5f", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0, textTransform: "capitalize" }}>{item}</p>
                           </div>
                         ))}
                       </div>
-                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{cierre}</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", lineHeight: 1.7, margin: 0 }}>{cierre}</p>
                     </>
                   )
                 }
@@ -1283,14 +1286,14 @@ export default function LeccionPage() {
                   const [, intro, desacuerdo, cierre] = matchEnResumenVerificar
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}.</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro}.</p>
                       <div style={{ backgroundColor: "#EFF6FF", borderLeft: "4px solid var(--huap-azul)", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
-                        <p style={{ color: "#1e3a5f", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{desacuerdo}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#1e3a5f", fontSize: "0.9rem", lineHeight: 1.6, margin: 0 }}>{desacuerdo}.</p>
                       </div>
                       <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
-                        <p style={{ color: "#166534", fontSize: "16px", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{cierre}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                        <p style={{ color: "#166534", fontSize: "0.9rem", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{cierre}.</p>
                       </div>
                     </>
                   )
@@ -1303,12 +1306,12 @@ export default function LeccionPage() {
                   return (
                     <>
                       <div style={{ backgroundColor: "#F8FAFC", border: "1px solid #E2E8F0", borderRadius: "12px", padding: "16px 18px", display: "flex", gap: "12px", alignItems: "flex-start" }}>
-                        <span style={{ flexShrink: 0, fontSize: "28px", lineHeight: 1 }}>👤</span>
-                        <p style={{ color: "#374151", fontSize: "16px", lineHeight: 1.7, margin: 0 }}>{historia}.</p>
+                        <span style={{ flexShrink: 0, fontSize: "1.55rem", lineHeight: 1 }}>👤</span>
+                        <p style={{ color: "#374151", fontSize: "0.9rem", lineHeight: 1.7, margin: 0 }}>{historia}.</p>
                       </div>
                       <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
-                        <p style={{ color: "#166534", fontSize: "16px", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{conclusion}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                        <p style={{ color: "#166534", fontSize: "0.9rem", fontWeight: 600, lineHeight: 1.5, margin: 0 }}>{conclusion}.</p>
                       </div>
                     </>
                   )
@@ -1320,19 +1323,19 @@ export default function LeccionPage() {
                   const [, intro, regla, coinciden, noCoinciden] = matchReglaDosFuentes
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
                       <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "16px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
-                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{regla}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#B85C00", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "0.9rem", lineHeight: 1.6, margin: 0 }}>{regla}.</p>
                       </div>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
-                          <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
-                          <p style={{ color: "#166534", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{coinciden}.</p>
+                          <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                          <p style={{ color: "#166534", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{coinciden}.</p>
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
-                          <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
-                          <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{noCoinciden}.</p>
+                          <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "0.8rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
+                          <p style={{ color: "#7f1d1d", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{noCoinciden}.</p>
                         </div>
                       </div>
                     </>
@@ -1347,21 +1350,21 @@ export default function LeccionPage() {
                   const rojos = rojosStr.split(/\s+o\s+/).map((s: string) => s.trim()).filter(Boolean)
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         {verdes.map((item: string, i: number) => (
                           <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#F0FDF4", borderRadius: "10px", border: "1px solid #BBF7D0" }}>
-                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
-                            <p style={{ color: "#166534", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-verde)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</span>
+                            <p style={{ color: "#166534", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
                           </div>
                         ))}
                       </div>
-                      <p style={{ color: "#374151", fontSize: "17px", fontWeight: 600, lineHeight: 1.7, margin: 0 }}>NO son fuentes confiables:</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", fontWeight: 600, lineHeight: 1.7, margin: 0 }}>NO son fuentes confiables:</p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         {rojos.map((item: string, i: number) => (
                           <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
-                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
-                            <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
+                            <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "0.8rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</span>
+                            <p style={{ color: "#7f1d1d", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{item.charAt(0).toUpperCase() + item.slice(1)}</p>
                           </div>
                         ))}
                       </div>
@@ -1375,12 +1378,12 @@ export default function LeccionPage() {
                   const [, intro, definicion, cierre] = matchVerificar
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}.</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro}.</p>
                       <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "14px 18px", backgroundColor: "#EFF6FF", borderLeft: "4px solid var(--huap-azul)", borderRadius: "10px" }}>
-                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "15px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>i</span>
-                        <p style={{ color: "#1e3a5f", fontSize: "17px", lineHeight: 1.6, margin: 0 }}>{definicion}.</p>
+                        <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "0.85rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>i</span>
+                        <p style={{ color: "#1e3a5f", fontSize: "0.95rem", lineHeight: 1.6, margin: 0 }}>{definicion}.</p>
                       </div>
-                      <p style={{ color: "#374151", fontSize: "17px", lineHeight: 1.7, margin: 0 }}>{cierre}</p>
+                      <p style={{ color: "#374151", fontSize: "0.95rem", lineHeight: 1.7, margin: 0 }}>{cierre}</p>
                     </>
                   )
                 }
@@ -1392,14 +1395,14 @@ export default function LeccionPage() {
                   const items = itemsStr.split(/;\s*/).map((s: string) => s.trim()).filter(Boolean)
                   return (
                     <>
-                      <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
+                      <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{intro}:</p>
                       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                         {items.map((item: string, i: number) => {
                           const partes = item.match(/^"([^"]+)"\s*=\s*(.+)$/)
                           return (
                             <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#EFF6FF", borderRadius: "10px", border: "1px solid #BFDBFE" }}>
-                              <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "16px", display: "flex", alignItems: "center", justifyContent: "center" }}>🤖</span>
-                              <p style={{ color: "#1e3a5f", fontSize: "16px", lineHeight: 1.5, margin: 0 }}>
+                              <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "0.9rem", display: "flex", alignItems: "center", justifyContent: "center" }}>🤖</span>
+                              <p style={{ color: "#1e3a5f", fontSize: "0.9rem", lineHeight: 1.5, margin: 0 }}>
                                 {partes ? <><em>&ldquo;{partes[1]}&rdquo;</em> <span style={{ color: "#374151" }}>= {partes[2]}</span></> : item}
                               </p>
                             </div>
@@ -1407,8 +1410,8 @@ export default function LeccionPage() {
                         })}
                       </div>
                       <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                        <span style={{ fontSize: "22px", flexShrink: 0, lineHeight: 1.3 }}>💡</span>
-                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>{cierre}</p>
+                        <span style={{ fontSize: "1.2rem", flexShrink: 0, lineHeight: 1.3 }}>💡</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "0.9rem", lineHeight: 1.6, margin: 0 }}>{cierre}</p>
                       </div>
                     </>
                   )
@@ -1422,10 +1425,10 @@ export default function LeccionPage() {
                   const despues = texto.slice(idx + recuerdaKeyword.length).trim()
                   return (
                     <>
-                      {antes && <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{antes}</p>}
+                      {antes && <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{antes}</p>}
                       <div style={{ backgroundColor: "#FFF4E6", borderLeft: "4px solid #B85C00", borderRadius: "10px", padding: "14px 18px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-                        <span style={{ fontSize: "22px", flexShrink: 0, lineHeight: 1.3 }}>💡</span>
-                        <p style={{ color: "#1A1A1A", fontSize: "16px", lineHeight: 1.6, margin: 0 }}>
+                        <span style={{ fontSize: "1.2rem", flexShrink: 0, lineHeight: 1.3 }}>💡</span>
+                        <p style={{ color: "#1A1A1A", fontSize: "0.9rem", lineHeight: 1.6, margin: 0 }}>
                           <strong>{recuerdaKeyword}</strong> {despues}
                         </p>
                       </div>
@@ -1434,7 +1437,7 @@ export default function LeccionPage() {
                 }
 
                 // Default
-                return <p style={{ color: "#374151", fontSize: "18px", lineHeight: 1.7, margin: 0 }}>{texto}</p>
+                return <p style={{ color: "#374151", fontSize: "1rem", lineHeight: 1.7, margin: 0 }}>{texto}</p>
               })()}
 
               {/* Lista de síntomas de emergencia */}
@@ -1442,8 +1445,8 @@ export default function LeccionPage() {
                 <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                   {pagina.lista_sintomas.map((sintoma: string, i: number) => (
                     <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "11px 16px", backgroundColor: "#FFF5F5", borderRadius: "10px", border: "1px solid #FECACA" }}>
-                      <span style={{ flexShrink: 0, width: "26px", height: "26px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
-                      <p style={{ color: "#7f1d1d", fontSize: "16px", fontWeight: 500, lineHeight: 1.4, margin: 0 }}>{sintoma}</p>
+                      <span style={{ flexShrink: 0, width: "26px", height: "26px", borderRadius: "50%", backgroundColor: "var(--huap-rojo)", color: "white", fontSize: "0.8rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>!</span>
+                      <p style={{ color: "#7f1d1d", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.4, margin: 0 }}>{sintoma}</p>
                     </div>
                   ))}
                 </div>
@@ -1475,7 +1478,7 @@ export default function LeccionPage() {
                       border: "0.5px solid #E5E7EB",
                       borderRadius: "10px",
                       color: "#6B7280",
-                      fontSize: "15px",
+                      fontSize: "0.85rem",
                       fontStyle: "italic",
                       lineHeight: 1.5,
                       margin: 0,
@@ -1500,7 +1503,7 @@ export default function LeccionPage() {
                   border: "1px solid var(--huap-azul)",
                   backgroundColor: "white",
                   color: "var(--huap-azul)",
-                  fontSize: "17px",
+                  fontSize: "0.95rem",
                   fontWeight: 600,
                   cursor: "pointer",
                 }}
@@ -1517,7 +1520,7 @@ export default function LeccionPage() {
                 border: "none",
                 backgroundColor: "var(--huap-azul)",
                 color: "white",
-                fontSize: "17px",
+                fontSize: "0.95rem",
                 fontWeight: 600,
                 cursor: "pointer",
               }}
@@ -1554,7 +1557,7 @@ export default function LeccionPage() {
               border: "none",
               backgroundColor: "var(--huap-azul)",
               color: "white",
-              fontSize: "17px",
+              fontSize: "0.95rem",
               fontWeight: 600,
               cursor: "pointer",
               marginBottom: "16px",
@@ -1566,8 +1569,8 @@ export default function LeccionPage() {
           {/* Progreso del quiz — pill style (ModuloCard) */}
           <div style={{ marginBottom: "20px" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-              <span style={{ fontSize: "14px", color: "#6B7280" }}>Quiz rápido</span>
-              <span style={{ fontSize: "14px", color: "#6B7280", fontWeight: 500 }}>
+              <span style={{ fontSize: "0.8rem", color: "#6B7280" }}>Quiz rápido</span>
+              <span style={{ fontSize: "0.8rem", color: "#6B7280", fontWeight: 500 }}>
                 {quiz.indice + 1} / {preguntas.length}
               </span>
             </div>
@@ -1619,7 +1622,7 @@ export default function LeccionPage() {
 
               {/* Pregunta + botón audio */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "12px" }}>
-                <h2 style={{ color: "#111827", fontSize: "18px", fontWeight: 500, lineHeight: 1.5, margin: 0, flex: 1 }}>
+                <h2 style={{ color: "#111827", fontSize: "1rem", fontWeight: 500, lineHeight: 1.5, margin: 0, flex: 1 }}>
                   {preguntaActual.pregunta}
                 </h2>
                 <button
@@ -1634,7 +1637,7 @@ export default function LeccionPage() {
                     border: `1px solid ${tocandoAudio ? "var(--huap-rojo)" : "var(--huap-azul)"}`,
                     backgroundColor: "white",
                     color: tocandoAudio ? "var(--huap-rojo)" : "var(--huap-azul)",
-                    fontSize: "14px",
+                    fontSize: "0.8rem",
                     fontWeight: 500,
                     cursor: "pointer",
                     whiteSpace: "nowrap",
@@ -1643,7 +1646,7 @@ export default function LeccionPage() {
                     gap: "4px",
                   }}
                 >
-                  <span style={{ fontSize: "22px", lineHeight: 1 }}>🔊</span>
+                  <span style={{ fontSize: "1.2rem", lineHeight: 1 }}>🔊</span>
                   <span className="hidden md:inline">{tocandoAudio ? "Detener" : "Escuchar"}</span>
                 </button>
               </div>
@@ -1691,7 +1694,7 @@ export default function LeccionPage() {
                         border: "0.5px solid #E5E7EB",
                         backgroundColor: bgColor,
                         boxShadow,
-                        fontSize: "16px",
+                        fontSize: "0.9rem",
                         textAlign: "left",
                         cursor: quiz.mostrandoFeedback ? "default" : "pointer",
                         color: textColor,
@@ -1711,7 +1714,7 @@ export default function LeccionPage() {
                           borderRadius: "50%",
                           backgroundColor: letraBg,
                           color: letraColor,
-                          fontSize: "13px",
+                          fontSize: "0.75rem",
                           fontWeight: 600,
                           display: "flex",
                           alignItems: "center",
@@ -1752,13 +1755,13 @@ export default function LeccionPage() {
             >
               <p style={{
                 color: esCorrecta ? "#166534" : "#a92020",
-                fontSize: "14px",
+                fontSize: "0.8rem",
                 fontWeight: 600,
                 marginBottom: "4px",
               }}>
                 {esCorrecta ? "✓ ¡Muy bien!" : "✗ Incorrecto"}
               </p>
-              <p style={{ color: esCorrecta ? "#166534" : "#6B7280", fontSize: "15px", lineHeight: 1.5, margin: 0 }}>
+              <p style={{ color: esCorrecta ? "#166534" : "#6B7280", fontSize: "0.85rem", lineHeight: 1.5, margin: 0 }}>
                 {preguntaActual.feedback}
               </p>
             </div>
@@ -1775,7 +1778,7 @@ export default function LeccionPage() {
                 border: "none",
                 backgroundColor: quiz.seleccion !== null ? "var(--huap-azul)" : "#E5E7EB",
                 color: quiz.seleccion !== null ? "white" : "#9CA3AF",
-                fontSize: "17px",
+                fontSize: "0.95rem",
                 fontWeight: 600,
                 cursor: quiz.seleccion !== null ? "pointer" : "not-allowed",
                 width: "100%",
@@ -1793,7 +1796,7 @@ export default function LeccionPage() {
                 border: "none",
                 backgroundColor: "var(--huap-azul)",
                 color: "white",
-                fontSize: "17px",
+                fontSize: "0.95rem",
                 fontWeight: 600,
                 cursor: "pointer",
                 width: "100%",
@@ -1839,16 +1842,16 @@ export default function LeccionPage() {
           <h2
             style={{
               color: aprobado ? "var(--huap-verde)" : "var(--huap-azul)",
-              fontSize: "24px",
+              fontSize: "1.33rem",
               marginBottom: "12px",
             }}
           >
             {aprobado ? resultado.titulo_aprobado : resultado.titulo_fallido}
           </h2>
-          <p style={{ color: "#555", fontSize: "18px", lineHeight: 1.6, marginBottom: "12px" }}>
+          <p style={{ color: "#555", fontSize: "1rem", lineHeight: 1.6, marginBottom: "12px" }}>
             {aprobado ? resultado.mensaje_aprobado : resultado.mensaje_fallido}
           </p>
-          <p style={{ color: "#aaa", fontSize: "15px", marginBottom: "32px" }}>
+          <p style={{ color: "#aaa", fontSize: "0.85rem", marginBottom: "32px" }}>
             {quiz.aciertos} de {leccion.contenido.quiz_corto.preguntas.length} respuestas correctas
           </p>
 
@@ -1862,7 +1865,7 @@ export default function LeccionPage() {
                   border: "2px solid var(--huap-azul)",
                   backgroundColor: "white",
                   color: "var(--huap-azul)",
-                  fontSize: "17px",
+                  fontSize: "0.95rem",
                   fontWeight: 600,
                   cursor: "pointer",
                 }}
@@ -1878,7 +1881,7 @@ export default function LeccionPage() {
                 border: "none",
                 backgroundColor: "var(--huap-azul)",
                 color: "white",
-                fontSize: "17px",
+                fontSize: "0.95rem",
                 fontWeight: 600,
                 cursor: "pointer",
               }}

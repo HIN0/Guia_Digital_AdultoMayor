@@ -14,7 +14,7 @@ import {
   type FeedbackPregunta,
 } from "@/lib/api"
 
-type Fase = "quiz" | "revision" | "resultado"
+type Fase = "quiz" | "resultado"
 
 function guardarFlags(moduloOrden: number) {
   if (moduloOrden === 1) {
@@ -47,6 +47,9 @@ export default function QuizFinalPage() {
   // Audio
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const [tocandoAudio, setTocandoAudio] = useState(false)
+
+  // Ref para scroll al botón "Siguiente" tras seleccionar
+  const siguienteRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     const moduloIdGuardado = Number(sessionStorage.getItem("huap_quiz_modulo_id") ?? "0")
@@ -81,6 +84,9 @@ export default function QuizFinalPage() {
 
   function seleccionar(opcionId: number) {
     setSeleccionActual(opcionId)
+    setTimeout(() => {
+      siguienteRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" })
+    }, 50)
   }
 
   function confirmarYSiguiente() {
@@ -92,7 +98,8 @@ export default function QuizFinalPage() {
     detenerAudio()
 
     if (indice + 1 < preguntas.length) {
-      setIndice((i) => i + 1)
+      window.scrollTo({ top: 0, behavior: "smooth" })
+      setTimeout(() => setIndice((i) => i + 1), 450)
     } else {
       // Última pregunta: enviar al backend
       enviarRespuestas(nuevas)
@@ -305,6 +312,7 @@ export default function QuizFinalPage() {
 
           {/* Botón siguiente */}
           <button
+            ref={siguienteRef}
             onClick={confirmarYSiguiente}
             disabled={seleccionActual === null}
             style={{
