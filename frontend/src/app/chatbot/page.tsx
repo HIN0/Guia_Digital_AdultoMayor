@@ -18,8 +18,15 @@ const SALUDO: Mensaje = {
   id: 0,
   tipo: "bot",
   contenido:
-    "Hola, soy el asistente de salud del HUAP. Puedo responder preguntas sobre diabetes, síntomas, causas y cómo cuidar tu salud. ¿En qué te puedo ayudar hoy?",
+    "Hola, soy el asistente de salud del HUAP. Puedo responder preguntas sobre gastroenteritis, neumonía, infección urinaria, dolor de cabeza y lumbago. También puedo informarte sobre el hospital. ¿En qué te puedo ayudar hoy?",
 }
+
+const SUGERENCIAS: { emoji: string; texto: string }[] = [
+  { emoji: "🏥", texto: "¿Cuál es el horario de atención del hospital?" },
+  { emoji: "⚠️", texto: "¿Cuándo es peligroso el dolor de cabeza?" },
+  { emoji: "🫁", texto: "¿Qué es la neumonía?" },
+  { emoji: "🦴", texto: "¿Qué es el lumbago?" },
+]
 
 export default function ChatbotPage() {
   const { data: session } = useSession()
@@ -36,8 +43,8 @@ export default function ChatbotPage() {
     }
   }, [mensajes, cargando])
 
-  async function enviar() {
-    const texto = input.trim()
+  async function enviar(textoSugerido?: string) {
+    const texto = (textoSugerido ?? input).trim()
     if (!texto || cargando) return
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -51,10 +58,11 @@ export default function ChatbotPage() {
     }
 
     setMensajes((prev) => [...prev, { id: Date.now(), tipo: "usuario", contenido: texto }])
-    setInput("")
-
-    if (textareaRef.current) {
-      textareaRef.current.style.height = "auto"
+    if (!textoSugerido) {
+      setInput("")
+      if (textareaRef.current) {
+        textareaRef.current.style.height = "auto"
+      }
     }
 
     setCargando(true)
@@ -297,6 +305,57 @@ export default function ChatbotPage() {
           boxShadow: "0 -2px 12px rgba(0,0,0,0.06)",
         }}
       >
+        {/* Sugerencias — justo encima del textarea */}
+        {mensajes.length === 1 && !cargando && (
+          <div style={{ maxWidth: "680px", margin: "0 auto 10px" }}>
+            <p style={{
+              fontSize: "0.72rem",
+              color: "#aaa",
+              fontWeight: 600,
+              textTransform: "uppercase",
+              letterSpacing: "0.04em",
+              marginBottom: "8px",
+            }}>
+              Preguntas frecuentes
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "7px" }}>
+              {SUGERENCIAS.map((s, i) => (
+                <button
+                  key={i}
+                  onClick={() => enviar(s.texto)}
+                  style={{
+                    padding: "10px 12px",
+                    borderRadius: "12px",
+                    border: "1.5px solid #C7D8F5",
+                    backgroundColor: "white",
+                    color: "var(--huap-azul)",
+                    fontSize: "0.84rem",
+                    fontWeight: 500,
+                    cursor: "pointer",
+                    textAlign: "left",
+                    lineHeight: 1.35,
+                    boxShadow: "0 1px 3px rgba(26,82,160,0.06)",
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: "6px",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = "#EFF5FF"
+                    e.currentTarget.style.borderColor = "var(--huap-azul)"
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "white"
+                    e.currentTarget.style.borderColor = "#C7D8F5"
+                  }}
+                >
+                  <span style={{ fontSize: "0.95rem", flexShrink: 0, marginTop: "1px" }}>{s.emoji}</span>
+                  <span>{s.texto}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div
           style={{
             display: "flex",

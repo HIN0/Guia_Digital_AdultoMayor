@@ -1,67 +1,4 @@
 ## Guía Digital del HUAP — Base de Conocimiento
-
----
-
-## DIABETES
-
-### ¿Qué es la diabetes?
-La diabetes es una enfermedad crónica que ocurre cuando el páncreas no produce suficiente insulina o cuando el cuerpo no utiliza correctamente la insulina que produce. La insulina es una hormona que regula el azúcar (glucosa) en la sangre. Existen dos tipos principales: Tipo 1 (el cuerpo no produce insulina) y Tipo 2 (el cuerpo no usa bien la insulina), siendo este último el más frecuente en adultos mayores.
-
-### Síntomas de la diabetes
-Los síntomas más comunes de la diabetes son:
-- Sed excesiva y boca seca
-- Necesidad frecuente de orinar, especialmente durante la noche
-- Cansancio y fatiga sin razón aparente
-- Visión borrosa
-- Heridas que tardan mucho en cicatrizar
-- Hormigueo o entumecimiento en manos y pies
-- Pérdida de peso sin dieta
-- Hambre frecuente incluso después de comer
-- Infecciones recurrentes en la piel, encías o vejiga
-
-### Causas de la diabetes
-Las principales causas y factores de riesgo son:
-- Antecedentes familiares (herencia genética)
-- Sobrepeso u obesidad, especialmente en la zona abdominal
-- Sedentarismo y falta de actividad física
-- Alimentación alta en azúcares y harinas refinadas
-- Edad mayor de 45 años
-- Hipertensión arterial
-- Niveles altos de colesterol o triglicéridos
-- Estrés crónico
-
-### Buenas prácticas para prevenir y controlar la diabetes
-Para prevenir la diabetes o mantenerla bajo control se recomienda:
-
-**Alimentación saludable:**
-- Consumir frutas, verduras y legumbres todos los días
-- Preferir cereales integrales como avena, arroz integral y pan integral
-- Reducir el consumo de azúcar, bebidas azucaradas y dulces
-- Disminuir las frituras y alimentos procesados
-- Comer en porciones moderadas y a horarios regulares
-- Beber al menos 8 vasos de agua al día
-
-**Actividad física:**
-- Realizar al menos 30 minutos de caminata diaria
-- Subir escaleras en lugar de ascensores cuando sea posible
-- Practicar actividades físicas suaves como yoga, natación o bicicleta estacionaria
-- Evitar permanecer sentado más de 2 horas seguidas
-
-**Controles médicos:**
-- Medir la glucosa en sangre según indicación médica
-- Asistir a los controles con el médico o enfermera de cabecera
-- Tomar los medicamentos prescritos sin saltarse dosis
-- Controlar la presión arterial regularmente
-- Realizarse el examen de hemoglobina glicosilada (HbA1c) al menos 2 veces al año
-
-**Cuidados generales:**
-- Revisar los pies diariamente para detectar heridas o cambios en la piel
-- Usar calzado cómodo y adecuado
-- No fumar
-- Moderar el consumo de alcohol
-- Dormir entre 7 y 8 horas por noche
-- Gestionar el estrés con actividades de relajación
-
 ---
 
 ## INFORMACIÓN GENERAL DEL HUAP
@@ -74,3 +11,108 @@ La Guía Digital del HUAP es una plataforma educativa en línea diseñada especi
 
 ### Soporte técnico
 Si tiene problemas para acceder a la plataforma, puede acercarse al mesón de atención del HUAP en horario de lunes a viernes de 8:00 a 17:00 hrs o llamar al número de soporte indicado en su tarjeta de atención.
+
+---
+
+## GASTROENTERITIS AGUDA
+
+### ¿Qué es la gastroenteritis aguda?
+La gastroenteritis es una infección del estómago e intestinos que produce diarrea y/o vómitos. Habitualmente es causada por virus o bacterias y suele mejorar sola en pocos días.
+
+### Causas y factores de riesgo
+Virus (norovirus, rotavirus), bacterias (Salmonella, E. coli, Campylobacter) y toxinas. Se contagia por alimentos o agua contaminada, o por contacto con personas enfermas.
+
+### Síntomas
+Diarrea, náuseas y vómitos, dolor abdominal tipo retortijón, fiebre, malestar general.
+
+### Señales de alarma — cuándo ir a urgencias
+Acuda a urgencias o llame al 131 si presenta: boca muy seca, mareo o muy poca orina (señales de deshidratación), confusión o desorientación, sangre en las deposiciones, vómitos que no permiten tomar líquidos, fiebre alta que no baja, o si no mejora en 48-72 horas. En adultos mayores la confusión puede ser la única señal de deshidratación grave.
+
+### Prevención y buenas prácticas
+Lavarse bien las manos, mantener buena higiene en la cocina, hidratarse con agua o sales de rehidratación oral. No tomar antidiarreicos por cuenta propia si hay fiebre o sangre en las deposiciones.
+
+*Esta información es orientación general y no reemplaza la evaluación médica.*
+
+---
+
+## NEUMONÍA ADQUIRIDA EN LA COMUNIDAD
+
+### ¿Qué es la neumonía?
+La neumonía es una infección de los pulmones, generalmente causada por bacterias o virus. En adultos mayores puede presentarse de forma diferente a la habitual.
+
+### Causas y factores de riesgo
+La bacteria más frecuente es Streptococcus pneumoniae. También la causan virus respiratorios. El riesgo aumenta con la edad, enfermedades crónicas, tabaquismo y dificultades para tragar.
+
+### Síntomas
+Tos con flemas, fiebre, dificultad para respirar, dolor en el pecho al respirar. En adultos mayores puede presentarse de forma atípica: solo confusión, decaimiento o caídas, a veces sin fiebre.
+
+### Señales de alarma — cuándo ir a urgencias
+Acuda a urgencias o llame al 131 si hay: dificultad para respirar marcada, labios o uñas azulados, confusión o desorientación repentina, respiración muy rápida o decaimiento intenso.
+
+### Prevención y buenas prácticas
+Vacunarse contra la neumonía (antineumocócica) y la influenza todos los años, no fumar, lavarse las manos frecuentemente.
+
+*Esta información es orientación general y no reemplaza la evaluación médica.*
+
+---
+
+## INFECCIÓN URINARIA BAJA (ITU / CISTITIS)
+
+### ¿Qué es la infección urinaria baja?
+Es una infección de la vejiga y las vías urinarias bajas, habitualmente causada por bacterias. Es muy frecuente en adultos mayores, especialmente en mujeres.
+
+### Causas y factores de riesgo
+La bacteria más frecuente es E. coli. Los factores de riesgo incluyen: ser mujer, diabetes, próstata aumentada en hombres, retención de orina y uso de sonda vesical.
+
+### Síntomas
+Ardor al orinar, ganas de orinar seguido y en poca cantidad, urgencia, dolor bajo el ombligo, orina turbia o con mal olor. En adultos mayores puede manifestarse solo como confusión o decaimiento, sin síntomas urinarios evidentes.
+
+### Señales de alarma — cuándo consultar
+Consulte a su médico si aparece fiebre, dolor intenso en la zona de los riñones (zona lumbar alta), confusión repentina o malestar general importante.
+
+### Prevención y buenas prácticas
+Tomar bastante agua, no aguantar las ganas de orinar, buena higiene, cuidado adecuado de las sondas si las usa.
+
+*Esta información es orientación general y no reemplaza la evaluación médica.*
+
+---
+
+## CEFALEA (DOLOR DE CABEZA)
+
+### ¿Qué es la cefalea?
+La cefalea es el dolor de cabeza. Es un síntoma, no una enfermedad en sí misma. La mayoría de los casos son benignos (tensional, migraña), pero algunos pueden ser señal de algo grave.
+
+### Posibles causas
+Tensión muscular o estrés, migraña, sinusitis, presión arterial alta, problema en el cuello. Causas graves (menos frecuentes): hemorragia cerebral, meningitis.
+
+### Banderas rojas — cuándo ir a urgencias de inmediato
+Acuda a urgencias o llame al 131 si el dolor de cabeza: aparece de forma muy brusca e intensa ("el peor dolor de mi vida"), va acompañado de fiebre y cuello rígido, produce debilidad, dificultad para hablar o ver, es nuevo en una persona mayor de 50 años, apareció después de un golpe en la cabeza, o despierta de noche y empeora con el esfuerzo.
+
+### Qué hacer ante un dolor de cabeza común
+Descanso en un lugar tranquilo y oscuro, hidratación, analgésico simple si no tiene contraindicaciones médicas. Si el dolor no cede o se repite seguido, consulte a su médico.
+
+### Autocuidado
+Dormir bien, mantenerse hidratado, manejar el estrés, identificar y evitar los factores que lo desencadenan (alimentos, luces fuertes, tensión).
+
+*Esta información es orientación general y no reemplaza la evaluación médica.*
+
+---
+
+## LUMBAGO (DOLOR DE ESPALDA BAJA)
+
+### ¿Qué es el lumbago?
+El lumbago es el dolor en la zona baja de la espalda. La mayoría de los casos es de origen muscular o mecánico y se resuelve con el tiempo.
+
+### Posibles causas
+Sobrecarga o mala postura, contractura muscular, cambios por la edad (artrosis), hernia discal. Causas graves (poco frecuentes): fractura, infección, tumor.
+
+### Banderas rojas — cuándo consultar con urgencia
+Consulte a su médico con urgencia si el dolor va acompañado de: antecedente de caída o golpe, dolor nocturno que va empeorando, pérdida de peso sin razón, fiebre, debilidad o entumecimiento en las piernas. Si pierde el control de la orina o las deposiciones, acuda a urgencias de inmediato, ya que puede ser una emergencia (compresión de la médula).
+
+### Qué hacer
+Mantenerse activo según lo que tolere (el reposo prolongado en cama empeora el lumbago), aplicar calor local en la zona, tomar un analgésico simple si no tiene contraindicaciones.
+
+### Autocuidado y prevención
+Mantener buena postura, fortalecer la musculatura de la espalda, técnica correcta al levantar objetos pesados, evitar el sedentarismo.
+
+*Esta información es orientación general y no reemplaza la evaluación médica.*

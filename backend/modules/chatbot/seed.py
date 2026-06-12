@@ -39,109 +39,200 @@ SEED_DATA = {
         },
         {
             "pregunta": "¿qué puedes hacer?",
-            "respuesta": "Puedo responder sus preguntas sobre salud, como la diabetes, sus síntomas y cuidados, y también darle información sobre los horarios y servicios del HUAP. ¿Sobre qué le gustaría saber?",
+            "respuesta": (
+                "Puedo responder sus preguntas sobre salud: gastroenteritis, neumonía, infección "
+                "urinaria, dolor de cabeza y lumbago. También puedo orientarle sobre cuándo ir a "
+                "urgencias y darle información del HUAP. ¿Sobre qué le gustaría saber?"
+            ),
             "variantes": ["¿para qué sirves?", "¿en qué me puedes ayudar?",
                           "¿qué sabes hacer?", "ayuda", "¿qué preguntas puedo hacer?"],
         },
     ],
 
-    "Diabetes": [
+    "Urgencias y Síntomas Frecuentes": [
+        # ── GASTROENTERITIS ──────────────────────────────────────────────────
         {
-            "pregunta": "¿Qué es la diabetes?",
+            "pregunta": "¿Qué es la gastroenteritis?",
             "respuesta": (
-                "La diabetes es una enfermedad crónica que ocurre cuando el páncreas no produce "
-                "suficiente insulina o cuando el cuerpo no la utiliza correctamente. La insulina es "
-                "una hormona que regula el azúcar en la sangre. Existen dos tipos principales: "
-                "Tipo 1 (el cuerpo no produce insulina) y Tipo 2 (el cuerpo no usa bien la insulina). "
-                "El Tipo 2 es el más frecuente en adultos mayores."
+                "La gastroenteritis es una infección del estómago e intestinos que produce diarrea "
+                "y/o vómitos. Habitualmente es causada por virus o bacterias y suele mejorar sola "
+                "en pocos días con reposo e hidratación."
             ),
-            "variantes": ["¿qué significa tener diabetes?", "explíqueme la diabetes",
-                          "¿qué es ser diabético?", "¿qué le pasa a uno con la diabetes?",
-                          "¿qué es la enfermedad del azúcar?", "háblame de la diabetes"],
+            "variantes": ["tengo diarrea y vómitos ¿qué tengo?", "¿qué es la infección intestinal?",
+                          "me duele la guata y tengo diarrea", "¿qué causa la diarrea?",
+                          "infección estomacal", "gastroenteritis aguda"],
         },
         {
-            "pregunta": "¿Cuáles son los síntomas de la diabetes?",
+            "pregunta": "¿Cuándo debo ir a urgencias por diarrea o vómitos?",
             "respuesta": (
-                "Los síntomas más comunes de la diabetes son: sed excesiva y boca seca, necesidad "
-                "frecuente de orinar (especialmente de noche), cansancio sin razón aparente, visión "
-                "borrosa, heridas que tardan en cicatrizar, hormigueo o entumecimiento en manos y pies, "
-                "pérdida de peso sin dieta, hambre frecuente e infecciones recurrentes en la piel, "
-                "encías o vejiga. Si tiene varios de estos síntomas, consulte a su médico."
+                "Acuda a urgencias o llame al 131 si tiene: boca muy seca o muy poca orina "
+                "(señales de deshidratación), confusión o desorientación, sangre en las "
+                "deposiciones, vómitos que no le permiten tomar líquidos, fiebre alta que no baja, "
+                "o si no mejora en 48-72 horas. En adultos mayores la confusión puede ser la única "
+                "señal de deshidratación grave."
             ),
-            "variantes": ["¿qué síntomas da la diabetes?", "¿cómo sé si tengo diabetes?",
-                          "señales de la diabetes", "¿qué se siente cuando uno tiene diabetes?",
-                          "¿qué síntomas da el azúcar alta?", "síntomas de azúcar en la sangre"],
+            "variantes": ["señales de alarma gastroenteritis", "¿cuándo es grave la diarrea?",
+                          "me desidrato con la diarrea", "¿cuándo llamar al médico por vómitos?",
+                          "sangre en deposiciones", "diarrea con fiebre"],
         },
         {
-            "pregunta": "¿Cuáles son las causas de la diabetes?",
+            "pregunta": "¿Cómo me cuido si tengo gastroenteritis?",
             "respuesta": (
-                "Las principales causas y factores de riesgo de la diabetes son: antecedentes "
-                "familiares, sobrepeso u obesidad (especialmente en la zona abdominal), falta de "
-                "actividad física, alimentación alta en azúcares y harinas refinadas, edad mayor de "
-                "45 años, hipertensión arterial, colesterol o triglicéridos altos, y estrés crónico."
+                "Tomar bastante líquido (agua, sales de rehidratación oral) para no deshidratarse. "
+                "Comer en porciones pequeñas cuando tolere. Lavarse bien las manos. No tome "
+                "antidiarreicos por cuenta propia si tiene fiebre o sangre en las deposiciones, "
+                "ya que pueden ser perjudiciales. Si los síntomas empeoran, consulte a su médico."
             ),
-            "variantes": ["¿por qué da la diabetes?", "¿qué provoca la diabetes?",
-                          "¿de dónde viene la diabetes?", "factores de riesgo de la diabetes",
-                          "¿la diabetes es hereditaria?"],
+            "variantes": ["¿qué hago si tengo diarrea?", "cuidados para la gastroenteritis",
+                          "¿qué tomar para la diarrea?", "me siento mal del estómago"],
+        },
+
+        # ── NEUMONÍA ──────────────────────────────────────────────────────────
+        {
+            "pregunta": "¿Qué es la neumonía?",
+            "respuesta": (
+                "La neumonía es una infección de los pulmones causada generalmente por bacterias o "
+                "virus. Produce tos con flemas, fiebre y dificultad para respirar. En adultos "
+                "mayores puede presentarse de forma diferente: solo con confusión, decaimiento o "
+                "caídas, a veces sin fiebre."
+            ),
+            "variantes": ["¿qué es una pulmonía?", "me diagnosticaron neumonía",
+                          "infección pulmonar", "¿qué es la neumonía?", "pulmonía"],
         },
         {
-            "pregunta": "¿Cómo puedo prevenir o controlar la diabetes?",
+            "pregunta": "¿Cuándo debo ir a urgencias por la tos o dificultad para respirar?",
             "respuesta": (
-                "Para prevenir o controlar la diabetes se recomienda: comer frutas, verduras y "
-                "legumbres todos los días, preferir cereales integrales, reducir el azúcar, las "
-                "bebidas azucaradas y las frituras, caminar al menos 30 minutos diarios, tomar sus "
-                "medicamentos sin saltarse dosis, asistir a sus controles médicos, no fumar y dormir "
-                "entre 7 y 8 horas por noche."
+                "Acuda a urgencias o llame al 131 de inmediato si tiene: dificultad marcada para "
+                "respirar, labios o uñas de color azulado, confusión o desorientación repentina, "
+                "respiración muy rápida o decaimiento intenso. Estos son signos de que los pulmones "
+                "no están recibiendo suficiente oxígeno."
             ),
-            "variantes": ["¿cómo evito la diabetes?", "¿cómo cuidarme de la diabetes?",
-                          "¿qué hago para controlar la diabetes?", "consejos para la diabetes",
-                          "¿cómo bajar el azúcar?", "buenas prácticas para la diabetes"],
+            "variantes": ["me cuesta respirar ¿qué hago?", "señales de alarma neumonía",
+                          "¿cuándo es grave la tos?", "dificultad para respirar urgencias",
+                          "me ahogo", "falta de aire"],
         },
         {
-            "pregunta": "¿Qué alimentos debo comer si tengo diabetes?",
+            "pregunta": "¿Cómo prevenir la neumonía?",
             "respuesta": (
-                "Se recomienda consumir frutas, verduras y legumbres todos los días, preferir "
-                "cereales integrales como avena, arroz integral y pan integral, comer en porciones "
-                "moderadas y a horarios regulares, y beber al menos 8 vasos de agua al día. "
-                "Conviene reducir el azúcar, las bebidas azucaradas, los dulces, las frituras y "
-                "los alimentos procesados."
+                "Las medidas más importantes son: vacunarse contra la neumonía (vacuna "
+                "antineumocócica) y contra la influenza todos los años, no fumar, lavarse las "
+                "manos con frecuencia y mantener buena higiene respiratoria."
             ),
-            "variantes": ["¿qué puedo comer con diabetes?", "dieta para diabéticos",
-                          "alimentación para la diabetes", "¿qué comida es buena para el azúcar?",
-                          "¿qué no debo comer si tengo diabetes?"],
+            "variantes": ["vacuna contra la neumonía", "¿cómo evitar la pulmonía?",
+                          "prevención neumonía adulto mayor", "¿me debo vacunar contra la neumonía?"],
+        },
+
+        # ── INFECCIÓN URINARIA (ITU) ──────────────────────────────────────────
+        {
+            "pregunta": "¿Qué es la infección urinaria?",
+            "respuesta": (
+                "La infección urinaria baja (también llamada cistitis) es una infección de la "
+                "vejiga causada habitualmente por bacterias. Es muy frecuente en adultos mayores, "
+                "especialmente en mujeres. Produce ardor al orinar, ganas frecuentes de ir al baño "
+                "y orina turbia o con mal olor. En personas mayores puede manifestarse solo como "
+                "confusión o decaimiento, sin síntomas urinarios evidentes."
+            ),
+            "variantes": ["ardor al orinar", "¿qué es la cistitis?", "infección al riñón",
+                          "orino seguido y me duele", "ITU", "infección urinaria",
+                          "¿por qué orino tanto?", "orina con mal olor"],
         },
         {
-            "pregunta": "¿Qué ejercicio puedo hacer si tengo diabetes?",
+            "pregunta": "¿Cuándo debo consultar por una infección urinaria?",
             "respuesta": (
-                "Se recomienda realizar al menos 30 minutos de caminata diaria, subir escaleras en "
-                "lugar de usar el ascensor cuando sea posible, y practicar actividades suaves como "
-                "yoga, natación o bicicleta estacionaria. También es importante evitar permanecer "
-                "sentado más de 2 horas seguidas."
+                "Consulte a su médico si aparece fiebre, dolor intenso en la zona de la espalda "
+                "alta o los riñones, confusión repentina o malestar general importante. Estos "
+                "síntomas pueden indicar que la infección llegó al riñón, lo que requiere atención "
+                "médica. Si los síntomas son solo ardor al orinar y ganas frecuentes, igualmente "
+                "consulte para recibir tratamiento con antibióticos."
             ),
-            "variantes": ["ejercicios para diabéticos", "¿puedo hacer deporte con diabetes?",
-                          "actividad física para la diabetes", "¿cuánto debo caminar?"],
+            "variantes": ["señales de alarma infección urinaria", "¿cuándo es grave la infección urinaria?",
+                          "me duelen los riñones", "fiebre con ardor al orinar"],
         },
         {
-            "pregunta": "¿Qué controles médicos debo hacerme si tengo diabetes?",
+            "pregunta": "¿Cómo prevenir la infección urinaria?",
             "respuesta": (
-                "Debe medir su glucosa en sangre según la indicación de su médico, asistir a los "
-                "controles con su médico o enfermera, tomar los medicamentos prescritos sin saltarse "
-                "dosis, controlar su presión arterial regularmente y realizarse el examen de "
-                "hemoglobina glicosilada (HbA1c) al menos 2 veces al año."
+                "Tome bastante agua durante el día, no aguante las ganas de orinar, mantenga una "
+                "buena higiene en la zona íntima y, si usa sonda vesical, siga las instrucciones "
+                "de su equipo de salud para su cuidado."
             ),
-            "variantes": ["¿cada cuánto debo controlarme la diabetes?", "exámenes para la diabetes",
-                          "¿qué es la hemoglobina glicosilada?", "¿cuándo debo medirme el azúcar?"],
+            "variantes": ["¿cómo evitar la infección urinaria?", "prevención cistitis",
+                          "¿qué tomar para no tener infección urinaria?"],
+        },
+
+        # ── CEFALEA ───────────────────────────────────────────────────────────
+        {
+            "pregunta": "¿Por qué me duele la cabeza?",
+            "respuesta": (
+                "El dolor de cabeza (cefalea) es un síntoma, no una enfermedad. Las causas más "
+                "frecuentes son tensión muscular, estrés, migraña, presión arterial alta o "
+                "problemas de cuello. La mayoría son benignas. Sin embargo, algunas pueden ser "
+                "señal de algo grave, por lo que es importante conocer las señales de alarma."
+            ),
+            "variantes": ["me duele la cabeza", "dolor de cabeza frecuente", "¿qué es la cefalea?",
+                          "tengo jaqueca", "migraña", "cefalea", "¿por qué tengo dolor de cabeza?"],
         },
         {
-            "pregunta": "¿Por qué debo cuidarme los pies si tengo diabetes?",
+            "pregunta": "¿Cuándo es peligroso el dolor de cabeza?",
             "respuesta": (
-                "Las personas con diabetes deben revisar sus pies todos los días para detectar "
-                "heridas o cambios en la piel, ya que las heridas pueden tardar mucho en cicatrizar. "
-                "También se recomienda usar calzado cómodo y adecuado. Si nota una herida que no "
-                "sana, consulte a su médico."
+                "Acuda a urgencias o llame al 131 de inmediato si el dolor de cabeza: aparece de "
+                "golpe y es muy intenso (como 'el peor dolor de su vida'), va acompañado de fiebre "
+                "y cuello rígido, le produce debilidad, dificultad para hablar o para ver, es nuevo "
+                "en una persona mayor de 50 años, apareció después de un golpe en la cabeza, o le "
+                "despierta de noche y empeora con el esfuerzo."
             ),
-            "variantes": ["cuidado de los pies en diabetes", "¿cómo cuidar mis pies?",
-                          "pie diabético", "¿por qué revisar los pies?"],
+            "variantes": ["señales de alarma dolor de cabeza", "¿cuándo es grave el dolor de cabeza?",
+                          "dolor de cabeza muy fuerte de repente", "dolor de cabeza con vómitos",
+                          "banderas rojas cefalea", "¿cuándo ir a urgencias por dolor de cabeza?"],
+        },
+        {
+            "pregunta": "¿Cómo aliviar el dolor de cabeza?",
+            "respuesta": (
+                "Para un dolor de cabeza común: descanse en un lugar tranquilo y con poca luz, "
+                "tome bastante agua, y puede tomar un analgésico simple si no tiene "
+                "contraindicaciones médicas. Si el dolor se repite seguido o no cede, consulte "
+                "a su médico. Evitar el estrés, dormir bien y mantenerse hidratado ayuda a "
+                "prevenir los episodios."
+            ),
+            "variantes": ["¿qué tomar para el dolor de cabeza?", "remedios para la jaqueca",
+                          "¿cómo calmar el dolor de cabeza?", "pastilla para el dolor de cabeza"],
+        },
+
+        # ── LUMBAGO ───────────────────────────────────────────────────────────
+        {
+            "pregunta": "¿Qué es el lumbago?",
+            "respuesta": (
+                "El lumbago es el dolor en la zona baja de la espalda. Es muy frecuente y en la "
+                "mayoría de los casos es de origen muscular o mecánico (mala postura, sobrecarga). "
+                "Suele mejorar solo en días o semanas con movimiento suave y analgésicos simples."
+            ),
+            "variantes": ["me duele la espalda baja", "dolor lumbar", "¿qué es el lumbago?",
+                          "dolor de espalda", "me duele la cintura", "lumbago"],
+        },
+        {
+            "pregunta": "¿Cuándo debo consultar con urgencia por el dolor de espalda?",
+            "respuesta": (
+                "Consulte a su médico con urgencia si el dolor de espalda va acompañado de: "
+                "una caída o golpe reciente, dolor que empeora de noche sin razón, pérdida de "
+                "peso sin explicación, fiebre, debilidad o entumecimiento en las piernas. "
+                "Si pierde el control de la orina o las deposiciones, acuda a urgencias de "
+                "inmediato, ya que puede ser una emergencia que requiere atención urgente."
+            ),
+            "variantes": ["señales de alarma lumbago", "¿cuándo es grave el dolor de espalda?",
+                          "dolor de espalda con fiebre", "se me duermen las piernas con el dolor de espalda",
+                          "banderas rojas lumbago", "¿cuándo ir a urgencias por lumbago?"],
+        },
+        {
+            "pregunta": "¿Cómo cuidarme si tengo lumbago?",
+            "respuesta": (
+                "Lo más importante es mantenerse activo según lo que tolere: el reposo prolongado "
+                "en cama empeora el lumbago. Puede aplicar calor local en la zona y tomar un "
+                "analgésico simple si no tiene contraindicaciones. Para prevenirlo: mantenga buena "
+                "postura, fortalezca su espalda con ejercicio suave y use técnica correcta al "
+                "levantar objetos pesados."
+            ),
+            "variantes": ["¿qué hago si me duele la espalda?", "tratamiento del lumbago",
+                          "ejercicios para el lumbago", "¿qué tomar para el dolor de espalda?",
+                          "¿debo hacer reposo por lumbago?"],
         },
     ],
 
