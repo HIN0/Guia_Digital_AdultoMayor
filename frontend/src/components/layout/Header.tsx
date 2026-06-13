@@ -21,6 +21,7 @@ export default function Header() {
   useEffect(() => {
     const saved = (localStorage.getItem("fontTamano") ?? "mediano") as Tamano
     setTamano(saved)
+    document.documentElement.style.fontSize = FONT_MAP[saved]
   }, [])
 
   useEffect(() => {

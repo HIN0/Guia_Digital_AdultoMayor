@@ -1,35 +1,62 @@
 ## Guía Digital del HUAP — Base de Conocimiento
+
+> Documento fuente para el asistente. Reglas que el asistente debe respetar al
+> responder con esta base:
+> - Nunca indicar dosis ni recomendar, cambiar o suspender medicamentos.
+> - Nunca contradecir la indicación de consultar al médico.
+> - Lenguaje simple, frases cortas, pensado para personas mayores.
+> - Contexto chileno: CESFAM, FONASA, urgencia pública, 131 (SAMU).
+> - Ante señales de alarma, derivar a urgencias o al 131.
+
 ---
 
 ## INFORMACIÓN GENERAL DEL HUAP
 
 ### Horarios de atención
-El hospital atiende de lunes a viernes de 8:00 AM a 9:00 PM. Los fines de semana el horario de urgencias es las 24 horas.
+El hospital atiende de lunes a viernes de 8:00 AM a 9:00 PM. Los fines de semana el horario de urgencias es las 24 horas. Si hay una emergencia fuera del horario de atención, acudir a la urgencia más cercana o llamar al 131. Para confirmar horarios actualizados, consultar el canal oficial del hospital o el mesón de atención.
 
 ### Guía Digital para Adultos Mayores
 La Guía Digital del HUAP es una plataforma educativa en línea diseñada especialmente para personas mayores. Ofrece lecciones interactivas sobre tecnología, salud y bienestar. Cada módulo contiene lecciones con texto, imágenes y audio para facilitar el aprendizaje.
 
 ### Soporte técnico
-Si tiene problemas para acceder a la plataforma, puede acercarse al mesón de atención del HUAP en horario de lunes a viernes de 8:00 a 17:00 hrs o llamar al número de soporte indicado en su tarjeta de atención.
+Si tiene problemas para acceder a la plataforma, puede acercarse al mesón de atención del HUAP en horario de lunes a viernes de 8:00 a 17:00 hrs, o llamar al número de soporte indicado en su tarjeta de atención. Si no encuentra el número, puede preguntar en el mesón.
+
+### Dirección, teléfono y cómo atenderse
+Para obtener la dirección y los teléfonos correctos y al día del hospital, lo mejor es revisar la información oficial del HUAP o preguntar en el mesón de atención, de modo de no usar datos desactualizados. Para saber cómo atenderse o pedir una hora, la persona debe consultar directamente en el HUAP o en su CESFAM según corresponda a su caso; ahí le indicarán los pasos y los documentos necesarios. Tener a mano el carnet y los datos de FONASA facilita el trámite. Si es una urgencia, no esperar una hora: acudir a la urgencia o llamar al 131.
+
+### Alcance del asistente
+El asistente entrega información general validada para orientar; no reemplaza al médico ni a la enfermera, no examina ni entrega diagnósticos. Ante cualquier duda de salud, la persona debe consultar con un profesional. Si la persona expresa que se siente muy mal o que puede ser una emergencia, indicarle que llame de inmediato al 131 o acuda a la urgencia más cercana.
 
 ---
 
 ## GASTROENTERITIS AGUDA
 
 ### ¿Qué es la gastroenteritis aguda?
-La gastroenteritis es una infección del estómago e intestinos que produce diarrea y/o vómitos. Habitualmente es causada por virus o bacterias y suele mejorar sola en pocos días.
+La gastroenteritis es una infección del estómago e intestinos que produce diarrea y/o vómitos. Habitualmente es causada por un virus o una bacteria (germen muy pequeño que produce infección) y suele mejorar sola en pocos días con reposo e hidratación.
 
 ### Causas y factores de riesgo
-Virus (norovirus, rotavirus), bacterias (Salmonella, E. coli, Campylobacter) y toxinas. Se contagia por alimentos o agua contaminada, o por contacto con personas enfermas.
+Virus (norovirus, rotavirus), bacterias (Salmonella, E. coli, Campylobacter) y toxinas. Se contagia por alimentos o agua contaminada, o por contacto con personas enfermas, sobre todo por las manos sucias.
 
 ### Síntomas
 Diarrea, náuseas y vómitos, dolor abdominal tipo retortijón, fiebre, malestar general.
 
+### Presentación en personas mayores
+En adultos mayores, la gastroenteritis puede mostrarse distinta: a veces la única señal es que están más confundidos, decaídos o que se caen más seguido. Esto puede deberse a deshidratación (falta de líquido en el cuerpo). No conviene esperar a que aparezcan más síntomas; ante un cambio brusco así, llevar a la persona a urgencias o llamar al 131.
+
 ### Señales de alarma — cuándo ir a urgencias
 Acuda a urgencias o llame al 131 si presenta: boca muy seca, mareo o muy poca orina (señales de deshidratación), confusión o desorientación, sangre en las deposiciones, vómitos que no permiten tomar líquidos, fiebre alta que no baja, o si no mejora en 48-72 horas. En adultos mayores la confusión puede ser la única señal de deshidratación grave.
 
+### Cuánto dura
+La mayoría de las gastroenteritis mejoran solas en 2 a 4 días. Lo más importante en ese tiempo es descansar y tomar harto líquido. Si pasan más de 3 días sin mejorar o la persona se siente peor, consultar en el CESFAM; si aparecen señales de alarma, acudir a urgencias.
+
+### Qué comer
+Comer de a poco, en porciones pequeñas, cuando la persona se sienta capaz. Se toleran mejor alimentos suaves como arroz, fideos, papas cocidas, pollo, plátano o manzana. Por unos días conviene evitar frituras, lácteos y comidas muy condimentadas. Lo más importante es mantener una buena hidratación.
+
+### Medicamentos durante el cuadro
+Algunos remedios necesitan ajustarse cuando la persona está con diarrea o vómitos. Por ejemplo, ciertos remedios para la presión, para la diabetes (como la metformina) o para el dolor (antiinflamatorios) pueden afectar más si el cuerpo está deshidratado. La persona no debe suspenderlos ni cambiarlos por su cuenta: debe consultar a su médico o CESFAM para que le indiquen qué hacer. No tomar antidiarreicos por cuenta propia si hay fiebre o sangre en las deposiciones.
+
 ### Prevención y buenas prácticas
-Lavarse bien las manos, mantener buena higiene en la cocina, hidratarse con agua o sales de rehidratación oral. No tomar antidiarreicos por cuenta propia si hay fiebre o sangre en las deposiciones.
+Lavarse bien las manos con agua y jabón (especialmente después de ir al baño y antes de comer), mantener buena higiene en la cocina, hidratarse con agua o sales de rehidratación oral (sobres que reponen el líquido y las sales que se pierden). Mientras esté enfermo, usar vaso, cubiertos y toalla propios para no contagiar a la familia.
 
 *Esta información es orientación general y no reemplaza la evaluación médica.*
 
@@ -44,13 +71,22 @@ La neumonía es una infección de los pulmones, generalmente causada por bacteri
 La bacteria más frecuente es Streptococcus pneumoniae. También la causan virus respiratorios. El riesgo aumenta con la edad, enfermedades crónicas, tabaquismo y dificultades para tragar.
 
 ### Síntomas
-Tos con flemas, fiebre, dificultad para respirar, dolor en el pecho al respirar. En adultos mayores puede presentarse de forma atípica: solo confusión, decaimiento o caídas, a veces sin fiebre.
+Tos con flemas, fiebre, dificultad para respirar, dolor en el pecho al respirar. En adultos mayores puede presentarse de forma atípica: solo confusión, decaimiento, falta de apetito o caídas, a veces sin fiebre. Ante un cambio brusco así en una persona mayor, conviene que la revisen pronto.
+
+### Resfrío o neumonía
+Al inicio pueden parecerse. Conviene sospechar neumonía si la tos, la fiebre o el cansancio no mejoran en unos días o empeoran. La falta de aire, el dolor en el pecho al respirar o la confusión apuntan a algo más serio que un resfrío. Ante la duda, consultar en el CESFAM para que examinen a la persona.
 
 ### Señales de alarma — cuándo ir a urgencias
 Acuda a urgencias o llame al 131 si hay: dificultad para respirar marcada, labios o uñas azulados, confusión o desorientación repentina, respiración muy rápida o decaimiento intenso.
 
+### Recuperación
+La mejoría es lenta y distinta en cada persona. La tos y el cansancio pueden durar varias semanas, aunque la fiebre suele bajar antes con el tratamiento. Conviene descansar, hidratarse y asistir a los controles. Si en vez de mejorar la persona empeora, vuelve la fiebre o le cuesta respirar, debe consultar de nuevo.
+
+### Antibióticos
+Es muy importante completar todos los días de antibiótico indicados por el médico, aunque la persona ya se sienta bien; cortarlos antes puede hacer que la infección vuelva y sea más difícil de tratar. No compartir antibióticos ni guardarlos para otra ocasión. Si un remedio cae mal, no suspenderlo solo: consultar al médico o al CESFAM.
+
 ### Prevención y buenas prácticas
-Vacunarse contra la neumonía (antineumocócica) y la influenza todos los años, no fumar, lavarse las manos frecuentemente.
+Vacunarse contra la neumonía (antineumocócica) y contra la influenza todos los años, no fumar, lavarse las manos frecuentemente y abrigarse en invierno. En Chile, la vacuna antineumocócica es gratuita para las personas de 65 años y más a través del Programa Nacional de Inmunizaciones, y se coloca en el CESFAM o consultorio. Además, el tratamiento de la neumonía en personas de 65 años y más está cubierto por el GES, con copago $0 para beneficiarios de FONASA.
 
 *Esta información es orientación general y no reemplaza la evaluación médica.*
 
@@ -62,16 +98,25 @@ Vacunarse contra la neumonía (antineumocócica) y la influenza todos los años,
 Es una infección de la vejiga y las vías urinarias bajas, habitualmente causada por bacterias. Es muy frecuente en adultos mayores, especialmente en mujeres.
 
 ### Causas y factores de riesgo
-La bacteria más frecuente es E. coli. Los factores de riesgo incluyen: ser mujer, diabetes, próstata aumentada en hombres, retención de orina y uso de sonda vesical.
+La bacteria más frecuente es E. coli. Los factores de riesgo incluyen: ser mujer, diabetes, próstata aumentada en hombres, retención de orina, cambios después de la menopausia y uso de sonda vesical.
 
 ### Síntomas
-Ardor al orinar, ganas de orinar seguido y en poca cantidad, urgencia, dolor bajo el ombligo, orina turbia o con mal olor. En adultos mayores puede manifestarse solo como confusión o decaimiento, sin síntomas urinarios evidentes.
+Ardor al orinar, ganas de orinar seguido y en poca cantidad, urgencia, dolor bajo el ombligo, orina turbia o con mal olor. En adultos mayores puede manifestarse solo como confusión o decaimiento, sin síntomas urinarios evidentes. Ante un cambio brusco de confusión o ánimo en una persona mayor, conviene que la revisen y le tomen un examen de orina.
 
 ### Señales de alarma — cuándo consultar
-Consulte a su médico si aparece fiebre, dolor intenso en la zona de los riñones (zona lumbar alta), confusión repentina o malestar general importante.
+Consulte a su médico si aparece fiebre, dolor intenso en la zona de los riñones (zona lumbar alta), confusión repentina o malestar general importante. Estas señales pueden indicar que la infección subió al riñón, que es más serio.
+
+### Infecciones a repetición
+En personas mayores la ITU puede repetirse por varias razones: cambios después de la menopausia, vaciar mal la vejiga, uso de sonda o diabetes. Si ocurre seguido, el médico debe buscar la causa. La persona no debe usar antibióticos que le sobraron de antes: cada infección debe evaluarse de nuevo.
+
+### Arándano (cranberry)
+El arándano podría ayudar a algunas mujeres con infecciones a repetición a tener menos episodios, pero la evidencia no es concluyente, sobre todo en personas mayores. No sirve para curar una infección ya presente, que requiere evaluación médica. Si la persona quiere probarlo, debe comentarlo antes con su médico o enfermera, y nunca reemplazar con él el tratamiento indicado.
+
+### Antibióticos
+Completar todos los días de antibiótico indicados, aunque el ardor ya haya pasado; cortarlos antes puede hacer que la infección vuelva más fuerte. Avisar al médico si los síntomas regresan poco después de terminar el tratamiento. No guardar antibióticos ni usarlos por cuenta propia.
 
 ### Prevención y buenas prácticas
-Tomar bastante agua, no aguantar las ganas de orinar, buena higiene, cuidado adecuado de las sondas si las usa.
+Tomar bastante agua, no aguantar las ganas de orinar, buena higiene (limpiarse de adelante hacia atrás), y cuidado adecuado de la sonda si la usa: lavarse las manos antes y después de tocarla, mantener la bolsa más abajo que la vejiga y no doblar ni tirar la sonda. Si aparece fiebre, orina con muy mal olor o con sangre, avisar pronto en el CESFAM.
 
 *Esta información es orientación general y no reemplaza la evaluación médica.*
 
@@ -83,16 +128,28 @@ Tomar bastante agua, no aguantar las ganas de orinar, buena higiene, cuidado ade
 La cefalea es el dolor de cabeza. Es un síntoma, no una enfermedad en sí misma. La mayoría de los casos son benignos (tensional, migraña), pero algunos pueden ser señal de algo grave.
 
 ### Posibles causas
-Tensión muscular o estrés, migraña, sinusitis, presión arterial alta, problema en el cuello. Causas graves (menos frecuentes): hemorragia cerebral, meningitis.
+Tensión muscular o estrés, migraña, sinusitis, problema en el cuello. Causas graves (menos frecuentes): hemorragia cerebral, meningitis.
+
+### ¿Es por la presión alta?
+Casi nunca. La presión alta (hipertensión) en general no da síntomas; por eso la llaman "el asesino silencioso". Solo una subida muy brusca y muy alta de la presión (crisis hipertensiva) puede dar dolor de cabeza, y eso es una urgencia. La única forma de saber cómo está la presión es midiéndola, no por cómo se siente la persona; por eso es importante no dejar de controlarla.
+
+### Cefalea por tensión o por el cuello
+El dolor de cabeza por tensión es el más común y se siente como una banda apretada alrededor de la cabeza. Suele venir del estrés o de tener tensos los músculos del cuello y los hombros. Puede ayudar descansar, soltar los hombros, aplicar calor en el cuello y dormir bien.
 
 ### Banderas rojas — cuándo ir a urgencias de inmediato
 Acuda a urgencias o llame al 131 si el dolor de cabeza: aparece de forma muy brusca e intensa ("el peor dolor de mi vida"), va acompañado de fiebre y cuello rígido, produce debilidad, dificultad para hablar o ver, es nuevo en una persona mayor de 50 años, apareció después de un golpe en la cabeza, o despierta de noche y empeora con el esfuerzo.
 
 ### Qué hacer ante un dolor de cabeza común
-Descanso en un lugar tranquilo y oscuro, hidratación, analgésico simple si no tiene contraindicaciones médicas. Si el dolor no cede o se repite seguido, consulte a su médico.
+Descanso en un lugar tranquilo y oscuro, hidratación, analgésico simple si la persona no tiene contraindicaciones médicas. Si el dolor no cede o se repite seguido, consultar al médico.
+
+### Sobreuso de analgésicos
+Tomar calmantes para la cabeza muchos días a la semana puede provocar que el dolor vuelva más seguido (dolor de rebote). Por eso no conviene automedicarse a diario. Si la persona necesita calmantes muy seguido, debe consultar en el CESFAM para buscar la causa y un mejor tratamiento.
+
+### Analgésicos junto con otros remedios
+Antes de tomar un calmante, conviene preguntar al médico o farmacéutico, sobre todo si la persona toma remedios para la presión o tiene diabetes. Algunos calmantes, como los antiinflamatorios, pueden subir la presión o afectar los riñones. La persona no debe mezclar remedios por su cuenta ni repetir dosis.
 
 ### Autocuidado
-Dormir bien, mantenerse hidratado, manejar el estrés, identificar y evitar los factores que lo desencadenan (alimentos, luces fuertes, tensión).
+Dormir bien, mantenerse hidratado, manejar el estrés, descansar la vista, e identificar y evitar los factores que desencadenan el dolor (alimentos, luces fuertes, tensión).
 
 *Esta información es orientación general y no reemplaza la evaluación médica.*
 
@@ -101,18 +158,90 @@ Dormir bien, mantenerse hidratado, manejar el estrés, identificar y evitar los 
 ## LUMBAGO (DOLOR DE ESPALDA BAJA)
 
 ### ¿Qué es el lumbago?
-El lumbago es el dolor en la zona baja de la espalda. La mayoría de los casos es de origen muscular o mecánico y se resuelve con el tiempo.
+El lumbago es el dolor en la zona baja de la espalda. La mayoría de los casos es de origen muscular o mecánico (sobrecarga, mala postura o un mal movimiento) y se resuelve con el tiempo.
 
 ### Posibles causas
 Sobrecarga o mala postura, contractura muscular, cambios por la edad (artrosis), hernia discal. Causas graves (poco frecuentes): fractura, infección, tumor.
 
+### Caída y fractura en personas mayores
+Después de una caída, un dolor de espalda en una persona mayor merece evaluación médica. Con los años los huesos se vuelven más frágiles (osteoporosis) y a veces una caída puede quebrar una vértebra, aunque el golpe parezca leve. La persona no debe automedicarse solo para aguantar el dolor; debe acudir al CESFAM o a urgencias, sobre todo si el dolor es fuerte o no puede moverse bien.
+
 ### Banderas rojas — cuándo consultar con urgencia
 Consulte a su médico con urgencia si el dolor va acompañado de: antecedente de caída o golpe, dolor nocturno que va empeorando, pérdida de peso sin razón, fiebre, debilidad o entumecimiento en las piernas. Si pierde el control de la orina o las deposiciones, acuda a urgencias de inmediato, ya que puede ser una emergencia (compresión de la médula).
 
+### Dolor que baja por la pierna (ciática)
+Cuando el dolor baja desde la espalda por la parte de atrás de la pierna, suele llamarse ciática; ocurre cuando un nervio de la zona baja de la espalda se irrita o queda apretado. Muchas veces mejora con movimiento suave y tiempo. Pero si hay mucha debilidad en la pierna, se duerme, o se pierde el control de la orina, consultar pronto o acudir a urgencias.
+
 ### Qué hacer
-Mantenerse activo según lo que tolere (el reposo prolongado en cama empeora el lumbago), aplicar calor local en la zona, tomar un analgésico simple si no tiene contraindicaciones.
+Mantenerse activo según lo que se tolere (el reposo prolongado en cama empeora el lumbago), aplicar calor local en la zona, tomar un analgésico simple si la persona no tiene contraindicaciones. Quedarse en cama solo si el dolor es muy fuerte, y por poco tiempo.
+
+### Calor o frío
+Para el lumbago muscular, el calor suele ser lo más cómodo porque relaja los músculos. Se puede usar una bolsa de agua caliente o compresa tibia por ratos, con cuidado de no quemar la piel. Algunas personas sienten alivio con frío justo después de un golpe o tirón. Usar lo que mejor resulte, sin aplicarlo directo sobre la piel ni por mucho rato seguido.
+
+### Antiinflamatorios junto con otros remedios
+Antes de tomar un antiinflamatorio para la espalda, conviene consultar al médico o farmacéutico. Estos remedios pueden afectar el estómago, la presión y los riñones, sobre todo en personas mayores o que toman remedios para la presión o la diabetes. No tomarlos por cuenta propia varios días seguidos ni juntar distintos calmantes.
 
 ### Autocuidado y prevención
-Mantener buena postura, fortalecer la musculatura de la espalda, técnica correcta al levantar objetos pesados, evitar el sedentarismo.
+Mantener buena postura, fortalecer la musculatura de la espalda, usar la técnica correcta al levantar objetos pesados (doblando las rodillas) y evitar el sedentarismo.
+
+*Esta información es orientación general y no reemplaza la evaluación médica.*
+
+---
+
+## HIPERTENSIÓN ARTERIAL (PRESIÓN ALTA)
+
+### ¿Qué es la hipertensión arterial?
+La hipertensión es cuando la presión de la sangre dentro de las arterias es demasiado alta de forma persistente. Se considera hipertensión cuando la presión es igual o mayor a 140/90 mmHg en reposo y en más de una medición. Es muy frecuente en personas mayores y en Chile es una de las enfermedades más comunes. Está cubierta por el GES a partir de los 15 años, con copago reducido para beneficiarios de FONASA.
+
+### Por qué es importante controlarla
+La presión alta casi nunca da síntomas, por eso la llaman "el asesino silencioso". La persona puede sentirse bien aunque tenga la presión muy alta. Sin control, puede dañar el corazón, los riñones, los ojos y los vasos del cerebro, causando un infarto o un derrame (ACV). La única forma de saber si la presión está bien es midiéndola con regularidad.
+
+### ¿Cómo se mide bien la presión?
+Antes de medirla conviene estar sentado y tranquilo al menos 5 minutos, sin haber fumado, tomado café ni hecho ejercicio en la media hora anterior. Se mide en ambos brazos la primera vez; luego en el que dio el valor más alto. Si se mide en casa, anotar la fecha, la hora y el valor para mostrárselo al médico o enfermera. Un valor aislado alto no confirma hipertensión; se necesitan varias mediciones.
+
+### Síntomas en una crisis hipertensiva
+Solo una subida muy brusca y muy alta de la presión puede dar síntomas: dolor de cabeza muy intenso, zumbido en los oídos, visión borrosa, náuseas o confusión. Eso es una urgencia: llamar al 131 o acudir de inmediato a urgencias. No intentar bajar la presión con medicamentos extra por cuenta propia.
+
+### Banderas rojas — cuándo ir a urgencias por presión alta
+Acuda a urgencias o llame al 131 si la persona tiene: presión muy alta con dolor de pecho, dificultad para respirar, dolor de cabeza muy intenso y brusco, debilidad o entumecimiento en un lado del cuerpo, dificultad para hablar o ver. Estos pueden ser señales de infarto o derrame cerebral.
+
+### Tratamiento y remedios para la presión
+El médico o la enfermera del CESFAM indica el tratamiento según cada caso. Generalmente incluye cambios de estilo de vida y, si es necesario, medicamentos. Es fundamental tomar los remedios todos los días a la misma hora, aunque la persona se sienta bien; no suspenderlos ni cambiar la dosis por cuenta propia. Si el remedio le cae mal, consultar antes de dejarlo. Muchos medicamentos para la presión pueden interactuar con antiinflamatorios, algunos antigripales o remedios naturales; siempre avisar al médico o farmacéutico qué otros remedios se están tomando.
+
+### Estilo de vida y prevención de la hipertensión
+Reducir la sal en las comidas (evitar agregar sal extra, embutidos, alimentos en conserva), mantener un peso saludable, hacer actividad física moderada (caminar 30 minutos la mayoría de los días), no fumar, limitar el alcohol, dormir bien y manejar el estrés. Estas medidas ayudan a bajar la presión aunque no la reemplazan del todo cuando ya se necesita medicamento.
+
+### Controles en el CESFAM por hipertensión
+La persona con hipertensión debe ir a sus controles periódicos aunque se sienta bien. En el CESFAM le medirán la presión, le revisarán los medicamentos y le harán exámenes de control. Si tiene dudas sobre cuándo es su próximo control, puede preguntar en el mesón del CESFAM o del HUAP.
+
+*Esta información es orientación general y no reemplaza la evaluación médica.*
+
+---
+
+## CAÍDAS EN ADULTOS MAYORES
+
+### Por qué son graves las caídas en personas mayores
+Una caída puede parecer un accidente menor, pero en personas mayores puede tener consecuencias serias: fracturas (especialmente de cadera, muñeca y columna), lesiones en la cabeza y pérdida de confianza para moverse. La fractura de cadera es especialmente grave porque puede limitar mucho la movilidad y la independencia. Además, las personas mayores tienen los huesos más frágiles por la osteoporosis, lo que hace que incluso una caída leve pueda quebrar un hueso.
+
+### Causas frecuentes de caídas
+Los factores de riesgo más frecuentes son: debilidad muscular en las piernas, problemas de equilibrio y marcha, visión disminuida, mareos (por medicamentos, presión baja al pararse o problemas del oído), alfombras sueltas o piso mojado, mala iluminación, calzado inadecuado (sandalias sin sujeción), y levantarse rápido de la cama o de una silla.
+
+### Qué hacer si la persona se cae
+Si la persona se cae, no intentar levantarla de inmediato: primero evaluar si está consciente y si puede moverse. Si hay dolor intenso, no puede mover alguna extremidad, o perdió el conocimiento aunque sea brevemente, llamar al 131 o acudir a urgencias. Si la persona se cayó pero parece estar bien, de todas formas debe ser evaluada pronto, sobre todo si hay dolor de espalda, cadera, muñeca o cabeza. Un golpe en la cabeza en una persona mayor siempre merece revisión médica, incluso si en el momento parece leve.
+
+### Banderas rojas — caídas, cuándo llamar al 131
+Llamar al 131 o acudir a urgencias de inmediato si la persona: perdió el conocimiento o está confundida, no puede mover una pierna o brazo, tiene dolor muy intenso en la cadera o en la espalda, o tiene una herida abierta con sangrado que no se detiene.
+
+### Señales de fractura de cadera
+La fractura de cadera produce un dolor muy fuerte en la zona de la cadera o en la ingle, la persona no puede pararse ni caminar, y la pierna puede verse girada hacia afuera. Es una urgencia: llamar al 131 o llevar a urgencias sin demorar.
+
+### Prevención de caídas en el hogar
+Revisar el hogar para quitar alfombras sueltas y cables en el suelo, mejorar la iluminación (especialmente de noche, camino al baño), poner barras de apoyo en el baño y ducha, usar calzado con suela antideslizante y que sujete bien el pie, no levantarse rápido de la cama (sentarse primero unos segundos antes de pararse). El CESFAM puede orientar sobre programas de ejercicios para mejorar el equilibrio y la fuerza.
+
+### Osteoporosis y caídas
+La osteoporosis hace que los huesos sean más frágiles y que una caída leve pueda quebrarlos. Muchas personas mayores tienen osteoporosis sin saberlo. El médico puede indicar exámenes para evaluarla y, si es necesario, tratamiento con calcio, vitamina D y medicamentos específicos. La persona no debe automedicarse con calcio o vitamina D sin consultar antes.
+
+### Miedo a caerse de nuevo
+Después de una caída, es frecuente que la persona tenga miedo de volver a caerse y empiece a moverse menos. Eso aumenta el riesgo de caída porque debilita más los músculos. Si esto ocurre, comentarlo con el médico o la enfermera del CESFAM, que pueden indicar ejercicios seguros y apoyo para recuperar la confianza.
 
 *Esta información es orientación general y no reemplaza la evaluación médica.*

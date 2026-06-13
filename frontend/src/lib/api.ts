@@ -153,6 +153,7 @@ export async function submitQuizFinal(quizId: number, respuestas: RespuestaItem[
 export interface ChatResponse {
   respuesta: string
   conversacion_id: number
+  mensaje_id: number
 }
 
 export async function preguntarChatbot(
@@ -169,6 +170,52 @@ export async function preguntarChatbot(
     body: JSON.stringify({ pregunta, conversacion_id }),
   })
   if (!res.ok) throw new Error('Error al procesar la pregunta')
+  return res.json()
+}
+
+export async function valorarMensaje(
+  mensaje_id: number,
+  valoracion: 'positiva' | 'negativa',
+  token: string,
+): Promise<void> {
+  await fetch(`${API_URL}/chatbot/valorar`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ mensaje_id, valoracion }),
+  })
+}
+
+export interface ConversacionOut {
+  id: number
+  fecha_inicio: string
+  preview: string
+  total_mensajes: number
+}
+
+export interface MensajeOut {
+  id: number
+  tipo: string
+  contenido: string
+  valoracion: string | null
+  fecha: string
+}
+
+export async function listarConversaciones(token: string): Promise<ConversacionOut[]> {
+  const res = await fetch(`${API_URL}/chatbot/conversaciones`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  if (!res.ok) throw new Error('Error al cargar conversaciones')
+  return res.json()
+}
+
+export async function obtenerMensajesConversacion(id: number, token: string): Promise<MensajeOut[]> {
+  const res = await fetch(`${API_URL}/chatbot/conversaciones/${id}/mensajes`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  if (!res.ok) throw new Error('Error al cargar mensajes')
   return res.json()
 }
 

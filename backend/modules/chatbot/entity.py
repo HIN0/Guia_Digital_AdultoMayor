@@ -45,6 +45,7 @@ class MensajeChat(Base):
     pregunta_chatbot_id = Column(Integer, ForeignKey("pregunta_chatbot.id"), nullable=True)
     tipo = Column(String, nullable=False)  # 'usuario', 'bot', 'fallback'
     contenido = Column(Text, nullable=False)
+    valoracion = Column(String, nullable=True)  # 'positiva', 'negativa', null
     fecha = Column(DateTime, default=datetime.utcnow)
 
     conversacion = relationship("Conversacion", back_populates="mensajes")

@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
-from typing import Optional, List
+from typing import Optional, List, Literal
+from datetime import datetime
 
 
 # ── Esquemas de chat (usuario) ──────────────────────────────────────────────
@@ -11,6 +12,39 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     respuesta: str
     conversacion_id: int
+    mensaje_id: int
+
+
+# ── Esquemas de valoración (feedback) ───────────────────────────────────────
+
+class FeedbackRequest(BaseModel):
+    mensaje_id: int
+    valoracion: Literal["positiva", "negativa"]
+
+class FeedbackResponse(BaseModel):
+    ok: bool
+
+
+# ── Esquemas de historial ────────────────────────────────────────────────────
+
+class MensajeOut(BaseModel):
+    id: int
+    tipo: str
+    contenido: str
+    valoracion: Optional[str] = None
+    fecha: datetime
+
+    class Config:
+        from_attributes = True
+
+class ConversacionOut(BaseModel):
+    id: int
+    fecha_inicio: datetime
+    preview: str
+    total_mensajes: int
+
+    class Config:
+        from_attributes = True
 
 
 # ── Esquemas de Patologia ────────────────────────────────────────────────────

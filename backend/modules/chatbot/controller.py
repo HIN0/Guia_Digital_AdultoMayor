@@ -7,6 +7,8 @@ from modules.auth.entity import Usuario
 
 from .schema import (
     ChatRequest, ChatResponse,
+    FeedbackRequest, FeedbackResponse,
+    ConversacionOut, MensajeOut,
     PreguntaChatbotCreate, PreguntaChatbotUpdate, PreguntaChatbotOut,
     PatologiaCreate, PatologiaOut,
 )
@@ -40,6 +42,40 @@ def hacer_pregunta(
             status_code=503,
             detail="El asistente no está disponible en este momento. Por favor intente de nuevo en unos minutos.",
         )
+
+
+# ── Valoración de mensajes ───────────────────────────────────────────────────
+
+@router.post("/valorar", response_model=FeedbackResponse)
+def valorar_mensaje(
+    request: FeedbackRequest,
+    db: Session = Depends(get_db),
+    usuario: Usuario = Depends(get_usuario_actual),
+):
+    ok = repo.valorar_mensaje(db, request.mensaje_id, usuario.id, request.valoracion)
+    return {"ok": ok}
+
+
+# ── Historial de conversaciones ──────────────────────────────────────────────
+
+@router.get("/conversaciones", response_model=list[ConversacionOut])
+def listar_conversaciones(
+    db: Session = Depends(get_db),
+    usuario: Usuario = Depends(get_usuario_actual),
+):
+    return repo.listar_conversaciones(db, usuario.id)
+
+
+@router.get("/conversaciones/{conversacion_id}/mensajes", response_model=list[MensajeOut])
+def obtener_mensajes(
+    conversacion_id: int,
+    db: Session = Depends(get_db),
+    usuario: Usuario = Depends(get_usuario_actual),
+):
+    mensajes = repo.obtener_mensajes_conversacion(db, conversacion_id, usuario.id)
+    if mensajes is None:
+        raise HTTPException(status_code=404, detail="Conversación no encontrada")
+    return mensajes
 
 
 # ── Endpoints admin — Patologías ─────────────────────────────────────────────
@@ -114,7 +150,6 @@ def eliminar_pregunta(
 
 @router.post("/admin/recargar-whitelist", status_code=200)
 def recargar_whitelist(_: Usuario = Depends(requiere_admin)):
-    """Reconstruye el índice FAISS de preguntas validadas desde la BD."""
     try:
         cargar_preguntas_validadas()
         return {"detail": "Whitelist recargada correctamente"}

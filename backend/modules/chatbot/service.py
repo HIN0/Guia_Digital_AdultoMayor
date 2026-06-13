@@ -21,8 +21,8 @@ from .repository import (
 
 # Umbral de distancia L2 para FAISS: menor distancia = más similar.
 # Con paraphrase-multilingual-MiniLM-L12-v2, distancias < 0.8 son buenos matches.
-# Ajustar con preguntas reales antes del test si hay falsos positivos/negativos.
-DISTANCE_THRESHOLD = 0.8
+# Ajustar con CHATBOT_DISTANCE_THRESHOLD en el .env si hay falsos positivos/negativos.
+DISTANCE_THRESHOLD = float(os.getenv("CHATBOT_DISTANCE_THRESHOLD", "0.8"))
 
 MODELO_PRIMARIO = "llama-3.1-8b-instant"
 MODELO_RESPALDO = "llama-3.3-70b-versatile"
@@ -187,18 +187,18 @@ def generar_y_guardar_respuesta(db: Session, usuario_id: int, pregunta: str, con
     # 1. Whitelist primero — no consume cuota de Groq
     pregunta_id, respuesta_validada = _buscar_en_whitelist(pregunta)
     if respuesta_validada:
-        guardar_mensaje(db, conv.id, tipo="bot", contenido=respuesta_validada, pregunta_chatbot_id=pregunta_id)
-        return {"respuesta": respuesta_validada, "conversacion_id": conv.id}
+        msg = guardar_mensaje(db, conv.id, tipo="bot", contenido=respuesta_validada, pregunta_chatbot_id=pregunta_id)
+        return {"respuesta": respuesta_validada, "conversacion_id": conv.id, "mensaje_id": msg.id}
 
     # 2. RAG con LLM (primario → respaldo). Si ambos fallan, mensaje amable.
     try:
         respuesta_texto = _invocar_llm(pregunta, historial_texto)
     except Exception:
-        guardar_mensaje(db, conv.id, tipo="fallback", contenido=MENSAJE_SOBRECARGA)
-        return {"respuesta": MENSAJE_SOBRECARGA, "conversacion_id": conv.id}
+        msg = guardar_mensaje(db, conv.id, tipo="fallback", contenido=MENSAJE_SOBRECARGA)
+        return {"respuesta": MENSAJE_SOBRECARGA, "conversacion_id": conv.id, "mensaje_id": msg.id}
 
     es_fallback = "Lo siento, no tengo esa información." in respuesta_texto
     tipo_resp = "fallback" if es_fallback else "bot"
 
-    guardar_mensaje(db, conv.id, tipo=tipo_resp, contenido=respuesta_texto)
-    return {"respuesta": respuesta_texto, "conversacion_id": conv.id}
+    msg = guardar_mensaje(db, conv.id, tipo=tipo_resp, contenido=respuesta_texto)
+    return {"respuesta": respuesta_texto, "conversacion_id": conv.id, "mensaje_id": msg.id}

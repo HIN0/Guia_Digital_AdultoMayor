@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 from .entity import Conversacion, MensajeChat, PreguntaChatbot, Patologia
 
 
@@ -31,7 +32,6 @@ def guardar_mensaje(db: Session, conversacion_id: int, tipo: str, contenido: str
     db.refresh(mensaje)
     return mensaje
 
-
 def obtener_mensajes_recientes(db: Session, conversacion_id: int, limite: int = 6) -> list[MensajeChat]:
     mensajes = (
         db.query(MensajeChat)
@@ -41,6 +41,71 @@ def obtener_mensajes_recientes(db: Session, conversacion_id: int, limite: int = 
         .all()
     )
     return list(reversed(mensajes))
+
+
+# ── Valoración (feedback) ────────────────────────────────────────────────────
+
+def valorar_mensaje(db: Session, mensaje_id: int, usuario_id: int, valoracion: str) -> bool:
+    mensaje = (
+        db.query(MensajeChat)
+        .join(Conversacion)
+        .filter(
+            MensajeChat.id == mensaje_id,
+            Conversacion.usuario_id == usuario_id,
+            MensajeChat.tipo.in_(["bot", "fallback"]),
+        )
+        .first()
+    )
+    if not mensaje:
+        return False
+    mensaje.valoracion = valoracion
+    db.commit()
+    return True
+
+
+# ── Historial de conversaciones ──────────────────────────────────────────────
+
+def listar_conversaciones(db: Session, usuario_id: int) -> list[dict]:
+    conversaciones = (
+        db.query(Conversacion)
+        .filter(Conversacion.usuario_id == usuario_id)
+        .order_by(Conversacion.fecha_inicio.desc())
+        .limit(20)
+        .all()
+    )
+    result = []
+    for conv in conversaciones:
+        total = db.query(func.count(MensajeChat.id)).filter(
+            MensajeChat.conversacion_id == conv.id
+        ).scalar()
+        primer_mensaje_usuario = (
+            db.query(MensajeChat)
+            .filter(MensajeChat.conversacion_id == conv.id, MensajeChat.tipo == "usuario")
+            .order_by(MensajeChat.id.asc())
+            .first()
+        )
+        preview = primer_mensaje_usuario.contenido[:80] if primer_mensaje_usuario else "Conversación"
+        result.append({
+            "id": conv.id,
+            "fecha_inicio": conv.fecha_inicio,
+            "preview": preview,
+            "total_mensajes": total or 0,
+        })
+    return result
+
+def obtener_mensajes_conversacion(db: Session, conversacion_id: int, usuario_id: int) -> list[MensajeChat] | None:
+    conv = db.query(Conversacion).filter(
+        Conversacion.id == conversacion_id,
+        Conversacion.usuario_id == usuario_id,
+    ).first()
+    if not conv:
+        return None
+    return (
+        db.query(MensajeChat)
+        .filter(MensajeChat.conversacion_id == conversacion_id)
+        .order_by(MensajeChat.id.asc())
+        .all()
+    )
 
 
 # ── Preguntas (whitelist) — lectura ─────────────────────────────────────────
