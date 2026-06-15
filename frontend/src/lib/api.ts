@@ -82,9 +82,32 @@ export interface QuizCorto {
   }
 }
 
+export interface ItemEjercicio {
+  situacion?: string
+  frase?: string
+  caso?: string
+  fuente?: string
+  pregunta?: string
+  patologia?: string
+  respuesta?: string
+  respuesta_ia?: string
+  etiqueta?: string
+  motivo?: string
+  opciones?: string[]
+  mejor?: string
+  util?: boolean
+}
+
+export interface Ejercicio {
+  tipo: string
+  instruccion: string
+  items: ItemEjercicio[]
+  situacion_ejemplo?: string
+}
+
 export interface ContenidoLeccion {
   paginas: Pagina[]
-  ejercicio?: Record<string, unknown>
+  ejercicio?: Ejercicio
   quiz_corto: QuizCorto
 }
 
