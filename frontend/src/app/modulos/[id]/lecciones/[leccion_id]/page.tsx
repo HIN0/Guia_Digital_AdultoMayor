@@ -132,6 +132,7 @@ export default function LeccionPage() {
   const progresoRef = useRef<HTMLDivElement>(null)
   const instruccionRef = useRef<HTMLDivElement>(null)
   const confirmarRef = useRef<HTMLButtonElement>(null)
+  const opcionesEjercicioRef = useRef<HTMLDivElement>(null)
 
   function scrollAProgreso() {
     progresoRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
@@ -233,7 +234,9 @@ export default function LeccionPage() {
       setPaginaActual((p) => p + 1)
     } else if (leccion.contenido.ejercicio) {
       setFase("ejercicio")
-      scrollAInstruccion()
+      setTimeout(() => {
+        opcionesEjercicioRef.current?.scrollIntoView({ behavior: "smooth", block: "end" })
+      }, 150)
     } else {
       setFase("quiz")
       setTimeout(() => {
@@ -2303,6 +2306,9 @@ export default function LeccionPage() {
                   ))}
                 </div>
               )}
+
+              {/* Anchor para scroll al final de las opciones */}
+              <div ref={opcionesEjercicioRef} style={{ scrollMarginBottom: "70px" }} />
 
               {/* Feedback */}
               {ejercicio.mostrandoFeedback && (
