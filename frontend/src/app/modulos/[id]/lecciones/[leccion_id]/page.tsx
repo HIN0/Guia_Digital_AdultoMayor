@@ -86,13 +86,20 @@ const IMAGENES_APOYO: Record<string, string> = {
   "Mensaje de cierre destacado (disclaimer del prototipo).": "/lecciones/modulo2/L6-5.svg",
 }
 
-type Fase = "paginas" | "quiz" | "resultado"
+type Fase = "paginas" | "ejercicio" | "quiz" | "resultado"
 
 interface EstadoQuiz {
   indice: number
   seleccion: number | null
   mostrandoFeedback: boolean
   aciertos: number
+}
+
+interface EstadoEjercicio {
+  indice: number
+  seleccion: string | null
+  mostrandoFeedback: boolean
+  completado: boolean
 }
 
 export default function LeccionPage() {
@@ -111,17 +118,37 @@ export default function LeccionPage() {
     mostrandoFeedback: false,
     aciertos: 0,
   })
+  const [ejercicio, setEjercicio] = useState<EstadoEjercicio>({
+    indice: 0,
+    seleccion: null,
+    mostrandoFeedback: false,
+    completado: false,
+  })
   const [aprobado, setAprobado] = useState(false)
   const [moduloOrden, setModuloOrden] = useState(0)
   const [tocandoAudio, setTocandoAudio] = useState(false)
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const feedbackRef = useRef<HTMLDivElement>(null)
+  const progresoRef = useRef<HTMLDivElement>(null)
+  const instruccionRef = useRef<HTMLDivElement>(null)
+  const confirmarRef = useRef<HTMLButtonElement>(null)
+
+  function scrollAProgreso() {
+    progresoRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+  }
+
+  function scrollAInstruccion() {
+    setTimeout(() => {
+      instruccionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+    }, 50)
+  }
 
   function detenerAudio() {
     if (audioRef.current) {
       audioRef.current.pause()
       audioRef.current.currentTime = 0
     }
+    window.speechSynthesis?.cancel()
     setTocandoAudio(false)
   }
 
@@ -138,6 +165,29 @@ export default function LeccionPage() {
     audio.play().then(() => setTocandoAudio(true)).catch(() => setTocandoAudio(false))
     audio.onended = () => setTocandoAudio(false)
   }
+
+  function toggleAudioEjercicio(texto: string) {
+    if (tocandoAudio) {
+      detenerAudio()
+      return
+    }
+    if (!texto.trim()) return
+    detenerAudio()
+    const utterance = new SpeechSynthesisUtterance(texto)
+    utterance.lang = "es-ES"
+    utterance.rate = 0.9
+    utterance.onend = () => setTocandoAudio(false)
+    utterance.onerror = () => setTocandoAudio(false)
+    setTocandoAudio(true)
+    window.speechSynthesis.speak(utterance)
+  }
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) audioRef.current.pause()
+      window.speechSynthesis?.cancel()
+    }
+  }, [])
 
   useEffect(() => {
     getLeccion(leccionId)
@@ -157,13 +207,67 @@ export default function LeccionPage() {
     }
   }, [quiz.mostrandoFeedback])
 
+  useEffect(() => {
+    if (ejercicio.mostrandoFeedback && feedbackRef.current) {
+      const t = setTimeout(() => {
+        feedbackRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+      }, 50)
+      return () => clearTimeout(t)
+    }
+  }, [ejercicio.mostrandoFeedback])
+
+  useEffect(() => {
+    if (quiz.seleccion !== null && !quiz.mostrandoFeedback && confirmarRef.current) {
+      const t = setTimeout(() => {
+        confirmarRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" })
+      }, 50)
+      return () => clearTimeout(t)
+    }
+  }, [quiz.seleccion, quiz.mostrandoFeedback])
+
   function avanzarPagina() {
     if (!leccion) return
     detenerAudio()
     if (paginaActual < leccion.contenido.paginas.length - 1) {
+      scrollAProgreso()
       setPaginaActual((p) => p + 1)
+    } else if (leccion.contenido.ejercicio) {
+      setFase("ejercicio")
+      scrollAInstruccion()
     } else {
       setFase("quiz")
+      setTimeout(() => {
+        confirmarRef.current?.scrollIntoView({ behavior: "smooth", block: "end" })
+      }, 100)
+    }
+  }
+
+  function retrocederPagina() {
+    detenerAudio()
+    scrollAProgreso()
+    setPaginaActual((p) => p - 1)
+  }
+
+  function seleccionarEjercicio(resp: string) {
+    if (ejercicio.mostrandoFeedback) return
+    setEjercicio((e) => ({ ...e, seleccion: resp, mostrandoFeedback: true }))
+  }
+
+  function siguienteEjercicio() {
+    if (!leccion) return
+    detenerAudio()
+    const items = leccion.contenido.ejercicio?.items ?? []
+    const siguiente = ejercicio.indice + 1
+    if (siguiente >= items.length) {
+      setEjercicio((e) => ({ ...e, completado: true }))
+    } else {
+      setEjercicio((e) => ({
+        ...e,
+        indice: siguiente,
+        seleccion: null,
+        mostrandoFeedback: false,
+      }))
+      scrollAInstruccion()
     }
   }
 
@@ -196,7 +300,6 @@ export default function LeccionPage() {
       setFase("resultado")
       if (paso) guardarProgreso()
     } else {
-      window.scrollTo({ top: 0, behavior: "smooth" })
       setTimeout(() => {
         setQuiz((q) => ({
           ...q,
@@ -205,6 +308,7 @@ export default function LeccionPage() {
           mostrandoFeedback: false,
         }))
       }, 450)
+      scrollAInstruccion()
     }
   }
 
@@ -222,6 +326,7 @@ export default function LeccionPage() {
     setPaginaActual(0)
     setFase("paginas")
     setQuiz({ indice: 0, seleccion: null, mostrandoFeedback: false, aciertos: 0 })
+    setEjercicio({ indice: 0, seleccion: null, mostrandoFeedback: false, completado: false })
   }
 
   // ── Carga / error ──────────────────────────────────────────────────────────
@@ -283,7 +388,7 @@ export default function LeccionPage() {
           </button>
 
           {/* Progreso — pill style (ModuloCard) */}
-          <div style={{ marginBottom: "20px" }}>
+          <div ref={progresoRef} style={{ marginBottom: "20px" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
               <span style={{ fontSize: "0.8rem", color: "#6B7280" }}>{leccion.titulo}</span>
               <span style={{ fontSize: "0.8rem", color: "#6B7280", fontWeight: 500 }}>
@@ -353,12 +458,12 @@ export default function LeccionPage() {
                 </h2>
                 <button
                   onClick={() => toggleAudio(paginaActual + 1)}
+                  className="flex items-center justify-center gap-1 p-[6px] md:py-[2px] md:pl-[8px] md:pr-[10px]"
                   style={{
                     flexShrink: 0,
                     alignSelf: "flex-start",
                     marginTop: "-20px",
                     marginRight: "-20px",
-                    padding: "2px 10px 2px 8px",
                     borderRadius: "999px",
                     border: `1px solid ${tocandoAudio ? "var(--huap-rojo)" : "var(--huap-azul)"}`,
                     backgroundColor: "white",
@@ -367,12 +472,9 @@ export default function LeccionPage() {
                     fontWeight: 500,
                     cursor: "pointer",
                     whiteSpace: "nowrap",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "4px",
                   }}
                 >
-                  <span style={{ fontSize: "1.2rem", lineHeight: 1 }}>🔊</span>
+                  <span style={{ fontSize: "1.2rem", lineHeight: 1, display: "block" }}>{tocandoAudio ? "⏹" : "🔊"}</span>
                   <span className="hidden md:inline">{tocandoAudio ? "Detener" : "Escuchar"}</span>
                 </button>
               </div>
@@ -1495,7 +1597,7 @@ export default function LeccionPage() {
           <div style={{ display: "flex", gap: "12px" }}>
             {paginaActual > 0 && (
               <button
-                onClick={() => setPaginaActual((p) => p - 1)}
+                onClick={retrocederPagina}
                 style={{
                   flex: 1,
                   padding: "16px",
@@ -1525,9 +1627,752 @@ export default function LeccionPage() {
                 cursor: "pointer",
               }}
             >
-              {paginaActual < totalPaginas - 1 ? "Siguiente →" : "Ir al quiz →"}
+              {paginaActual < totalPaginas - 1 ? "Siguiente →" : leccion.contenido.ejercicio ? "Ir al ejercicio →" : "Ir al quiz →"}
             </button>
           </div>
+        </main>
+      </div>
+    )
+  }
+
+  // ── FASE: EJERCICIO ────────────────────────────────────────────────────────
+
+  if (fase === "ejercicio" && leccion.contenido.ejercicio) {
+    const ej = leccion.contenido.ejercicio
+    const items = ej.items
+    const itemActual = items[ejercicio.indice]
+    const respuestaCorrecta = (ej.tipo === "detectar_riesgo" || ej.tipo === "etiquetar_respuestas")
+      ? itemActual?.etiqueta
+      : ej.tipo === "elegir_mejor_pregunta"
+      ? itemActual?.mejor
+      : ej.tipo === "construye_tu_consulta"
+      ? (itemActual?.util ? "SÍ" : "NO")
+      : itemActual?.respuesta
+    const esCorrecto = ejercicio.seleccion === respuestaCorrecta
+
+    const textoAudioEjercicio = (() => {
+      const textoItem = ej.tipo === "elegir_mejor_pregunta"
+        ? (itemActual?.opciones ?? []).join(". ")
+        : ej.tipo === "etiquetar_respuestas"
+        ? (itemActual?.respuesta_ia ?? "")
+        : ej.tipo === "pregunta_util_o_no" || ej.tipo === "construye_tu_consulta"
+        ? [itemActual?.patologia, itemActual?.pregunta].filter(Boolean).join(". ")
+        : (itemActual?.fuente ?? itemActual?.caso ?? itemActual?.frase ?? itemActual?.situacion ?? "")
+      return [ej.instruccion, textoItem].filter(Boolean).join(". ")
+    })()
+
+
+    return (
+      <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--huap-fondo)" }}>
+        <Header />
+        <main
+          className="flex-1 flex flex-col px-5 py-6 pb-28 w-full mx-auto"
+          style={{ maxWidth: "680px" }}
+        >
+          {/* Volver */}
+          <button
+            onClick={() => router.push(`/modulos/${moduloId}`)}
+            style={{
+              alignSelf: "flex-start",
+              padding: "12px 20px",
+              borderRadius: "12px",
+              border: "none",
+              backgroundColor: "var(--huap-azul)",
+              color: "white",
+              fontSize: "17px",
+              fontWeight: 600,
+              cursor: "pointer",
+              marginBottom: "16px",
+            }}
+          >
+            ← Volver
+          </button>
+
+          {/* Progreso ejercicio */}
+          <div ref={progresoRef} style={{ marginBottom: "20px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+              <span style={{ fontSize: "14px", color: "#6B7280" }}>{leccion.titulo} — Ejercicio</span>
+              {!ejercicio.completado && (
+                <span style={{ fontSize: "14px", color: "#6B7280", fontWeight: 500 }}>
+                  {ejercicio.indice + 1} / {items.length}
+                </span>
+              )}
+            </div>
+            {!ejercicio.completado && (
+              <div
+                style={{
+                  width: "100%",
+                  height: "5px",
+                  backgroundColor: "#E5E7EB",
+                  borderRadius: "999px",
+                  overflow: "hidden",
+                }}
+              >
+                <div
+                  style={{
+                    width: `${((ejercicio.indice + 1) / items.length) * 100}%`,
+                    height: "100%",
+                    backgroundColor: "var(--huap-verde)",
+                    borderRadius: "999px",
+                    transition: "width 0.6s ease",
+                  }}
+                />
+              </div>
+            )}
+          </div>
+
+          {ejercicio.completado ? (
+            /* ── Pantalla de cierre ── */
+            <div
+              style={{
+                background: "#FFFFFF",
+                borderRadius: "16px",
+                border: "0.5px solid #E5E7EB",
+                padding: "32px 24px",
+                textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "16px",
+              }}
+            >
+              <div style={{ fontSize: "56px" }}>🎉</div>
+              <p style={{ fontSize: "22px", fontWeight: 700, color: "var(--huap-azul)" }}>
+                ¡Muy bien!
+              </p>
+              <p style={{ fontSize: "18px", color: "#374151", lineHeight: 1.5 }}>
+                Completaste el ejercicio. Ahora responde unas preguntas rápidas.
+              </p>
+              <button
+                onClick={() => setFase("quiz")}
+                style={{
+                  marginTop: "8px",
+                  padding: "16px 32px",
+                  borderRadius: "14px",
+                  border: "none",
+                  backgroundColor: "var(--huap-azul)",
+                  color: "white",
+                  fontSize: "19px",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  width: "100%",
+                }}
+              >
+                Continuar al quiz →
+              </button>
+            </div>
+          ) : (
+            /* ── Tarjeta de pregunta ── */
+            <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+              {/* Instrucción */}
+              <div
+                ref={instruccionRef}
+                className="pr-[44px] md:pr-[130px]"
+                style={{
+                  background: "#EFF6FF",
+                  borderRadius: "14px",
+                  paddingTop: "16px",
+                  paddingBottom: "16px",
+                  paddingLeft: "20px",
+                  borderLeft: "4px solid var(--huap-azul)",
+                  position: "relative",
+                  scrollMarginTop: "12px",
+                }}
+              >
+                <p style={{ fontSize: "17px", color: "var(--huap-azul)", fontWeight: 600, margin: 0 }}>
+                  🤖 {ej.instruccion}
+                </p>
+                <button
+                  onClick={() => toggleAudioEjercicio(textoAudioEjercicio)}
+                  className="flex items-center justify-center gap-1 p-[6px] md:py-[2px] md:pl-[8px] md:pr-[10px]"
+                  style={{
+                    position: "absolute",
+                    top: "8px",
+                    right: "10px",
+                    borderRadius: "999px",
+                    border: `1px solid ${tocandoAudio ? "var(--huap-rojo)" : "var(--huap-azul)"}`,
+                    backgroundColor: "white",
+                    color: tocandoAudio ? "var(--huap-rojo)" : "var(--huap-azul)",
+                    fontSize: "0.8rem",
+                    fontWeight: 500,
+                    cursor: "pointer",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  <span style={{ fontSize: "1.2rem", lineHeight: 1, display: "block" }}>{tocandoAudio ? "⏹" : "🔊"}</span>
+                  <span className="hidden md:inline">{tocandoAudio ? "Detener" : "Escuchar"}</span>
+                </button>
+              </div>
+
+              {/* Situación (oculta para tipos que muestran respuesta_ia o sus propias opciones) */}
+              {ej.tipo !== "elegir_mejor_pregunta" && ej.tipo !== "detectar_riesgo" && ej.tipo !== "etiquetar_respuestas" && ej.tipo !== "pregunta_util_o_no" && ej.tipo !== "construye_tu_consulta" && (
+                <div
+                  style={{
+                    background: "#FFFFFF",
+                    borderRadius: "16px",
+                    border: "0.5px solid #E5E7EB",
+                    padding: "28px 24px",
+                    textAlign: "center",
+                  }}
+                >
+                  <p style={{ fontSize: "20px", color: "#1F2937", lineHeight: 1.5, margin: 0, fontWeight: 500 }}>
+                    {itemActual?.fuente ?? itemActual?.caso ?? itemActual?.frase ?? itemActual?.situacion}
+                  </p>
+                </div>
+              )}
+
+              {/* Botones según tipo */}
+              {!ejercicio.mostrandoFeedback && ej.tipo === "clasificar_es_ia" && (
+                <div style={{ display: "flex", gap: "16px" }}>
+                  <button
+                    onClick={() => seleccionarEjercicio("SÍ")}
+                    style={{
+                      flex: 1,
+                      padding: "20px",
+                      borderRadius: "14px",
+                      border: "none",
+                      backgroundColor: "var(--huap-verde)",
+                      color: "white",
+                      fontSize: "26px",
+                      fontWeight: 800,
+                      cursor: "pointer",
+                    }}
+                  >
+                    SÍ
+                  </button>
+                  <button
+                    onClick={() => seleccionarEjercicio("NO")}
+                    style={{
+                      flex: 1,
+                      padding: "20px",
+                      borderRadius: "14px",
+                      border: "none",
+                      backgroundColor: "var(--huap-rojo)",
+                      color: "white",
+                      fontSize: "26px",
+                      fontWeight: 800,
+                      cursor: "pointer",
+                    }}
+                  >
+                    NO
+                  </button>
+                </div>
+              )}
+
+              {!ejercicio.mostrandoFeedback && ej.tipo === "clasificar_uso_apropiado" && (
+                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                  <button
+                    onClick={() => seleccionarEjercicio("SÍ PUEDE AYUDAR")}
+                    style={{
+                      padding: "20px 24px",
+                      borderRadius: "14px",
+                      border: "none",
+                      backgroundColor: "var(--huap-verde)",
+                      color: "white",
+                      fontSize: "20px",
+                      fontWeight: 800,
+                      cursor: "pointer",
+                      textAlign: "center",
+                    }}
+                  >
+                    ✓ SÍ PUEDE AYUDAR
+                  </button>
+                  <button
+                    onClick={() => seleccionarEjercicio("ESO ES DEL MÉDICO")}
+                    style={{
+                      padding: "20px 24px",
+                      borderRadius: "14px",
+                      border: "none",
+                      backgroundColor: "var(--huap-azul)",
+                      color: "white",
+                      fontSize: "20px",
+                      fontWeight: 800,
+                      cursor: "pointer",
+                      textAlign: "center",
+                    }}
+                  >
+                    🩺 ESO ES DEL MÉDICO
+                  </button>
+                </div>
+              )}
+
+              {!ejercicio.mostrandoFeedback && ej.tipo === "pregunta_util_o_no" && (
+                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                  {/* Chip de patología + pregunta */}
+                  <div
+                    style={{
+                      background: "#FFFFFF",
+                      borderRadius: "16px",
+                      border: "0.5px solid #E5E7EB",
+                      padding: "24px",
+                    }}
+                  >
+                    {itemActual?.patologia && (
+                      <span
+                        style={{
+                          display: "inline-block",
+                          backgroundColor: "#EFF6FF",
+                          color: "var(--huap-azul)",
+                          borderRadius: "999px",
+                          padding: "4px 14px",
+                          fontSize: "14px",
+                          fontWeight: 700,
+                          marginBottom: "12px",
+                        }}
+                      >
+                        {itemActual.patologia}
+                      </span>
+                    )}
+                    <p style={{ fontSize: "20px", color: "#1F2937", lineHeight: 1.5, margin: 0, fontWeight: 500 }}>
+                      {itemActual?.pregunta}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => seleccionarEjercicio("ÚTIL")}
+                    style={{
+                      padding: "20px 24px",
+                      borderRadius: "14px",
+                      border: "none",
+                      backgroundColor: "var(--huap-verde)",
+                      color: "white",
+                      fontSize: "20px",
+                      fontWeight: 800,
+                      cursor: "pointer",
+                      textAlign: "center",
+                    }}
+                  >
+                    ✓ ÚTIL PARA LA IA
+                  </button>
+                  <button
+                    onClick={() => seleccionarEjercicio("DEL MÉDICO")}
+                    style={{
+                      padding: "20px 24px",
+                      borderRadius: "14px",
+                      border: "none",
+                      backgroundColor: "var(--huap-azul)",
+                      color: "white",
+                      fontSize: "20px",
+                      fontWeight: 800,
+                      cursor: "pointer",
+                      textAlign: "center",
+                    }}
+                  >
+                    🩺 ESO ES DEL MÉDICO
+                  </button>
+                </div>
+              )}
+
+              {!ejercicio.mostrandoFeedback && ej.tipo === "construye_tu_consulta" && (
+                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                  {/* Contexto de situación */}
+                  {ej.situacion_ejemplo && (
+                    <div
+                      style={{
+                        background: "#EFF6FF",
+                        borderRadius: "12px",
+                        padding: "14px 18px",
+                        borderLeft: "4px solid var(--huap-azul)",
+                      }}
+                    >
+                      <p style={{ fontSize: "15px", color: "var(--huap-azul)", fontWeight: 700, margin: 0 }}>
+                        📋 Situación: {ej.situacion_ejemplo}
+                      </p>
+                    </div>
+                  )}
+                  {/* Pregunta */}
+                  <div
+                    style={{
+                      background: "#FFFFFF",
+                      borderRadius: "16px",
+                      border: "0.5px solid #E5E7EB",
+                      padding: "24px",
+                      textAlign: "center",
+                    }}
+                  >
+                    <p style={{ fontSize: "20px", color: "#1F2937", lineHeight: 1.5, margin: 0, fontWeight: 500 }}>
+                      {itemActual?.pregunta}
+                    </p>
+                  </div>
+                  <p style={{ fontSize: "16px", color: "#374151", fontWeight: 600, margin: "4px 0 0 0" }}>
+                    ¿Vale la pena llevar esta pregunta al médico?
+                  </p>
+                  <button
+                    onClick={() => seleccionarEjercicio("SÍ")}
+                    style={{
+                      padding: "20px 24px",
+                      borderRadius: "14px",
+                      border: "none",
+                      backgroundColor: "var(--huap-verde)",
+                      color: "white",
+                      fontSize: "20px",
+                      fontWeight: 800,
+                      cursor: "pointer",
+                      textAlign: "center",
+                    }}
+                  >
+                    ✓ SÍ, LA LLEVO
+                  </button>
+                  <button
+                    onClick={() => seleccionarEjercicio("NO")}
+                    style={{
+                      padding: "20px 24px",
+                      borderRadius: "14px",
+                      border: "none",
+                      backgroundColor: "var(--huap-rojo)",
+                      color: "white",
+                      fontSize: "20px",
+                      fontWeight: 800,
+                      cursor: "pointer",
+                      textAlign: "center",
+                    }}
+                  >
+                    ✕ NO, LA DESCARTO
+                  </button>
+                </div>
+              )}
+
+              {!ejercicio.mostrandoFeedback && ej.tipo === "semaforo_privacidad" && (
+                <div style={{ display: "flex", gap: "16px" }}>
+                  <button
+                    onClick={() => seleccionarEjercicio("VERDE")}
+                    style={{
+                      flex: 1,
+                      padding: "20px",
+                      borderRadius: "14px",
+                      border: "none",
+                      backgroundColor: "var(--huap-verde)",
+                      color: "white",
+                      fontSize: "18px",
+                      fontWeight: 800,
+                      cursor: "pointer",
+                      textAlign: "center",
+                    }}
+                  >
+                    ✓ SÍ
+                  </button>
+                  <button
+                    onClick={() => seleccionarEjercicio("ROJO")}
+                    style={{
+                      flex: 1,
+                      padding: "20px",
+                      borderRadius: "14px",
+                      border: "none",
+                      backgroundColor: "var(--huap-rojo)",
+                      color: "white",
+                      fontSize: "18px",
+                      fontWeight: 800,
+                      cursor: "pointer",
+                      textAlign: "center",
+                    }}
+                  >
+                    ✕ NO
+                  </button>
+                </div>
+              )}
+
+              {!ejercicio.mostrandoFeedback && ej.tipo === "clasificar_fuente" && (
+                <div style={{ display: "flex", gap: "16px" }}>
+                  <button
+                    onClick={() => seleccionarEjercicio("CONFIABLE")}
+                    style={{
+                      flex: 1,
+                      padding: "20px",
+                      borderRadius: "14px",
+                      border: "none",
+                      backgroundColor: "var(--huap-verde)",
+                      color: "white",
+                      fontSize: "18px",
+                      fontWeight: 800,
+                      cursor: "pointer",
+                      textAlign: "center",
+                    }}
+                  >
+                    ✓ CONFIABLE
+                  </button>
+                  <button
+                    onClick={() => seleccionarEjercicio("NO CONFIABLE")}
+                    style={{
+                      flex: 1,
+                      padding: "20px",
+                      borderRadius: "14px",
+                      border: "none",
+                      backgroundColor: "var(--huap-rojo)",
+                      color: "white",
+                      fontSize: "18px",
+                      fontWeight: 800,
+                      cursor: "pointer",
+                      textAlign: "center",
+                    }}
+                  >
+                    ✕ NO CONFIABLE
+                  </button>
+                </div>
+              )}
+
+              {!ejercicio.mostrandoFeedback && ej.tipo === "detective_estafas" && (
+                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                  {[
+                    { label: "CONFIABLE",         icon: "✓", bg: "var(--huap-verde)" },
+                    { label: "VERIFICAR ANTES",   icon: "⚠", bg: "#F59E0B" },
+                    { label: "SOSPECHOSO",        icon: "✕", bg: "var(--huap-rojo)" },
+                  ].map(({ label, icon, bg }) => (
+                    <button
+                      key={label}
+                      onClick={() => seleccionarEjercicio(label === "VERIFICAR ANTES" ? "VERIFICAR" : label)}
+                      style={{
+                        padding: "18px 24px",
+                        borderRadius: "14px",
+                        border: "none",
+                        backgroundColor: bg,
+                        color: "white",
+                        fontSize: "19px",
+                        fontWeight: 700,
+                        cursor: "pointer",
+                        textAlign: "left",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                      }}
+                    >
+                      <span style={{ fontSize: "20px" }}>{icon}</span>
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {!ejercicio.mostrandoFeedback && ej.tipo === "elegir_mejor_pregunta" && (
+                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                  <p style={{ fontSize: "16px", color: "#374151", fontWeight: 600, margin: 0 }}>
+                    ¿Cuál es la mejor pregunta?
+                  </p>
+                  {(itemActual?.opciones ?? []).map((opcion: string) => (
+                    <button
+                      key={opcion}
+                      onClick={() => seleccionarEjercicio(opcion)}
+                      style={{
+                        padding: "20px 24px",
+                        borderRadius: "14px",
+                        border: "1.5px solid #E5E7EB",
+                        backgroundColor: "#FFFFFF",
+                        color: "#1F2937",
+                        fontSize: "18px",
+                        fontWeight: 500,
+                        cursor: "pointer",
+                        textAlign: "left",
+                        lineHeight: 1.4,
+                      }}
+                    >
+                      {opcion}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {!ejercicio.mostrandoFeedback && ej.tipo === "etiquetar_respuestas" && (
+                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                  {/* Card con la respuesta de la IA */}
+                  <div
+                    style={{
+                      background: "#F8FAFC",
+                      borderRadius: "14px",
+                      border: "1.5px solid #CBD5E1",
+                      padding: "20px 24px",
+                    }}
+                  >
+                    <p style={{ fontSize: "13px", color: "#6B7280", fontWeight: 600, margin: "0 0 8px 0", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                      🤖 La IA respondió:
+                    </p>
+                    <p style={{ fontSize: "18px", color: "#1F2937", lineHeight: 1.5, margin: 0, fontStyle: "italic" }}>
+                      {itemActual?.respuesta_ia}
+                    </p>
+                  </div>
+                  <p style={{ fontSize: "16px", color: "#374151", fontWeight: 600, margin: "4px 0 0 0" }}>
+                    ¿Cómo clasificas esta respuesta?
+                  </p>
+                  {[
+                    { label: "información útil",            icon: "💡", bg: "var(--huap-azul)" },
+                    { label: "debo consultar al médico",    icon: "🩺", bg: "var(--huap-verde)" },
+                    { label: "cuidado, puede estar adivinando", icon: "⚠", bg: "#F59E0B" },
+                  ].map(({ label, icon, bg }) => (
+                    <button
+                      key={label}
+                      onClick={() => seleccionarEjercicio(label)}
+                      style={{
+                        padding: "18px 24px",
+                        borderRadius: "14px",
+                        border: "none",
+                        backgroundColor: bg,
+                        color: "white",
+                        fontSize: "18px",
+                        fontWeight: 700,
+                        cursor: "pointer",
+                        textAlign: "left",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                      }}
+                    >
+                      <span style={{ fontSize: "20px" }}>{icon}</span>
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {!ejercicio.mostrandoFeedback && ej.tipo === "ia_medico_o_urgencias" && (
+                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                  {[
+                    { label: "IA",                  icon: "🤖", bg: "var(--huap-azul)" },
+                    { label: "MÉDICO DE CABECERA",  icon: "🩺", bg: "var(--huap-verde)" },
+                    { label: "URGENCIAS YA",        icon: "🚨", bg: "var(--huap-rojo)" },
+                  ].map(({ label, icon, bg }) => (
+                    <button
+                      key={label}
+                      onClick={() => seleccionarEjercicio(label)}
+                      style={{
+                        padding: label === "URGENCIAS YA" ? "22px 24px" : "18px 24px",
+                        borderRadius: "14px",
+                        border: "none",
+                        backgroundColor: bg,
+                        color: "white",
+                        fontSize: label === "URGENCIAS YA" ? "21px" : "19px",
+                        fontWeight: 800,
+                        cursor: "pointer",
+                        textAlign: "left",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                      }}
+                    >
+                      <span style={{ fontSize: "22px" }}>{icon}</span>
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Botones detectar_riesgo */}
+              {!ejercicio.mostrandoFeedback && ej.tipo === "detectar_riesgo" && (
+                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                  {/* Card con la respuesta de la IA */}
+                  <div
+                    style={{
+                      background: "#F8FAFC",
+                      borderRadius: "14px",
+                      border: "1.5px solid #CBD5E1",
+                      padding: "20px 24px",
+                    }}
+                  >
+                    <p style={{ fontSize: "13px", color: "#6B7280", fontWeight: 600, margin: "0 0 8px 0", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                      🤖 La IA respondió:
+                    </p>
+                    <p style={{ fontSize: "18px", color: "#1F2937", lineHeight: 1.5, margin: 0, fontStyle: "italic" }}>
+                      {itemActual?.respuesta_ia}
+                    </p>
+                  </div>
+                  <p style={{ fontSize: "16px", color: "#374151", fontWeight: 600, margin: "4px 0 0 0" }}>
+                    ¿Qué riesgo tiene esta respuesta?
+                  </p>
+                  {[
+                    { label: "Puede estar inventando", icon: "🔴" },
+                    { label: "Puede estar desactualizada", icon: "🕐" },
+                    { label: "No conoce mi caso", icon: "👤" },
+                  ].map(({ label, icon }) => (
+                    <button
+                      key={label}
+                      onClick={() => seleccionarEjercicio(label)}
+                      style={{
+                        padding: "18px 24px",
+                        borderRadius: "14px",
+                        border: "1.5px solid #E5E7EB",
+                        backgroundColor: "#FFFFFF",
+                        color: "#1F2937",
+                        fontSize: "18px",
+                        fontWeight: 600,
+                        cursor: "pointer",
+                        textAlign: "left",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                      }}
+                    >
+                      <span style={{ fontSize: "20px" }}>{icon}</span>
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Feedback */}
+              {ejercicio.mostrandoFeedback && (
+                <div
+                  ref={feedbackRef}
+                  style={{
+                    background: esCorrecto ? "#F0FDF4" : "#FFF7ED",
+                    borderRadius: "14px",
+                    padding: "20px 24px",
+                    borderLeft: `4px solid ${esCorrecto ? "var(--huap-verde)" : "#F59E0B"}`,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "12px",
+                  }}
+                >
+                  <p style={{ fontSize: "22px", fontWeight: 700, margin: 0, color: esCorrecto ? "var(--huap-verde)" : "#B45309" }}>
+                    {esCorrecto ? "✓ ¡Correcto!" : "Respuesta correcta: " + respuestaCorrecta}
+                  </p>
+                  <p style={{ fontSize: "17px", color: "#374151", margin: 0 }}>
+                    <strong>Respuesta:</strong>{" "}
+                    {itemActual?.motivo
+                      ? itemActual.motivo
+                      : respuestaCorrecta === "IA"
+                      ? "La IA puede ayudarte a entender esto."
+                      : respuestaCorrecta === "MÉDICO DE CABECERA"
+                      ? "Esto requiere una consulta con tu médico de cabecera."
+                      : respuestaCorrecta === "URGENCIAS YA"
+                      ? "Esta es una emergencia — hay que ir a urgencias de inmediato."
+                      : respuestaCorrecta === "ÚTIL"
+                      ? "La IA puede orientarte sobre esto."
+                      : respuestaCorrecta === "DEL MÉDICO"
+                      ? "Esto es mejor consultarlo directamente con tu médico."
+                      : respuestaCorrecta === "CONFIABLE"
+                      ? "Esta es una fuente confiable para verificar información de salud."
+                      : respuestaCorrecta === "NO CONFIABLE"
+                      ? "Esta fuente no es confiable para temas de salud."
+                      : respuestaCorrecta === "VERDE"
+                      ? "Esto se puede compartir con la IA sin problema."
+                      : respuestaCorrecta === "ROJO"
+                      ? "Esto es dato privado — nunca lo compartas con una IA."
+                      : respuestaCorrecta === "SÍ PUEDE AYUDAR"
+                      ? "La IA puede ayudar con esto."
+                      : respuestaCorrecta === "ESO ES DEL MÉDICO"
+                      ? "Esto es tarea del médico, no de la IA."
+                      : respuestaCorrecta === "SÍ"
+                      ? "Esto usa inteligencia artificial."
+                      : respuestaCorrecta === "NO"
+                      ? "Esto no usa inteligencia artificial."
+                      : respuestaCorrecta ?? ""}
+                  </p>
+                  <button
+                    onClick={siguienteEjercicio}
+                    style={{
+                      marginTop: "4px",
+                      padding: "14px 24px",
+                      borderRadius: "12px",
+                      border: "none",
+                      backgroundColor: "var(--huap-azul)",
+                      color: "white",
+                      fontSize: "18px",
+                      fontWeight: 700,
+                      cursor: "pointer",
+                    }}
+                  >
+                    {ejercicio.indice + 1 < items.length ? "Siguiente →" : "Ver resultado →"}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </main>
       </div>
     )
@@ -1567,7 +2412,7 @@ export default function LeccionPage() {
           </button>
 
           {/* Progreso del quiz — pill style (ModuloCard) */}
-          <div style={{ marginBottom: "20px" }}>
+          <div ref={progresoRef} style={{ marginBottom: "20px" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
               <span style={{ fontSize: "0.8rem", color: "#6B7280" }}>Quiz rápido</span>
               <span style={{ fontSize: "0.8rem", color: "#6B7280", fontWeight: 500 }}>
@@ -1601,6 +2446,7 @@ export default function LeccionPage() {
 
           {/* Tarjeta de pregunta — ModuloCard: franja izquierda + border sutil */}
           <div
+            ref={instruccionRef}
             style={{
               background: "#FFFFFF",
               borderRadius: "16px",
@@ -1609,6 +2455,7 @@ export default function LeccionPage() {
               marginBottom: "12px",
               display: "flex",
               flexDirection: "row",
+              scrollMarginTop: "12px",
             }}
           >
             {/* Franja izquierda verde (ModuloCard signature) */}
@@ -1627,12 +2474,12 @@ export default function LeccionPage() {
                 </h2>
                 <button
                   onClick={() => toggleAudio(leccion.contenido.paginas.length + quiz.indice + 1)}
+                  className="flex items-center justify-center gap-1 p-[6px] md:py-[2px] md:pl-[8px] md:pr-[10px]"
                   style={{
                     flexShrink: 0,
                     alignSelf: "flex-start",
                     marginTop: "-20px",
                     marginRight: "-20px",
-                    padding: "2px 10px 2px 8px",
                     borderRadius: "999px",
                     border: `1px solid ${tocandoAudio ? "var(--huap-rojo)" : "var(--huap-azul)"}`,
                     backgroundColor: "white",
@@ -1641,12 +2488,9 @@ export default function LeccionPage() {
                     fontWeight: 500,
                     cursor: "pointer",
                     whiteSpace: "nowrap",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "4px",
                   }}
                 >
-                  <span style={{ fontSize: "1.2rem", lineHeight: 1 }}>🔊</span>
+                  <span style={{ fontSize: "1.2rem", lineHeight: 1, display: "block" }}>{tocandoAudio ? "⏹" : "🔊"}</span>
                   <span className="hidden md:inline">{tocandoAudio ? "Detener" : "Escuchar"}</span>
                 </button>
               </div>
@@ -1770,6 +2614,7 @@ export default function LeccionPage() {
           {/* Botón de acción */}
           {!quiz.mostrandoFeedback ? (
             <button
+              ref={confirmarRef}
               onClick={confirmarRespuesta}
               disabled={quiz.seleccion === null}
               style={{
@@ -1783,6 +2628,7 @@ export default function LeccionPage() {
                 cursor: quiz.seleccion !== null ? "pointer" : "not-allowed",
                 width: "100%",
                 transition: "background-color 0.2s ease",
+                scrollMarginBottom: "120px",
               }}
             >
               Confirmar respuesta

@@ -70,29 +70,6 @@ LECCIONES_DATA = [
           "apoyo_visual": "Mensaje de felicitación con marca de avance del módulo."
         }
       ],
-      "ejercicio": {
-        "tipo": "tocar_boton_correcto",
-        "instruccion": "Toca el botón que sirve para volver atrás.",
-        "descripcion": "Una pantalla con cuatro botones desordenados. Si el usuario falla, se le muestra cuál era la respuesta correcta. Sin penalización.",
-        "items": [
-          {
-            "opcion": "Atrás (flecha ←)",
-            "correcta": True
-          },
-          {
-            "opcion": "Menú",
-            "correcta": False
-          },
-          {
-            "opcion": "Chatbot",
-            "correcta": False
-          },
-          {
-            "opcion": "Ajustes",
-            "correcta": False
-          }
-        ]
-      },
       "quiz_corto": {
         "preguntas": [
           {
@@ -217,10 +194,6 @@ LECCIONES_DATA = [
         "descripcion": "Aparecen situaciones una por una. El usuario clasifica si hay IA detrás. Sin penalización.",
         "items": [
           {
-            "situacion": "Tu teléfono reconoce tu cara para desbloquearse",
-            "respuesta": "SÍ"
-          },
-          {
             "situacion": "Una linterna que se enciende con un interruptor",
             "respuesta": "NO"
           },
@@ -231,6 +204,10 @@ LECCIONES_DATA = [
           {
             "situacion": "Una calculadora que suma dos números",
             "respuesta": "NO"
+          },
+          {
+            "situacion": "Tu teléfono reconoce tu cara para desbloquearse",
+            "respuesta": "SÍ"
           },
           {
             "situacion": "Una app que te sugiere la ruta más rápida",
@@ -359,10 +336,6 @@ LECCIONES_DATA = [
             "respuesta": "SÍ PUEDE AYUDAR"
           },
           {
-            "situacion": "Decirme qué dosis de remedio tomar",
-            "respuesta": "ESO ES DEL MÉDICO"
-          },
-          {
             "situacion": "Darme ideas de preguntas para mi control",
             "respuesta": "SÍ PUEDE AYUDAR"
           },
@@ -370,16 +343,20 @@ LECCIONES_DATA = [
             "situacion": "Interpretar el resultado de mi examen de sangre",
             "respuesta": "ESO ES DEL MÉDICO"
           },
+           {
+            "situacion": "Decirme qué dosis de remedio tomar",
+            "respuesta": "ESO ES DEL MÉDICO"
+          },
           {
             "situacion": "Recordarme tomar agua durante el día",
             "respuesta": "SÍ PUEDE AYUDAR"
           },
           {
-            "situacion": "Decirme si el dolor que siento es grave",
+            "situacion": "Usar la IA para cambiar la dosis de tu medicamento",
             "respuesta": "ESO ES DEL MÉDICO"
           },
-          {
-            "situacion": "Usar la IA para cambiar la dosis de tu medicamento",
+           {
+            "situacion": "Decirme si el dolor que siento es grave",
             "respuesta": "ESO ES DEL MÉDICO"
           }
         ]
@@ -504,7 +481,7 @@ LECCIONES_DATA = [
       ],
       "ejercicio": {
         "tipo": "detectar_riesgo",
-        "instruccion": "¿Qué riesgo hay en cada respuesta de la IA? Arrastra la etiqueta correcta.",
+        "instruccion": "¿Qué riesgo tiene esta respuesta de la IA? Toca la opción correcta.",
         "descripcion": "Se muestran respuestas de IA y el usuario identifica el riesgo.",
         "items": [
           {
@@ -642,15 +619,11 @@ LECCIONES_DATA = [
             "respuesta": "VERDE"
           },
           {
-            "frase": "Mi RUT es 12.345.678-9 y tengo presión alta",
-            "respuesta": "ROJO"
-          },
-          {
             "frase": "¿Qué es la diabetes tipo 2?",
             "respuesta": "VERDE"
           },
           {
-            "frase": "Soy Juan Pérez, vivo en calle Los Aromos 234",
+            "frase": "Mi RUT es 12.345.678-9 y tengo presión alta",
             "respuesta": "ROJO"
           },
           {
@@ -658,7 +631,11 @@ LECCIONES_DATA = [
             "respuesta": "VERDE"
           },
           {
-            "frase": "Aquí está mi tarjeta bancaria para que me cobres la consulta",
+            "frase": "Mi clave del banco es 1234",
+            "respuesta": "ROJO"
+          },
+          {
+            "frase": "Soy Juan Pérez, vivo en calle Los Aromos 234",
             "respuesta": "ROJO"
           },
           {
@@ -666,7 +643,7 @@ LECCIONES_DATA = [
             "respuesta": "VERDE"
           },
           {
-            "frase": "Mi clave del banco es 1234",
+            "frase": "Aquí está mi tarjeta bancaria para que me cobres la consulta",
             "respuesta": "ROJO"
           }
         ]
@@ -788,24 +765,24 @@ LECCIONES_DATA = [
         "descripcion": "Se muestran cinco casos y el usuario marca cada uno, con explicación al fallar.",
         "items": [
           {
-            "caso": "WhatsApp: Hola abuelita, soy Dr. Ramírez del HUAP, le tengo un remedio gratis para la artrosis, mándeme su dirección",
-            "respuesta": "SOSPECHOSO",
-            "motivo": "Un médico real no contacta así ni pide tu dirección por WhatsApp."
-          },
-          {
             "caso": "Sitio oficial: huap.redsalud.gob.cl con información sobre horarios",
             "respuesta": "CONFIABLE",
             "motivo": "Dominio gob.cl y lenguaje formal: señales de sitio oficial."
           },
           {
-            "caso": "Anuncio: Médicos odian este truco. Baja 10 kilos en una semana con esta hierba milagrosa",
+            "caso": "WhatsApp: Hola abuelita, soy Dr. Ramírez del HUAP, le tengo un remedio gratis para la artrosis, mándeme su dirección",
             "respuesta": "SOSPECHOSO",
-            "motivo": "Promesa milagrosa + lenguaje sensacionalista."
+            "motivo": "Un médico real no contacta así ni pide tu dirección por WhatsApp."
           },
           {
             "caso": "Email: Estimado paciente, su próxima consulta en HUAP es el 15 de mayo. Confirme respondiendo SÍ",
             "respuesta": "VERIFICAR",
             "motivo": "Puede ser real, pero siempre confirma llamando al hospital antes de responder."
+          },
+          {
+            "caso": "Anuncio: Médicos odian este truco. Baja 10 kilos en una semana con esta hierba milagrosa",
+            "respuesta": "SOSPECHOSO",
+            "motivo": "Promesa milagrosa + lenguaje sensacionalista."
           },
           {
             "caso": "Chatbot IA: Le receto paracetamol 500mg cada 8 horas para su dolor",
@@ -1086,21 +1063,24 @@ LECCIONES_DATA = [
       ],
       "ejercicio": {
         "tipo": "etiquetar_respuestas",
-        "instruccion": "Arrastra la etiqueta correcta a cada respuesta de la IA.",
-        "descripcion": "Pantalla con respuestas de IA. El usuario arrastra etiquetas: \"información útil\", \"debo consultar al médico\", \"cuidado, la IA está adivinando\".",
+        "instruccion": "¿Cómo clasificas esta respuesta de la IA? Toca la etiqueta correcta.",
+        "descripcion": "Se muestran respuestas de IA y el usuario elige la etiqueta que mejor la describe. Sin penalización.",
         "items": [
           {
             "respuesta_ia": "La hipertensión es cuando la presión arterial está sobre 140/90 de forma constante. Es importante medirla regularmente.",
-            "etiquetas": [
-              "información útil"
-            ]
+            "etiqueta": "información útil"
           },
           {
-            "respuesta_ia": "Sus síntomas podrían ser de gastritis, úlcera o reflujo. Es difícil decir sin examinarlo. Le recomiendo ir a urgencias si el dolor es fuerte.",
-            "etiquetas": [
-              "debo consultar al médico",
-              "cuidado, la IA está adivinando"
-            ]
+            "respuesta_ia": "Sus síntomas podrían ser de gastritis, úlcera o reflujo. Es difícil decir sin examinarlo.",
+            "etiqueta": "cuidado, puede estar adivinando"
+          },
+          {
+            "respuesta_ia": "Para ese dolor que describe, lo mejor sería que consultara con su médico para que lo examine correctamente.",
+            "etiqueta": "debo consultar al médico"
+          },
+          {
+            "respuesta_ia": "Los ácidos grasos omega-3 se asocian a beneficios para el corazón. Consulte con su médico si son adecuados para su caso.",
+            "etiqueta": "información útil"
           }
         ]
       },
@@ -1227,20 +1207,20 @@ LECCIONES_DATA = [
             "respuesta": "CONFIABLE"
           },
           {
-            "fuente": "Una cadena de WhatsApp de un grupo familiar",
-            "respuesta": "NO CONFIABLE"
-          },
-          {
             "fuente": "El sitio del hospital que termina en gob.cl",
             "respuesta": "CONFIABLE"
           },
           {
-            "fuente": "Un comentario anónimo en redes sociales",
+            "fuente": "Una cadena de WhatsApp de un grupo familiar",
             "respuesta": "NO CONFIABLE"
           },
           {
             "fuente": "El farmacéutico del consultorio",
             "respuesta": "CONFIABLE"
+          },
+          {
+            "fuente": "Un comentario anónimo en redes sociales",
+            "respuesta": "NO CONFIABLE"
           }
         ]
       },

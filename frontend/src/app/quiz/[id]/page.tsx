@@ -48,8 +48,9 @@ export default function QuizFinalPage() {
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const [tocandoAudio, setTocandoAudio] = useState(false)
 
-  // Ref para scroll al botón "Siguiente" tras seleccionar
   const siguienteRef = useRef<HTMLButtonElement>(null)
+  const progresoRef = useRef<HTMLDivElement>(null)
+  const preguntaRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const moduloIdGuardado = Number(sessionStorage.getItem("huap_quiz_modulo_id") ?? "0")
@@ -60,6 +61,19 @@ export default function QuizFinalPage() {
     getModuloDetalle(moduloIdGuardado)
       .then(setModulo)
       .catch(() => setError(true))
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) audioRef.current.pause()
+    }
+  }, [])
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      siguienteRef.current?.scrollIntoView({ behavior: "smooth", block: "end" })
+    }, 150)
+    return () => clearTimeout(t)
   }, [])
 
   function detenerAudio() {
@@ -98,8 +112,10 @@ export default function QuizFinalPage() {
     detenerAudio()
 
     if (indice + 1 < preguntas.length) {
-      window.scrollTo({ top: 0, behavior: "smooth" })
-      setTimeout(() => setIndice((i) => i + 1), 450)
+      setTimeout(() => {
+        setIndice((i) => i + 1)
+        setTimeout(() => siguienteRef.current?.scrollIntoView({ behavior: "smooth", block: "end" }), 80)
+      }, 50)
     } else {
       // Última pregunta: enviar al backend
       enviarRespuestas(nuevas)
@@ -224,7 +240,7 @@ export default function QuizFinalPage() {
             <p style={{ color: "#666", fontSize: "15px" }}>{modulo.nombre}</p>
 
             {/* Barra de progreso */}
-            <div style={{ marginTop: "14px" }}>
+            <div ref={progresoRef} style={{ marginTop: "14px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
                 <span style={{ fontSize: "14px", color: "#666" }}>Pregunta {indice + 1} de {preguntas.length}</span>
               </div>
@@ -244,6 +260,7 @@ export default function QuizFinalPage() {
 
           {/* Tarjeta de pregunta */}
           <div
+            ref={preguntaRef}
             style={{
               backgroundColor: "white",
               borderRadius: "16px",
@@ -251,6 +268,7 @@ export default function QuizFinalPage() {
               flex: 1,
               marginBottom: "20px",
               boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+              scrollMarginTop: "12px",
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "12px", marginBottom: "24px" }}>
@@ -259,12 +277,12 @@ export default function QuizFinalPage() {
               </h2>
               <button
                 onClick={() => toggleAudio(indice + 1)}
+                className="flex items-center justify-center gap-1 p-[6px] md:py-[2px] md:pl-[8px] md:pr-[10px]"
                 style={{
                   flexShrink: 0,
                   alignSelf: "flex-start",
                   marginTop: "-20px",
                   marginRight: "-20px",
-                  padding: "2px 10px 2px 8px",
                   borderRadius: "999px",
                   border: `1px solid ${tocandoAudio ? "var(--huap-rojo)" : "var(--huap-azul)"}`,
                   backgroundColor: "white",
@@ -273,12 +291,9 @@ export default function QuizFinalPage() {
                   fontWeight: 500,
                   cursor: "pointer",
                   whiteSpace: "nowrap",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "4px",
                 }}
               >
-                <span style={{ fontSize: "22px", lineHeight: 1 }}>🔊</span>
+                <span style={{ fontSize: "22px", lineHeight: 1, display: "block" }}>{tocandoAudio ? "⏹" : "🔊"}</span>
                 <span className="hidden md:inline">{tocandoAudio ? "Detener" : "Escuchar"}</span>
               </button>
             </div>
@@ -325,6 +340,7 @@ export default function QuizFinalPage() {
               fontWeight: 600,
               cursor: seleccionActual !== null ? "pointer" : "not-allowed",
               width: "100%",
+              scrollMarginBottom: "120px",
             }}
           >
             {indice + 1 < preguntas.length ? "Siguiente pregunta →" : "Ver resultado →"}
