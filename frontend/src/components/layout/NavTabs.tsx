@@ -31,6 +31,7 @@ export default function NavTabs() {
 
   const OCULTAR_EN = ["/", "/login", "/bienvenida"]
   if (OCULTAR_EN.includes(pathname)) return null
+  if (pathname.includes("/lecciones/")) return null
 
   return (
     <nav
