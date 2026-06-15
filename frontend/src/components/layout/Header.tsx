@@ -50,10 +50,10 @@ export default function Header() {
   }
 
   return (
-    <header style={{ position: "relative" }}>
+    <header style={{ position: "sticky", top: 0, zIndex: 100 }}>
       <div className="header-inner" style={{
         backgroundColor: "var(--huap-azul)",
-        paddingBottom: "30px",
+        paddingBottom: "22px",
         position: "relative",
         overflow: "hidden",
       }}>
@@ -69,7 +69,7 @@ export default function Header() {
           display: "grid",
           gridTemplateColumns: "1fr auto 1fr",
           alignItems: "center",
-          position: "relative", zIndex: 1, padding: "10px 16px 0",
+          position: "relative", zIndex: 1, padding: "16px 16px 0",
         }}>
           {/* Columna izquierda: logo */}
           <Link href="/inicio" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
@@ -215,6 +215,23 @@ export default function Header() {
               </div>
             </div>
           </div>
+
+          {/* Progreso */}
+          <button
+            onClick={() => { setOpen(false); router.push("/progreso") }}
+            style={{
+              width: "100%", padding: "18px 20px",
+              display: "flex", alignItems: "center", gap: "14px",
+              background: "none", border: "none", borderBottom: "1px solid #f0f0f0",
+              cursor: "pointer", color: "#333", fontWeight: 500, fontSize: "17px",
+              textAlign: "left",
+            }}
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+            Progreso
+          </button>
 
           {/* Ajustes */}
           <button
