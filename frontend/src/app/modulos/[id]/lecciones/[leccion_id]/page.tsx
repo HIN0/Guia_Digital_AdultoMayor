@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation"
 import Image from "next/image"
 import Header from "@/components/layout/Header"
 import { Trophy, RefreshCw } from "lucide-react"
-import { getLeccion, getModuloDetalle, completarLeccion, type LeccionDetalle, type PreguntaQuizCorto } from "@/lib/api"
+import { getLeccion, getModuloDetalle, completarLeccion, type LeccionDetalle, type PreguntaQuizCorto, type InsigniaOtorgada } from "@/lib/api"
 
 const IMAGENES_APOYO: Record<string, string> = {
   // L1 — Bienvenida y navegación
@@ -86,7 +86,7 @@ const IMAGENES_APOYO: Record<string, string> = {
   "Mensaje de cierre destacado (disclaimer del prototipo).": "/lecciones/modulo2/L6-5.svg",
 }
 
-type Fase = "paginas" | "ejercicio" | "quiz" | "resultado"
+type Fase = "paginas" | "ejercicio" | "quiz" | "insignia" | "resultado"
 
 interface EstadoQuiz {
   indice: number
@@ -126,6 +126,7 @@ export default function LeccionPage() {
   })
   const [aprobado, setAprobado] = useState(false)
   const [moduloOrden, setModuloOrden] = useState(0)
+  const [insignia, setInsignia] = useState<InsigniaOtorgada | null>(null)
   const [tocandoAudio, setTocandoAudio] = useState(false)
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const feedbackRef = useRef<HTMLDivElement>(null)
@@ -135,7 +136,7 @@ export default function LeccionPage() {
   const opcionesEjercicioRef = useRef<HTMLDivElement>(null)
 
   function scrollAProgreso() {
-    progresoRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+    window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
   function scrollAInstruccion() {
@@ -300,8 +301,12 @@ export default function LeccionPage() {
       const umbral = leccion.contenido.quiz_corto.resultado.umbral_aprobado
       const paso = quiz.aciertos >= umbral
       setAprobado(paso)
-      setFase("resultado")
-      if (paso) guardarProgreso()
+      if (paso && moduloOrden === 3) {
+        guardarProgresoMod3()  // muestra pantalla insignia y setea localStorage+chatbot
+      } else {
+        if (paso) guardarProgreso()
+        setFase("resultado")
+      }
     } else {
       setTimeout(() => {
         setQuiz((q) => ({
@@ -315,8 +320,7 @@ export default function LeccionPage() {
     }
   }
 
-  function guardarProgreso() {
-    completarLeccion(leccionId).catch(() => {})
+  function guardarLocalStorage() {
     const key = `huap_mod${moduloId}_lecciones_completadas`
     const completadas: number[] = JSON.parse(localStorage.getItem(key) ?? "[]")
     if (!completadas.includes(leccionId)) {
@@ -325,11 +329,31 @@ export default function LeccionPage() {
     }
   }
 
+  function guardarProgreso() {
+    completarLeccion(leccionId).catch(() => {})
+    guardarLocalStorage()
+  }
+
+  function guardarProgresoMod3() {
+    guardarLocalStorage()
+    localStorage.setItem("huap_chatbot_desbloqueado", "true")
+    completarLeccion(leccionId)
+      .then((resp) => {
+        setInsignia(resp.insignia_otorgada)
+        setFase("insignia")
+      })
+      .catch(() => {
+        setInsignia(null)
+        setFase("insignia")
+      })
+  }
+
   function reiniciarLeccion() {
     setPaginaActual(0)
     setFase("paginas")
     setQuiz({ indice: 0, seleccion: null, mostrandoFeedback: false, aciertos: 0 })
     setEjercicio({ indice: 0, seleccion: null, mostrandoFeedback: false, completado: false })
+    setInsignia(null)
   }
 
   // ── Carga / error ──────────────────────────────────────────────────────────
@@ -368,7 +392,7 @@ export default function LeccionPage() {
       <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--huap-fondo)" }}>
         <Header />
         <main
-          className="flex-1 flex flex-col px-5 py-6 pb-28 w-full mx-auto"
+          className="flex-1 flex flex-col px-5 py-6 w-full mx-auto"
           style={{ maxWidth: "680px" }}
         >
           {/* Volver */}
@@ -1669,7 +1693,7 @@ export default function LeccionPage() {
       <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--huap-fondo)" }}>
         <Header />
         <main
-          className="flex-1 flex flex-col px-5 py-6 pb-28 w-full mx-auto"
+          className="flex-1 flex flex-col px-5 py-6 w-full mx-auto"
           style={{ maxWidth: "680px" }}
         >
           {/* Volver */}
@@ -2395,7 +2419,7 @@ export default function LeccionPage() {
       <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--huap-fondo)" }}>
         <Header />
         <main
-          className="flex-1 flex flex-col px-5 py-6 pb-28 w-full mx-auto"
+          className="flex-1 flex flex-col px-5 py-6 w-full mx-auto"
           style={{ maxWidth: "680px" }}
         >
           {/* Volver */}
@@ -2664,6 +2688,112 @@ export default function LeccionPage() {
     )
   }
 
+  // ── FASE: INSIGNIA (Módulo 3) ──────────────────────────────────────────────
+
+  if (fase === "insignia") {
+    return (
+      <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--huap-fondo)" }}>
+        <Header />
+        <main
+          className="flex-1 flex flex-col items-center justify-center px-5 py-8 w-full mx-auto"
+          style={{ maxWidth: "480px" }}
+        >
+          {/* Medalla */}
+          <div style={{
+            width: "150px",
+            height: "150px",
+            borderRadius: "50%",
+            background: "radial-gradient(circle at 35% 35%, #FFD95C, #F5A623)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "68px",
+            marginBottom: "32px",
+            border: "4px dashed #E8A000",
+            boxShadow: "0 10px 40px rgba(245, 166, 35, 0.35)",
+            flexShrink: 0,
+          }}>
+            {insignia?.icono_url ?? "🤖"}
+          </div>
+
+          {/* Título */}
+          <h2 style={{
+            color: "var(--huap-verde)",
+            fontSize: "2rem",
+            fontWeight: 800,
+            textAlign: "center",
+            marginBottom: "14px",
+            lineHeight: 1.2,
+          }}>
+            ¡Felicitaciones!
+          </h2>
+
+          {/* Descripción */}
+          <p style={{
+            color: "#444",
+            fontSize: "1.05rem",
+            textAlign: "center",
+            lineHeight: 1.65,
+            marginBottom: "24px",
+          }}>
+            Completaste el <strong>Módulo 3</strong> y estás listo para usar el Asistente de IA.
+          </p>
+
+          {/* Chip de insignia */}
+          {insignia && (
+            <div style={{
+              border: "2px solid #E8A000",
+              borderRadius: "12px",
+              padding: "12px 28px",
+              marginBottom: "36px",
+              backgroundColor: "#FFFBF0",
+            }}>
+              <p style={{ color: "#B85C00", fontSize: "1rem", fontWeight: 700, textAlign: "center", margin: 0 }}>
+                Insignia: {insignia.nombre}
+              </p>
+            </div>
+          )}
+
+          {/* Botones */}
+          <div className="flex flex-col gap-3" style={{ width: "100%" }}>
+            <button
+              onClick={() => router.push("/chatbot")}
+              style={{
+                padding: "18px",
+                borderRadius: "14px",
+                border: "none",
+                backgroundColor: "var(--huap-verde)",
+                color: "white",
+                fontSize: "1.1rem",
+                fontWeight: 700,
+                cursor: "pointer",
+                width: "100%",
+              }}
+            >
+              Ir al Asistente de IA →
+            </button>
+            <button
+              onClick={() => router.push("/modulos")}
+              style={{
+                padding: "16px",
+                borderRadius: "14px",
+                border: "2px solid #D0D0D0",
+                backgroundColor: "white",
+                color: "#555",
+                fontSize: "0.95rem",
+                fontWeight: 600,
+                cursor: "pointer",
+                width: "100%",
+              }}
+            >
+              Volver al inicio
+            </button>
+          </div>
+        </main>
+      </div>
+    )
+  }
+
   // ── FASE: RESULTADO ────────────────────────────────────────────────────────
 
   const resultado = leccion.contenido.quiz_corto.resultado
@@ -2672,7 +2802,7 @@ export default function LeccionPage() {
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--huap-fondo)" }}>
       <Header />
       <main
-        className="flex-1 flex flex-col items-center justify-center px-5 py-8 pb-28 w-full mx-auto"
+        className="flex-1 flex flex-col items-center justify-center px-5 py-8 w-full mx-auto"
         style={{ maxWidth: "680px" }}
       >
         <div

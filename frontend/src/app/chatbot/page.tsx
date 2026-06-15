@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react"
 import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
 import Header from "@/components/layout/Header"
 import { MessageCircle, Send, AlertTriangle, ThumbsUp, ThumbsDown, Volume2, VolumeX, RotateCcw, History, X, ChevronRight } from "lucide-react"
 import {
@@ -48,6 +49,7 @@ const SALUDO: Mensaje = { id: 0, tipo: "bot", contenido: SALUDO_TEXTO }
 
 export default function ChatbotPage() {
   const { data: session } = useSession()
+  const router = useRouter()
   const [mensajes, setMensajes] = useState<Mensaje[]>([SALUDO])
   const [input, setInput] = useState("")
   const [cargando, setCargando] = useState(false)
@@ -61,6 +63,19 @@ export default function ChatbotPage() {
   const listaRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const speechRef = useRef<SpeechSynthesisUtterance | null>(null)
+
+  useEffect(() => {
+    const chatbotDesbloqueado = localStorage.getItem("huap_chatbot_desbloqueado") === "true"
+    const mod2completado = localStorage.getItem("huap_mod2_completado") === "true"
+    if (!chatbotDesbloqueado && !mod2completado) {
+      router.replace("/modulos")
+      return
+    }
+    // Migración: usuarios que completaron mod2 antes de que existiera el flag
+    if (!chatbotDesbloqueado && mod2completado) {
+      localStorage.setItem("huap_chatbot_desbloqueado", "true")
+    }
+  }, [router])
 
   useEffect(() => {
     if (listaRef.current) {

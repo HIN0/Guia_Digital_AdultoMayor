@@ -12,9 +12,10 @@ import {
   type RespuestaItem,
   type ResultadoQuiz,
   type FeedbackPregunta,
+  type InsigniaOtorgada,
 } from "@/lib/api"
 
-type Fase = "quiz" | "resultado"
+type Fase = "quiz" | "insignia" | "resultado"
 
 function guardarFlags(moduloOrden: number) {
   if (moduloOrden === 1) {
@@ -43,6 +44,7 @@ export default function QuizFinalPage() {
   // Resultado del backend
   const [resultado, setResultado] = useState<ResultadoQuiz | null>(null)
   const [feedbackMap, setFeedbackMap] = useState<Record<number, FeedbackPregunta>>({})
+  const [insignia, setInsignia] = useState<InsigniaOtorgada | null>(null)
 
   // Audio
   const audioRef = useRef<HTMLAudioElement | null>(null)
@@ -135,8 +137,13 @@ export default function QuizFinalPage() {
       const mapa: Record<number, FeedbackPregunta> = {}
       for (const fb of res.feedbacks) mapa[fb.pregunta_id] = fb
       setFeedbackMap(mapa)
-      if (res.aprobado) guardarFlags(modulo.orden)
-      setFase("resultado")
+      if (res.aprobado) {
+        guardarFlags(modulo.orden)
+        setInsignia(res.insignia_otorgada)
+        setFase("insignia")
+      } else {
+        setFase("resultado")
+      }
     } catch {
       setError(true)
     } finally {
@@ -345,6 +352,121 @@ export default function QuizFinalPage() {
           >
             {indice + 1 < preguntas.length ? "Siguiente pregunta →" : "Ver resultado →"}
           </button>
+        </main>
+      </div>
+    )
+  }
+
+  // ── FASE: INSIGNIA ─────────────────────────────────────────────────────────
+
+  if (fase === "insignia") {
+    const descripcionPorModulo: Record<number, string> = {
+      1: "ahora sabes qué es la inteligencia artificial.",
+      2: "sabes cómo usar la IA de manera segura.",
+    }
+    const desc = descripcionPorModulo[modulo.orden] ?? "completaste el módulo."
+    const siguienteLabel = modulo.orden < 3
+      ? `Continuar al Módulo ${modulo.orden + 1} →`
+      : "Ver mis módulos →"
+
+    return (
+      <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--huap-fondo)" }}>
+        <Header />
+        <main
+          className="flex-1 flex flex-col items-center justify-center px-5 py-8 pb-28 w-full mx-auto"
+          style={{ maxWidth: "480px" }}
+        >
+          {/* Medalla */}
+          <div style={{
+            width: "150px",
+            height: "150px",
+            borderRadius: "50%",
+            background: "radial-gradient(circle at 35% 35%, #FFD95C, #F5A623)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "68px",
+            marginBottom: "32px",
+            border: "4px dashed #E8A000",
+            boxShadow: "0 10px 40px rgba(245, 166, 35, 0.35)",
+            flexShrink: 0,
+          }}>
+            {insignia?.icono_url ?? "🏅"}
+          </div>
+
+          {/* Título */}
+          <h2 style={{
+            color: "var(--huap-verde)",
+            fontSize: "2rem",
+            fontWeight: 800,
+            textAlign: "center",
+            marginBottom: "14px",
+            lineHeight: 1.2,
+          }}>
+            ¡Felicitaciones!
+          </h2>
+
+          {/* Descripción */}
+          <p style={{
+            color: "#444",
+            fontSize: "1.05rem",
+            textAlign: "center",
+            lineHeight: 1.65,
+            marginBottom: "24px",
+          }}>
+            Completaste el <strong>Módulo {modulo.orden}</strong> y {desc}
+          </p>
+
+          {/* Chip de insignia — estilo ámbar como en el prototipo */}
+          {insignia && (
+            <div style={{
+              border: "2px solid #E8A000",
+              borderRadius: "12px",
+              padding: "12px 28px",
+              marginBottom: "36px",
+              backgroundColor: "#FFFBF0",
+            }}>
+              <p style={{ color: "#B85C00", fontSize: "1rem", fontWeight: 700, textAlign: "center", margin: 0 }}>
+                Insignia: {insignia.nombre}
+              </p>
+            </div>
+          )}
+
+          {/* Botones */}
+          <div className="flex flex-col gap-3" style={{ width: "100%" }}>
+            <button
+              onClick={() => router.push("/modulos")}
+              style={{
+                padding: "18px",
+                borderRadius: "14px",
+                border: "none",
+                backgroundColor: "var(--huap-verde)",
+                color: "white",
+                fontSize: "1.1rem",
+                fontWeight: 700,
+                cursor: "pointer",
+                width: "100%",
+              }}
+            >
+              {siguienteLabel}
+            </button>
+            <button
+              onClick={() => setFase("resultado")}
+              style={{
+                padding: "16px",
+                borderRadius: "14px",
+                border: "2px solid #D0D0D0",
+                backgroundColor: "white",
+                color: "#555",
+                fontSize: "0.95rem",
+                fontWeight: 600,
+                cursor: "pointer",
+                width: "100%",
+              }}
+            >
+              Ver revisión de respuestas
+            </button>
+          </div>
         </main>
       </div>
     )
