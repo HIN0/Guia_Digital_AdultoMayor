@@ -11,13 +11,12 @@ import type { Modulo } from "@/types"
 const DISPLAY: Record<number, { titulo: string; descripcion: string; leccionesTotales: number }> = {
   1: { titulo: "Entender qué es la IA",   descripcion: "Cómo funciona, qué puede y qué no puede hacer", leccionesTotales: 6 },
   2: { titulo: "Practicar con la IA",     descripcion: "Hacer preguntas, leer respuestas, verificar",   leccionesTotales: 6 },
-  3: { titulo: "Asistente de IA",         descripcion: "Conversa sobre temas de salud",                 leccionesTotales: 0 },
+  3: { titulo: "Asistente de IA",         descripcion: "Conversa sobre temas de salud",                 leccionesTotales: 1 },
 }
 
 function construirModulos(apiModulos: ModuloResumen[]): Modulo[] {
   const mod1completado = localStorage.getItem("huap_mod1_completado") === "true"
   const mod2completado = localStorage.getItem("huap_mod2_completado") === "true"
-  const quiz1aprobado  = localStorage.getItem("huap_quiz1_aprobado")  === "true"
 
   return apiModulos.map((m) => {
     const display = DISPLAY[m.orden] ?? { titulo: m.nombre, descripcion: "", leccionesTotales: 0 }
@@ -43,11 +42,14 @@ function construirModulos(apiModulos: ModuloResumen[]): Modulo[] {
         leccionesCompletadas: mod2completado ? leccionesTotales : mod1completado ? completadas : 0,
       }
     }
+    // Módulo 3: disponible solo cuando el Módulo 2 está completado;
+    // el chatbot se desbloquea al terminar la lección de repaso
+    const repasoCompletado = completadas >= 1
     return {
       id: m.id, numero: m.orden, ...display,
-      estado: quiz1aprobado ? "disponible" : "bloqueado",
-      progreso: 0,
-      leccionesCompletadas: 0,
+      estado: repasoCompletado ? "completado" : mod2completado ? "disponible" : "bloqueado",
+      progreso: repasoCompletado ? 100 : mod2completado ? progreso : 0,
+      leccionesCompletadas: repasoCompletado ? 1 : mod2completado ? completadas : 0,
     }
   })
 }
@@ -98,7 +100,7 @@ export default function ModulosPage() {
               modulo.estado !== "bloqueado" ? (
                 <Link
                   key={modulo.id}
-                  href={modulo.numero === 3 ? "/chatbot" : `/modulos/${modulo.id}`}
+                  href={`/modulos/${modulo.id}`}
                   style={{ textDecoration: "none" }}
                 >
                   <ModuloCard modulo={modulo} />

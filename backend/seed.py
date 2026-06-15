@@ -1786,6 +1786,90 @@ LECCIONES_DATA = [
         }
       }
     }
+  },
+  {
+    "leccion_id": "3.1",
+    "modulo_id": 3,
+    "orden": 1,
+    "titulo": "Repaso antes de usar el asistente",
+    "duracion_min": 5,
+    "contenido": {
+      "paginas": [
+        {
+          "n": 1,
+          "tipo": "saludo",
+          "titulo": "¡Ya casi llegas!",
+          "texto": "Llegaste al Módulo 3. Antes de comenzar a usar el Asistente de IA, hagamos un repaso rápido de lo más importante que aprendiste. Así podrás usar esta herramienta con confianza y seguridad.",
+          "apoyo_visual": "Ilustración de una persona mayor con una lista de repaso y una estrella de logro."
+        },
+        {
+          "n": 2,
+          "tipo": "contenido",
+          "titulo": "¿Qué es la IA y para qué sirve?",
+          "texto": "La IA es un programa que aprendió de muchos ejemplos. En salud puede:\n• Explicar palabras médicas difíciles\n• Orientarte con dudas generales\n• Ayudarte a preparar preguntas para tu médico\n\nPero NO puede diagnosticarte, NO puede recetarte y NUNCA reemplaza a tu médico.",
+          "apoyo_visual": "Dos columnas: SÍ (explicar, orientar, preparar consulta) y NO (diagnosticar, recetar, reemplazar al médico)."
+        },
+        {
+          "n": 3,
+          "tipo": "contenido",
+          "titulo": "Cuídate de estos riesgos",
+          "texto": "Recuerda lo que aprendiste en el Módulo 1:\n• La IA puede inventar información que parece real. Esto se llama 'alucinación'. Siempre confirma con tu médico.\n• Nunca le des tu RUT, contraseñas ni datos médicos privados.\n• Desconfía de mensajes que ofrezcan 'curas milagrosas' o que te pidan dinero.",
+          "apoyo_visual": "Tres alertas visuales: alucinación (signo de interrogación), privacidad (candado), engaños (señal de stop)."
+        },
+        {
+          "n": 4,
+          "tipo": "contenido",
+          "titulo": "Cómo preguntar y leer las respuestas",
+          "texto": "Recuerda lo que aprendiste en el Módulo 2:\n• Haz preguntas concretas. En vez de 'me siento mal', di '¿qué cuidados necesita alguien con presión alta?'\n• Cuando la IA diga 'podría ser' o 'consulta a un médico', significa que no está segura. Ve al médico.\n• Verifica siempre con tu médico o en sitios confiables (.gob.cl, consultorio).",
+          "apoyo_visual": "Comparación: pregunta vaga vs. pregunta concreta. Respuesta con señales de alerta subrayadas."
+        },
+        {
+          "n": 5,
+          "tipo": "cierre",
+          "titulo": "¡Estás listo para usar el Asistente!",
+          "texto": "Ya tienes todo lo necesario para usar el Asistente de IA con seguridad. Recuerda: úsalo para aclarar dudas generales sobre salud, nunca en emergencias. Para emergencias, llama siempre al 131. ¡Adelante!",
+          "apoyo_visual": "Ilustración de una persona mayor sonriente con el asistente en pantalla y el número 131 visible."
+        }
+      ],
+      "quiz_corto": {
+        "preguntas": [
+          {
+            "pregunta": "¿Puede la IA diagnosticarte una enfermedad?",
+            "opciones": [
+              {"texto": "No, eso lo hace solo tu médico", "correcta": True},
+              {"texto": "Sí, si le describes bien tus síntomas", "correcta": False},
+              {"texto": "Sí, siempre que no sea grave", "correcta": False}
+            ],
+            "feedback": "La IA nunca diagnostica. Puede orientarte, pero el diagnóstico siempre es del médico."
+          },
+          {
+            "pregunta": "La IA te responde: \"podría ser presión alta o algo más\". ¿Qué haces?",
+            "opciones": [
+              {"texto": "Lo acepto como diagnóstico definitivo", "correcta": False},
+              {"texto": "Voy al médico a confirmarlo", "correcta": True},
+              {"texto": "Busco la misma respuesta en otra IA", "correcta": False}
+            ],
+            "feedback": "Cuando la IA dice 'podría ser', significa que no está segura. El médico confirma."
+          },
+          {
+            "pregunta": "¿Cuál es una buena pregunta para hacerle al asistente?",
+            "opciones": [
+              {"texto": "Mi RUT es 12.345.678-9, ¿qué medicamento tomo?", "correcta": False},
+              {"texto": "¿Qué alimentos evitar si tengo diabetes?", "correcta": True},
+              {"texto": "Tengo un dolor, ¿qué tengo?", "correcta": False}
+            ],
+            "feedback": "Las mejores preguntas son concretas y sin datos personales. Así obtienes respuestas más útiles."
+          }
+        ],
+        "resultado": {
+          "umbral_aprobado": 2,
+          "titulo_aprobado": "¡Muy bien! Ya puedes usar el Asistente",
+          "mensaje_aprobado": "Demostraste que recuerdas lo más importante. ¡El Asistente de IA ya está disponible para ti!",
+          "titulo_fallido": "Repasemos un poco más",
+          "mensaje_fallido": "No te preocupes. Puedes volver a repasar la lección y volverlo a intentar cuando quieras."
+        }
+      }
+    }
   }
 ]
 
@@ -2134,6 +2218,7 @@ def poblar(db: Session):
     for idata in [
         {"nombre": "Conocedor de la IA",   "descripcion": "Completaste el Módulo 1: Conocer la IA",      "icono_url": "🧠"},
         {"nombre": "Practicante de la IA", "descripcion": "Completaste el Módulo 2: Practicar con la IA", "icono_url": "💪"},
+        {"nombre": "Asistente de IA",      "descripcion": "Completaste el Módulo 3: Asistente de IA",     "icono_url": "🤖"},
     ]:
         db.add(Insignia(**idata))
 

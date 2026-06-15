@@ -10,7 +10,7 @@ from . import schema, service
 
 router = APIRouter(prefix="/progreso", tags=["Progreso"])
 
-@router.post("/leccion")
+@router.post("/leccion", response_model=schema.LeccionCompletadaResponse)
 def registrar_avance_leccion(
     progreso: schema.ProgresoLeccionCreate, 
     db: Session = Depends(get_db)

@@ -4,27 +4,55 @@ Aísla todas las transacciones directas (queries) contra la base de datos.
 """
 from sqlalchemy.orm import Session
 from .entity import ProgresoLeccion, IntentoQuiz, InsigniaObtenida, Insignia
-from .schema import ProgresoLeccionCreate, IntentoQuizCreate, SubmitQuizCreate, ResultadoQuizResponse, FeedbackPregunta
-from modules.educacion.entity import QuizFinal, PreguntaQuiz, OpcionRespuesta
+from .schema import (
+    ProgresoLeccionCreate, SubmitQuizCreate,
+    ResultadoQuizResponse, FeedbackPregunta, InsigniaResponse,
+)
+from modules.educacion.entity import QuizFinal, PreguntaQuiz, OpcionRespuesta, Modulo
+
+# Mapeo orden de módulo → nombre de insignia en BD
+_INSIGNIA_POR_MODULO = {
+    1: "Conocedor de la IA",
+    2: "Practicante de la IA",
+    3: "Asistente de IA",
+}
+
+def otorgar_insignia_modulo(db: Session, usuario_id: int, modulo_orden: int):
+    """Otorga la insignia del módulo al usuario si no la tiene ya. Retorna el ORM o None."""
+    nombre = _INSIGNIA_POR_MODULO.get(modulo_orden)
+    if not nombre:
+        return None
+    insignia = db.query(Insignia).filter(Insignia.nombre == nombre).first()
+    if not insignia:
+        return None
+    ya_tiene = db.query(InsigniaObtenida).filter(
+        InsigniaObtenida.usuario_id == usuario_id,
+        InsigniaObtenida.insignia_id == insignia.id,
+    ).first()
+    if ya_tiene:
+        return None
+    db.add(InsigniaObtenida(usuario_id=usuario_id, insignia_id=insignia.id))
+    db.commit()
+    return insignia
+
 
 def registrar_leccion(db: Session, usuario_id: int, progreso: ProgresoLeccionCreate):
     """Inserta un nuevo registro de lección completada para un usuario."""
     nuevo_progreso = ProgresoLeccion(
-        usuario_id=usuario_id, 
-        leccion_id=progreso.leccion_id, 
-        completada=True
+        usuario_id=usuario_id,
+        leccion_id=progreso.leccion_id,
+        completada=True,
     )
     db.add(nuevo_progreso)
     db.commit()
     db.refresh(nuevo_progreso)
-    
     return nuevo_progreso
 
 def obtener_lecciones_usuario(db: Session, usuario_id: int):
     """Retorna todas las lecciones marcadas como completadas por el usuario."""
     return db.query(ProgresoLeccion).filter(
-        ProgresoLeccion.usuario_id == usuario_id, 
-        ProgresoLeccion.completada == True
+        ProgresoLeccion.usuario_id == usuario_id,
+        ProgresoLeccion.completada == True,
     ).all()
 
 def procesar_quiz(db: Session, usuario_id: int, submit: SubmitQuizCreate) -> ResultadoQuizResponse:
@@ -38,19 +66,19 @@ def procesar_quiz(db: Session, usuario_id: int, submit: SubmitQuizCreate) -> Res
     for resp in submit.respuestas:
         pregunta = db.query(PreguntaQuiz).filter(
             PreguntaQuiz.id == resp.pregunta_id,
-            PreguntaQuiz.quiz_final_id == submit.quiz_id
+            PreguntaQuiz.quiz_final_id == submit.quiz_id,
         ).first()
         if not pregunta:
             continue
 
         opcion_seleccionada = db.query(OpcionRespuesta).filter(
             OpcionRespuesta.id == resp.opcion_id,
-            OpcionRespuesta.pregunta_id == resp.pregunta_id
+            OpcionRespuesta.pregunta_id == resp.pregunta_id,
         ).first()
 
         opcion_correcta = db.query(OpcionRespuesta).filter(
             OpcionRespuesta.pregunta_id == resp.pregunta_id,
-            OpcionRespuesta.es_correcta == True
+            OpcionRespuesta.es_correcta == True,
         ).first()
 
         es_correcta = opcion_seleccionada is not None and opcion_seleccionada.es_correcta
@@ -62,24 +90,33 @@ def procesar_quiz(db: Session, usuario_id: int, submit: SubmitQuizCreate) -> Res
             opcion_correcta_id=opcion_correcta.id if opcion_correcta else 0,
             opcion_seleccionada_id=resp.opcion_id,
             es_correcta=es_correcta,
-            feedback=pregunta.feedback
+            feedback=pregunta.feedback,
         ))
 
     aprobado = aciertos >= quiz.minimo_aciertos
 
-    intento = IntentoQuiz(usuario_id=usuario_id, quiz_id=submit.quiz_id, puntaje=aciertos, aprobado=aprobado)
-    db.add(intento)
+    db.add(IntentoQuiz(usuario_id=usuario_id, quiz_id=submit.quiz_id, puntaje=aciertos, aprobado=aprobado))
     db.commit()
+
+    # Otorgar insignia del módulo cuando el quiz es aprobado
+    insignia_response = None
+    if aprobado:
+        modulo = db.query(Modulo).filter(Modulo.id == quiz.modulo_id).first()
+        if modulo:
+            insignia_orm = otorgar_insignia_modulo(db, usuario_id, modulo.orden)
+            if insignia_orm:
+                insignia_response = InsigniaResponse.model_validate(insignia_orm)
 
     return ResultadoQuizResponse(
         puntaje=aciertos,
         minimo_aciertos=quiz.minimo_aciertos,
         aprobado=aprobado,
-        feedbacks=feedbacks
+        feedbacks=feedbacks,
+        insignia_otorgada=insignia_response,
     )
 
 def obtener_insignias_usuario(db: Session, usuario_id: int):
     """Ejecuta un JOIN para obtener los detalles de las insignias ganadas por el usuario."""
     return db.query(Insignia).join(InsigniaObtenida).filter(
-        InsigniaObtenida.usuario_id == usuario_id
+        InsigniaObtenida.usuario_id == usuario_id,
     ).all()

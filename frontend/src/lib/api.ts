@@ -132,12 +132,27 @@ export async function getLeccion(id: number): Promise<LeccionDetalle> {
   return res.json()
 }
 
-export async function completarLeccion(leccionId: number): Promise<void> {
-  await fetch(`${API_URL}/progreso/leccion`, {
+export interface InsigniaOtorgada {
+  id: number
+  nombre: string
+  descripcion: string
+  icono_url: string
+}
+
+export interface LeccionCompletadaResponse {
+  leccion_id: number
+  completada: boolean
+  insignia_otorgada: InsigniaOtorgada | null
+}
+
+export async function completarLeccion(leccionId: number): Promise<LeccionCompletadaResponse> {
+  const res = await fetch(`${API_URL}/progreso/leccion`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ leccion_id: leccionId }),
   })
+  if (!res.ok) return { leccion_id: leccionId, completada: false, insignia_otorgada: null }
+  return res.json()
 }
 
 export interface RespuestaItem {
@@ -158,6 +173,7 @@ export interface ResultadoQuiz {
   minimo_aciertos: number
   aprobado: boolean
   feedbacks: FeedbackPregunta[]
+  insignia_otorgada: InsigniaOtorgada | null
 }
 
 export async function submitQuizFinal(quizId: number, respuestas: RespuestaItem[]): Promise<ResultadoQuiz> {

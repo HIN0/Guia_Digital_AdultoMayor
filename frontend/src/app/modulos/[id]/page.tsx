@@ -15,12 +15,17 @@ export default function ModuloDetallePage() {
   const [error, setError] = useState(false)
   const [leccionesCompletadas, setLeccionesCompletadas] = useState<Set<number>>(new Set())
   const [quizAprobado, setQuizAprobado] = useState(false)
+  const [chatbotAccesible, setChatbotAccesible] = useState(false)
 
   useEffect(() => {
     const guardadas: number[] = JSON.parse(
       localStorage.getItem(`huap_mod${moduloId}_lecciones_completadas`) ?? "[]"
     )
     setLeccionesCompletadas(new Set(guardadas))
+
+    const desbloqueado = localStorage.getItem("huap_chatbot_desbloqueado") === "true"
+    const mod2done = localStorage.getItem("huap_mod2_completado") === "true"
+    setChatbotAccesible(desbloqueado || mod2done)
 
     getModuloDetalle(moduloId)
       .then((m) => {
@@ -177,6 +182,91 @@ export default function ModuloDetallePage() {
                   </button>
                 )
               })}
+
+              {/* Módulo 3: pestaña de acceso al chatbot */}
+              {modulo.orden === 3 && chatbotAccesible && (() => {
+                const repasoHecho = modulo.lecciones.length > 0 && leccionesCompletadas.size >= modulo.lecciones.length
+                return (
+                  <>
+                    <div style={{ display: "flex", alignItems: "center", gap: "12px", margin: "4px 0" }}>
+                      <div style={{ flex: 1, height: "1px", backgroundColor: "#D0D0D0" }} />
+                      <span style={{ fontSize: "0.75rem", color: "#999", fontWeight: 600, whiteSpace: "nowrap" }}>
+                        ASISTENTE DE IA
+                      </span>
+                      <div style={{ flex: 1, height: "1px", backgroundColor: "#D0D0D0" }} />
+                    </div>
+                    <button
+                      onClick={() => {
+                        localStorage.setItem("huap_chatbot_desbloqueado", "true")
+                        router.push("/chatbot")
+                      }}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "16px",
+                        padding: "20px",
+                        borderRadius: "16px",
+                        width: "100%",
+                        textAlign: "left",
+                        cursor: "pointer",
+                        ...(repasoHecho
+                          ? {
+                              backgroundColor: "#F0FAF4",
+                              border: "2px solid var(--huap-verde)",
+                              boxShadow: "0 1px 6px rgba(76,175,80,0.12)",
+                            }
+                          : {
+                              backgroundColor: "white",
+                              border: "2px dashed var(--huap-azul)",
+                              boxShadow: "0 1px 6px rgba(0,80,180,0.10)",
+                            }),
+                      }}
+                    >
+                      <div style={{
+                        width: "52px",
+                        height: "52px",
+                        borderRadius: "50%",
+                        flexShrink: 0,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        backgroundColor: repasoHecho ? "var(--huap-verde)" : "#EBF3FF",
+                        border: repasoHecho ? "none" : "2px solid var(--huap-azul)",
+                      }}>
+                        {repasoHecho
+                          ? <CheckCircle size={28} color="white" strokeWidth={2.5} />
+                          : <ChevronRight size={26} color="var(--huap-azul)" strokeWidth={2.5} />
+                        }
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <p style={{
+                          fontSize: "0.75rem",
+                          fontWeight: 700,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.05em",
+                          marginBottom: "3px",
+                          color: repasoHecho ? "var(--huap-verde)" : "var(--huap-azul)",
+                        }}>
+                          {repasoHecho ? "✓ Test completado" : "Disponible"}
+                        </p>
+                        <p style={{ fontSize: "1rem", fontWeight: 700, lineHeight: 1.3, color: "#1a1a1a" }}>
+                          {repasoHecho
+                            ? "¡Haz clic para ir al chatbot!"
+                            : "Ir al Asistente de IA"
+                          }
+                        </p>
+                        <p style={{ fontSize: "0.8rem", color: "#555", marginTop: "2px" }}>
+                          {repasoHecho
+                            ? "Completaste el repaso. El asistente te espera."
+                            : "Completa el repaso de arriba para prepararte mejor."
+                          }
+                        </p>
+                      </div>
+                      <ChevronRight size={26} color={repasoHecho ? "var(--huap-verde)" : "var(--huap-azul)"} strokeWidth={2} />
+                    </button>
+                  </>
+                )
+              })()}
 
               {/* Quiz final — siempre visible al final de la lista */}
               {modulo.quiz_final && modulo.lecciones.length > 0 && (() => {
