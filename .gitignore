@@ -18,8 +18,8 @@ build/
 .idea/
 .DS_Store
 
-# Claude
-.claude/
+# Claude (solo el archivo personal, settings.json del proyecto se trackea)
+.claude/settings.local.json
 
 # Logs
 *.log
