@@ -18,12 +18,13 @@ const FONT_MAP: Record<string, string> = {
 
 export default function AjustesPage() {
   const router = useRouter()
-  const [tamano, setTamano] = useState("mediano")
+  const [tamano, setTamano] = useState(() => localStorage.getItem("fontTamano") ?? "mediano")
 
   useEffect(() => {
-    const saved = localStorage.getItem("fontTamano") ?? "mediano"
-    setTamano(saved)
+    document.documentElement.style.fontSize = FONT_MAP[tamano]
+  }, [tamano])
 
+  useEffect(() => {
     function syncDesdeHeader() {
       setTamano(localStorage.getItem("fontTamano") ?? "mediano")
     }
@@ -34,7 +35,6 @@ export default function AjustesPage() {
   function handleSelect(id: string) {
     setTamano(id)
     localStorage.setItem("fontTamano", id)
-    document.documentElement.style.fontSize = FONT_MAP[id]
   }
 
   return (

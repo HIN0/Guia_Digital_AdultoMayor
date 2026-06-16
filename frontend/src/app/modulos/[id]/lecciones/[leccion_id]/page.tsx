@@ -1374,7 +1374,7 @@ export default function LeccionPage() {
                         {[item1, item2].map((item: string, i: number) => (
                           <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 16px", backgroundColor: "#EFF6FF", borderRadius: "10px", border: "1px solid #BFDBFE" }}>
                             <span style={{ flexShrink: 0, width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "var(--huap-azul)", color: "white", fontSize: "0.9rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>–</span>
-                            <p style={{ color: "#1e3a5f", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>"{item}"</p>
+                            <p style={{ color: "#1e3a5f", fontSize: "0.9rem", fontWeight: 500, lineHeight: 1.5, margin: 0 }}>{`"${item}"`}</p>
                           </div>
                         ))}
                       </div>

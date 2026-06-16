@@ -7,7 +7,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     signIn: "/login",
   },
   callbacks: {
-    async signIn({ account, user }) {
+    async signIn({ account }) {
       if (account?.provider === "google" && account.id_token) {
         try {
           // Se verifica la URL correcta. CON http://localhost:8000//api/auth/login 
@@ -28,7 +28,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           
           // Guardamos el token propio del backend dentro del objeto account temporalmente
           // para pasarlo al callback de jwt
-          (account as any).backend_access_token = data.access_token;
+          (account as Record<string, unknown>).backend_access_token = data.access_token;
           
           return true;
         } catch (error) {
@@ -50,7 +50,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
     // El callback session expone los datos al cliente (frontend)
     async session({ session, token }) {
-      // @ts-ignore (evitar error tipado si no has extendido los types de NextAuth)
+      // @ts-expect-error (evitar error tipado si no has extendido los types de NextAuth)
       session.accessToken = token.accessToken;
       return session;
     }

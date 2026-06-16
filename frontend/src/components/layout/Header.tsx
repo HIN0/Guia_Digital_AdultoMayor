@@ -14,15 +14,13 @@ export default function Header() {
   const { data: session } = useSession()
   const router = useRouter()
   const [open, setOpen] = useState(false)
-  const [tamano, setTamano] = useState<Tamano>("mediano")
+  const [tamano, setTamano] = useState<Tamano>(() => (localStorage.getItem("fontTamano") ?? "mediano") as Tamano)
   const buttonRef = useRef<HTMLDivElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const saved = (localStorage.getItem("fontTamano") ?? "mediano") as Tamano
-    setTamano(saved)
-    document.documentElement.style.fontSize = FONT_MAP[saved]
-  }, [])
+    document.documentElement.style.fontSize = FONT_MAP[tamano]
+  }, [tamano])
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
