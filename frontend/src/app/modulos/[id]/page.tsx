@@ -13,20 +13,20 @@ export default function ModuloDetallePage() {
 
   const [modulo, setModulo] = useState<ModuloDetalle | null>(null)
   const [error, setError] = useState(false)
-  const [leccionesCompletadas, setLeccionesCompletadas] = useState<Set<number>>(new Set())
-  const [quizAprobado, setQuizAprobado] = useState(false)
-  const [chatbotAccesible, setChatbotAccesible] = useState(false)
-
-  useEffect(() => {
+  const [leccionesCompletadas] = useState<Set<number>>(() => {
     const guardadas: number[] = JSON.parse(
       localStorage.getItem(`huap_mod${moduloId}_lecciones_completadas`) ?? "[]"
     )
-    setLeccionesCompletadas(new Set(guardadas))
-
+    return new Set(guardadas)
+  })
+  const [quizAprobado, setQuizAprobado] = useState(false)
+  const [chatbotAccesible] = useState(() => {
     const desbloqueado = localStorage.getItem("huap_chatbot_desbloqueado") === "true"
     const mod2done = localStorage.getItem("huap_mod2_completado") === "true"
-    setChatbotAccesible(desbloqueado || mod2done)
+    return desbloqueado || mod2done
+  })
 
+  useEffect(() => {
     getModuloDetalle(moduloId)
       .then((m) => {
         setModulo(m)

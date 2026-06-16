@@ -32,7 +32,7 @@ export default function QuizFinalPage() {
   const quizId = Number(params.id as string)
 
   const [modulo, setModulo] = useState<ModuloDetalle | null>(null)
-  const [error, setError] = useState(false)
+  const [error, setError] = useState(() => !Number(sessionStorage.getItem("huap_quiz_modulo_id") ?? "0"))
   const [enviando, setEnviando] = useState(false)
   const [fase, setFase] = useState<Fase>("quiz")
 
@@ -56,10 +56,7 @@ export default function QuizFinalPage() {
 
   useEffect(() => {
     const moduloIdGuardado = Number(sessionStorage.getItem("huap_quiz_modulo_id") ?? "0")
-    if (!moduloIdGuardado) {
-      setError(true)
-      return
-    }
+    if (!moduloIdGuardado) return
     getModuloDetalle(moduloIdGuardado)
       .then(setModulo)
       .catch(() => setError(true))

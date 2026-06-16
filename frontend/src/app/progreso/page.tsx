@@ -17,16 +17,16 @@ const TOTAL_LECCIONES = 13
 
 export default function ProgresoPage() {
   const router = useRouter()
-  const [insigniasGanadas, setInsigniasGanadas] = useState<Record<number, boolean>>({})
-  const [leccionesCompletadas, setLeccionesCompletadas] = useState(0)
-
-  useEffect(() => {
+  const [insigniasGanadas] = useState<Record<number, boolean>>(() => {
     const ganadas: Record<number, boolean> = {}
     for (const ins of INSIGNIAS_DEF) {
       ganadas[ins.orden] = localStorage.getItem(ins.flag) === "true"
     }
-    setInsigniasGanadas(ganadas)
+    return ganadas
+  })
+  const [leccionesCompletadas, setLeccionesCompletadas] = useState(0)
 
+  useEffect(() => {
     getModulos()
       .then((apiModulos) => {
         let completadas = 0
@@ -39,10 +39,10 @@ export default function ProgresoPage() {
         setLeccionesCompletadas(completadas)
       })
       .catch(() => {
-        const fallback = INSIGNIAS_DEF.filter((i) => ganadas[i.orden]).length
+        const fallback = INSIGNIAS_DEF.filter((i) => insigniasGanadas[i.orden]).length
         setLeccionesCompletadas(fallback)
       })
-  }, [])
+  }, [insigniasGanadas])
 
   const pct = Math.round((leccionesCompletadas / TOTAL_LECCIONES) * 100)
 

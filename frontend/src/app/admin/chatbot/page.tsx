@@ -143,7 +143,7 @@ export default function AdminChatbotPage() {
   }, [token])
 
   useEffect(() => {
-    cargarDatos()
+    void cargarDatos() // eslint-disable-line react-hooks/set-state-in-effect
   }, [cargarDatos])
 
   async function handleCrearPregunta() {
