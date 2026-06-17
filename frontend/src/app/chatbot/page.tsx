@@ -10,6 +10,7 @@ import {
   valorarMensaje,
   listarConversaciones,
   obtenerMensajesConversacion,
+  getProgreso,
   ConversacionOut,
 } from "@/lib/api"
 
@@ -65,17 +66,27 @@ export default function ChatbotPage() {
   const speechRef = useRef<SpeechSynthesisUtterance | null>(null)
 
   useEffect(() => {
-    const chatbotDesbloqueado = localStorage.getItem("huap_chatbot_desbloqueado") === "true"
-    const mod2completado = localStorage.getItem("huap_mod2_completado") === "true"
-    if (!chatbotDesbloqueado && !mod2completado) {
-      router.replace("/modulos")
-      return
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const token = (session as any)?.accessToken as string | undefined
+
+    if (token) {
+      getProgreso(token).then((progreso) => {
+        if (progreso && !progreso.chatbot_desbloqueado) {
+          router.replace("/modulos")
+        }
+      })
+    } else {
+      const chatbotDesbloqueado = localStorage.getItem("huap_chatbot_desbloqueado") === "true"
+      const mod2completado = localStorage.getItem("huap_mod2_completado") === "true"
+      if (!chatbotDesbloqueado && !mod2completado) {
+        router.replace("/modulos")
+        return
+      }
+      if (!chatbotDesbloqueado && mod2completado) {
+        localStorage.setItem("huap_chatbot_desbloqueado", "true")
+      }
     }
-    // Migración: usuarios que completaron mod2 antes de que existiera el flag
-    if (!chatbotDesbloqueado && mod2completado) {
-      localStorage.setItem("huap_chatbot_desbloqueado", "true")
-    }
-  }, [router])
+  }, [router, session])
 
   useEffect(() => {
     if (listaRef.current) {

@@ -1806,25 +1806,39 @@ LECCIONES_DATA = [
           "n": 2,
           "tipo": "contenido",
           "titulo": "¿Qué es la IA y para qué sirve?",
-          "texto": "La IA es un programa que aprendió de muchos ejemplos. En salud puede:\n• Explicar palabras médicas difíciles\n• Orientarte con dudas generales\n• Ayudarte a preparar preguntas para tu médico\n\nPero NO puede diagnosticarte, NO puede recetarte y NUNCA reemplaza a tu médico.",
+          "texto": "La IA es un programa que aprendió de muchos ejemplos. En salud puede: explicar palabras médicas difíciles, orientarte con dudas generales y ayudarte a preparar preguntas para tu médico. Pero NO puede diagnosticarte, NO puede recetarte y NUNCA reemplaza a tu médico.",
           "apoyo_visual": "Dos columnas: SÍ (explicar, orientar, preparar consulta) y NO (diagnosticar, recetar, reemplazar al médico)."
         },
         {
           "n": 3,
-          "tipo": "contenido",
+          "tipo": "advertencia",
           "titulo": "Cuídate de estos riesgos",
-          "texto": "Recuerda lo que aprendiste en el Módulo 1:\n• La IA puede inventar información que parece real. Esto se llama 'alucinación'. Siempre confirma con tu médico.\n• Nunca le des tu RUT, contraseñas ni datos médicos privados.\n• Desconfía de mensajes que ofrezcan 'curas milagrosas' o que te pidan dinero.",
+          "texto": "La IA puede inventar información que parece real. Esto se llama 'alucinación'. Siempre confirma lo importante con tu médico.",
           "apoyo_visual": "Tres alertas visuales: alucinación (signo de interrogación), privacidad (candado), engaños (señal de stop)."
         },
         {
           "n": 4,
-          "tipo": "contenido",
-          "titulo": "Cómo preguntar y leer las respuestas",
-          "texto": "Recuerda lo que aprendiste en el Módulo 2:\n• Haz preguntas concretas. En vez de 'me siento mal', di '¿qué cuidados necesita alguien con presión alta?'\n• Cuando la IA diga 'podría ser' o 'consulta a un médico', significa que no está segura. Ve al médico.\n• Verifica siempre con tu médico o en sitios confiables (.gob.cl, consultorio).",
-          "apoyo_visual": "Comparación: pregunta vaga vs. pregunta concreta. Respuesta con señales de alerta subrayadas."
+          "tipo": "advertencia",
+          "titulo": "Protege tus datos y desconfía",
+          "texto": "Nunca le des a la IA tu RUT, contraseñas ni datos médicos privados. Desconfía de mensajes que ofrezcan 'curas milagrosas' o que te pidan dinero. Los servicios de salud de verdad no funcionan así.",
+          "apoyo_visual": "Lista roja: RUT, dirección, Fonasa, fotos con nombre, tarjeta bancaria, contraseñas."
         },
         {
           "n": 5,
+          "tipo": "concepto",
+          "titulo": "Cómo preguntar bien",
+          "texto": "Haz preguntas concretas. En lugar de 'me siento mal', di: \"¿qué cuidados necesita alguien con presión alta?\". Mientras más concreta la pregunta, más útil la respuesta.",
+          "apoyo_visual": "Comparación: \"me siento mal\" (vago) → \"dolor de cabeza en las mañanas\" (concreto)."
+        },
+        {
+          "n": 6,
+          "tipo": "concepto",
+          "titulo": "Cómo leer las respuestas",
+          "texto": "Cuando la IA diga 'podría ser' o 'consulta a un médico', significa que no está segura. Ve al médico. Verifica siempre con tu médico o en sitios confiables (.gob.cl, consultorio).",
+          "apoyo_visual": "Frase \"consulte a un médico\" resaltada en verde con un visto bueno."
+        },
+        {
+          "n": 7,
           "tipo": "cierre",
           "titulo": "¡Estás listo para usar el Asistente!",
           "texto": "Ya tienes todo lo necesario para usar el Asistente de IA con seguridad. Recuerda: úsalo para aclarar dudas generales sobre salud, nunca en emergencias. Para emergencias, llama siempre al 131. ¡Adelante!",
@@ -2018,7 +2032,7 @@ QUIZZES_DATA = [
     "modulo_id": 2,
     "titulo": "Quiz final — Practicar con la IA",
     "minimo_aciertos": 5,
-    "bloqueante": False,
+    "bloqueante": True,
     "preguntas": [
       {
         "pregunta": "¿Cuál es una mejor pregunta para hacerle a la IA?",

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
+import { useSession } from "next-auth/react"
 import { Trophy, RefreshCw, CheckCircle, XCircle } from "lucide-react"
 import Header from "@/components/layout/Header"
 import {
@@ -29,6 +30,7 @@ function guardarFlags(moduloOrden: number) {
 export default function QuizFinalPage() {
   const params = useParams()
   const router = useRouter()
+  const { data: session } = useSession()
   const quizId = Number(params.id as string)
 
   const [modulo, setModulo] = useState<ModuloDetalle | null>(null)
@@ -129,7 +131,9 @@ export default function QuizFinalPage() {
       opcion_id: Number(opId),
     }))
     try {
-      const res = await submitQuizFinal(quizId, respuestas)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const token = (session as any)?.accessToken as string | undefined
+      const res = await submitQuizFinal(quizId, respuestas, token)
       setResultado(res)
       const mapa: Record<number, FeedbackPregunta> = {}
       for (const fb of res.feedbacks) mapa[fb.pregunta_id] = fb

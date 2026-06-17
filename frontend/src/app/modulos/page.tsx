@@ -1,27 +1,51 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useSession } from "next-auth/react"
 import Link from "next/link"
 import Header from "@/components/layout/Header"
 import ModuloCard from "@/components/modulos/ModuloCard"
-import { getModulos, type ModuloResumen } from "@/lib/api"
+import { getModulos, getProgreso, sincronizarLocalStorage, type ModuloResumen, type ResumenProgreso } from "@/lib/api"
 import type { Modulo } from "@/types"
 
-// Datos de display estáticos indexados por orden (1, 2, 3)
 const DISPLAY: Record<number, { titulo: string; descripcion: string; leccionesTotales: number }> = {
   1: { titulo: "Entender qué es la IA",   descripcion: "Cómo funciona, qué puede y qué no puede hacer", leccionesTotales: 6 },
   2: { titulo: "Practicar con la IA",     descripcion: "Hacer preguntas, leer respuestas, verificar",   leccionesTotales: 6 },
   3: { titulo: "Asistente de IA",         descripcion: "Conversa sobre temas de salud",                 leccionesTotales: 1 },
 }
 
-function construirModulos(apiModulos: ModuloResumen[]): Modulo[] {
+function construirDesdeBackend(apiModulos: ModuloResumen[], progreso: ResumenProgreso): Modulo[] {
+  return apiModulos.map((m) => {
+    const display = DISPLAY[m.orden] ?? { titulo: m.nombre, descripcion: "", leccionesTotales: 0 }
+    const estado = progreso.modulos.find(e => e.modulo_id === m.id)
+    const leccionesTotales = display.leccionesTotales
+
+    if (!estado) {
+      return {
+        id: m.id, numero: m.orden, ...display,
+        estado: "bloqueado" as const, progreso: 0, leccionesCompletadas: 0,
+      }
+    }
+
+    const completadas = Math.min(estado.lecciones_completadas.length, leccionesTotales)
+    const pct = estado.completado ? 100 : leccionesTotales > 0 ? Math.round((completadas / leccionesTotales) * 100) : 0
+
+    return {
+      id: m.id, numero: m.orden, ...display,
+      estado: estado.completado ? "completado" : estado.desbloqueado ? "disponible" : "bloqueado",
+      progreso: pct,
+      leccionesCompletadas: estado.completado ? leccionesTotales : completadas,
+    }
+  })
+}
+
+function construirDesdeLocalStorage(apiModulos: ModuloResumen[]): Modulo[] {
   const mod1completado = localStorage.getItem("huap_mod1_completado") === "true"
   const mod2completado = localStorage.getItem("huap_mod2_completado") === "true"
 
   return apiModulos.map((m) => {
     const display = DISPLAY[m.orden] ?? { titulo: m.nombre, descripcion: "", leccionesTotales: 0 }
     const leccionesTotales = display.leccionesTotales
-    // Usa el ID real del módulo en BD para leer el progreso guardado por la página de lecciones
     const guardadas: number[] = JSON.parse(localStorage.getItem(`huap_mod${m.id}_lecciones_completadas`) ?? "[]")
     const completadas = guardadas.length
     const progreso = leccionesTotales > 0 ? Math.round((completadas / leccionesTotales) * 100) : 0
@@ -42,8 +66,6 @@ function construirModulos(apiModulos: ModuloResumen[]): Modulo[] {
         leccionesCompletadas: mod2completado ? leccionesTotales : mod1completado ? completadas : 0,
       }
     }
-    // Módulo 3: disponible solo cuando el Módulo 2 está completado;
-    // el chatbot se desbloquea al terminar la lección de repaso
     const repasoCompletado = completadas >= 1
     return {
       id: m.id, numero: m.orden, ...display,
@@ -55,13 +77,27 @@ function construirModulos(apiModulos: ModuloResumen[]): Modulo[] {
 }
 
 export default function ModulosPage() {
+  const { data: session } = useSession()
   const [modulos, setModulos] = useState<Modulo[] | null>(null)
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const token = (session as any)?.accessToken as string | undefined
+
     getModulos()
-      .then((apiModulos) => setModulos(construirModulos(apiModulos)))
-      .catch(() => setModulos([]))  // si el back no responde, muestra lista vacía
-  }, [])
+      .then(async (apiModulos) => {
+        if (token) {
+          const progreso = await getProgreso(token)
+          if (progreso && progreso.modulos.length > 0) {
+            sincronizarLocalStorage(progreso, apiModulos.map(m => m.id))
+            setModulos(construirDesdeBackend(apiModulos, progreso))
+            return
+          }
+        }
+        setModulos(construirDesdeLocalStorage(apiModulos))
+      })
+      .catch(() => setModulos([]))
+  }, [session])
 
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--huap-fondo)" }}>
@@ -78,7 +114,6 @@ export default function ModulosPage() {
         </div>
 
         {modulos === null ? (
-          // Esqueleto de carga para evitar parpadeo
           <div className="flex flex-col gap-5" aria-busy="true" aria-label="Cargando módulos">
             {[1, 2, 3].map((n) => (
               <div

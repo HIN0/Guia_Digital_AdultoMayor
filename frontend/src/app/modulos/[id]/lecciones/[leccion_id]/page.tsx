@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
+import { useSession } from "next-auth/react"
 import Image from "next/image"
 import Header from "@/components/layout/Header"
 import { Trophy, RefreshCw } from "lucide-react"
@@ -84,6 +85,11 @@ const IMAGENES_APOYO: Record<string, string> = {
   "Tarjetas con números grandes (igual que en el prototipo).": "/lecciones/modulo2/L6-3.svg",
   "Tres situaciones para médico de cabecera con ícono de médico.": "/lecciones/modulo2/L6-4.svg",
   "Mensaje de cierre destacado (disclaimer del prototipo).": "/lecciones/modulo2/L6-5.svg",
+  // L1 — Repaso antes de usar el asistente (Módulo 3, lección 3.1)
+  "Ilustración de una persona mayor con una lista de repaso y una estrella de logro.": "/lecciones/modulo3/L1-1.svg",
+  "Dos columnas: SÍ (explicar, orientar, preparar consulta) y NO (diagnosticar, recetar, reemplazar al médico).": "/lecciones/modulo3/L1-2.svg",
+  "Tres alertas visuales: alucinación (signo de interrogación), privacidad (candado), engaños (señal de stop).": "/lecciones/modulo3/L1-3.svg",
+  "Ilustración de una persona mayor sonriente con el asistente en pantalla y el número 131 visible.": "/lecciones/modulo3/L1-7.svg",
 }
 
 type Fase = "paginas" | "ejercicio" | "quiz" | "insignia" | "resultado"
@@ -105,6 +111,7 @@ interface EstadoEjercicio {
 export default function LeccionPage() {
   const params = useParams()
   const router = useRouter()
+  const { data: session } = useSession()
   const moduloId = Number(params.id as string)
   const leccionId = Number(params.leccion_id as string)
 
@@ -330,14 +337,18 @@ export default function LeccionPage() {
   }
 
   function guardarProgreso() {
-    completarLeccion(leccionId).catch(() => {})
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const token = (session as any)?.accessToken as string | undefined
+    completarLeccion(leccionId, token).catch(() => {})
     guardarLocalStorage()
   }
 
   function guardarProgresoMod3() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const token = (session as any)?.accessToken as string | undefined
     guardarLocalStorage()
     localStorage.setItem("huap_chatbot_desbloqueado", "true")
-    completarLeccion(leccionId)
+    completarLeccion(leccionId, token)
       .then((resp) => {
         setInsignia(resp.insignia_otorgada)
         setFase("insignia")

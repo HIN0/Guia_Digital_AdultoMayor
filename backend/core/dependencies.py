@@ -27,6 +27,21 @@ def get_usuario_actual(
     return usuario
 
 
+def get_usuario_opcional(
+    authorization: str = Header(None), db: Session = Depends(get_db)
+) -> Usuario | None:
+    """Igual que get_usuario_actual pero retorna None si no hay token válido."""
+    if not authorization:
+        return None
+    try:
+        token = authorization.replace("Bearer ", "")
+        payload = decode_token(token)
+        usuario_id = int(payload["sub"])
+    except (ValueError, KeyError):
+        return None
+    return auth_repo.get_usuario_by_id(db, usuario_id)
+
+
 def requiere_admin(usuario: Usuario = Depends(get_usuario_actual)) -> Usuario:
     """Dependencia que además exige rol admin."""
     if usuario.rol.value != "admin":
