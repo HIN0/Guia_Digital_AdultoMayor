@@ -145,10 +145,12 @@ export interface LeccionCompletadaResponse {
   insignia_otorgada: InsigniaOtorgada | null
 }
 
-export async function completarLeccion(leccionId: number): Promise<LeccionCompletadaResponse> {
+export async function completarLeccion(leccionId: number, token?: string): Promise<LeccionCompletadaResponse> {
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+  if (token) headers['Authorization'] = `Bearer ${token}`
   const res = await fetch(`${API_URL}/progreso/leccion`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers,
     body: JSON.stringify({ leccion_id: leccionId }),
   })
   if (!res.ok) return { leccion_id: leccionId, completada: false, insignia_otorgada: null }
@@ -176,14 +178,77 @@ export interface ResultadoQuiz {
   insignia_otorgada: InsigniaOtorgada | null
 }
 
-export async function submitQuizFinal(quizId: number, respuestas: RespuestaItem[]): Promise<ResultadoQuiz> {
+export async function submitQuizFinal(quizId: number, respuestas: RespuestaItem[], token?: string): Promise<ResultadoQuiz> {
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+  if (token) headers['Authorization'] = `Bearer ${token}`
   const res = await fetch(`${API_URL}/progreso/quiz`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers,
     body: JSON.stringify({ quiz_id: quizId, respuestas }),
   })
   if (!res.ok) throw new Error('Error al enviar el quiz')
   return res.json()
+}
+
+// ── Progreso del usuario ────────────────────────────────────────────────────
+
+export interface EstadoModuloBack {
+  modulo_id: number
+  orden: number
+  desbloqueado: boolean
+  completado: boolean
+  lecciones_completadas: number[]
+}
+
+export interface ResumenProgreso {
+  lecciones_completadas: number[]
+  quizzes_aprobados: number[]
+  insignias: InsigniaOtorgada[]
+  modulos: EstadoModuloBack[]
+  chatbot_desbloqueado: boolean
+}
+
+export async function getProgreso(token?: string): Promise<ResumenProgreso | null> {
+  const headers: Record<string, string> = {}
+  if (token) headers['Authorization'] = `Bearer ${token}`
+  try {
+    const res = await fetch(`${API_URL}/progreso/`, { headers })
+    if (!res.ok) return null
+    return res.json()
+  } catch {
+    return null
+  }
+}
+
+
+/**
+ * Sincroniza localStorage con los datos reales del backend.
+ * Sobreescribe las keys de progreso para eliminar datos obsoletos.
+ */
+export function sincronizarLocalStorage(progreso: ResumenProgreso, moduloIds: number[]) {
+  for (const estado of progreso.modulos) {
+    const key = `huap_mod${estado.modulo_id}_lecciones_completadas`
+    localStorage.setItem(key, JSON.stringify(estado.lecciones_completadas))
+
+    if (estado.orden === 1) {
+      if (estado.completado) localStorage.setItem("huap_mod1_completado", "true")
+      else localStorage.removeItem("huap_mod1_completado")
+    }
+    if (estado.orden === 2) {
+      if (estado.completado) localStorage.setItem("huap_mod2_completado", "true")
+      else localStorage.removeItem("huap_mod2_completado")
+    }
+  }
+
+  if (progreso.chatbot_desbloqueado) localStorage.setItem("huap_chatbot_desbloqueado", "true")
+  else localStorage.removeItem("huap_chatbot_desbloqueado")
+
+  // Limpiar keys de módulos que no vinieron del backend
+  for (const id of moduloIds) {
+    if (!progreso.modulos.find(e => e.modulo_id === id)) {
+      localStorage.removeItem(`huap_mod${id}_lecciones_completadas`)
+    }
+  }
 }
 
 

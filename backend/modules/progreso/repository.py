@@ -8,7 +8,7 @@ from .schema import (
     ProgresoLeccionCreate, SubmitQuizCreate,
     ResultadoQuizResponse, FeedbackPregunta, InsigniaResponse,
 )
-from modules.educacion.entity import QuizFinal, PreguntaQuiz, OpcionRespuesta, Modulo
+from modules.educacion.entity import QuizFinal, PreguntaQuiz, OpcionRespuesta, Modulo, Leccion
 
 # Mapeo orden de módulo → nombre de insignia en BD
 _INSIGNIA_POR_MODULO = {
@@ -114,6 +114,35 @@ def procesar_quiz(db: Session, usuario_id: int, submit: SubmitQuizCreate) -> Res
         feedbacks=feedbacks,
         insignia_otorgada=insignia_response,
     )
+
+def usuario_aprobo_quiz(db: Session, usuario_id: int, quiz_id: int) -> bool:
+    """Retorna True si el usuario aprobó este quiz al menos una vez."""
+    return db.query(IntentoQuiz).filter(
+        IntentoQuiz.usuario_id == usuario_id,
+        IntentoQuiz.quiz_id == quiz_id,
+        IntentoQuiz.aprobado == True,
+    ).first() is not None
+
+def obtener_lecciones_completadas_de_modulo(db: Session, usuario_id: int, modulo_id: int) -> list[int]:
+    """Retorna IDs de lecciones completadas por el usuario en un módulo específico."""
+    rows = (
+        db.query(ProgresoLeccion.leccion_id)
+        .join(Leccion, ProgresoLeccion.leccion_id == Leccion.id)
+        .filter(
+            ProgresoLeccion.usuario_id == usuario_id,
+            Leccion.modulo_id == modulo_id,
+            ProgresoLeccion.completada == True,
+        ).all()
+    )
+    return [r[0] for r in rows]
+
+def obtener_quizzes_aprobados(db: Session, usuario_id: int) -> list[int]:
+    """Retorna los IDs de quizzes que el usuario aprobó al menos una vez."""
+    intentos = db.query(IntentoQuiz.quiz_id).filter(
+        IntentoQuiz.usuario_id == usuario_id,
+        IntentoQuiz.aprobado == True,
+    ).distinct().all()
+    return [i[0] for i in intentos]
 
 def obtener_insignias_usuario(db: Session, usuario_id: int):
     """Ejecuta un JOIN para obtener los detalles de las insignias ganadas por el usuario."""

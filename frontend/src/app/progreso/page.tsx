@@ -1,10 +1,11 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { Lock } from "lucide-react"
 import Header from "@/components/layout/Header"
-import { getModulos } from "@/lib/api"
+import { getModulos, getProgreso } from "@/lib/api"
 
 const INSIGNIAS_DEF = [
   { orden: 1, nombre: "Conocedor de la IA",   descripcion: "Completaste el Módulo 1", icono: "🧠", flag: "huap_mod1_completado" },
@@ -17,18 +18,39 @@ const TOTAL_LECCIONES = 13
 
 export default function ProgresoPage() {
   const router = useRouter()
-  const [insigniasGanadas] = useState<Record<number, boolean>>(() => {
-    const ganadas: Record<number, boolean> = {}
-    for (const ins of INSIGNIAS_DEF) {
-      ganadas[ins.orden] = localStorage.getItem(ins.flag) === "true"
-    }
-    return ganadas
-  })
+  const { data: session } = useSession()
+  const [insigniasGanadas, setInsigniasGanadas] = useState<Record<number, boolean>>({})
   const [leccionesCompletadas, setLeccionesCompletadas] = useState(0)
 
   useEffect(() => {
-    getModulos()
-      .then((apiModulos) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const token = (session as any)?.accessToken as string | undefined
+
+    async function cargar() {
+      if (token) {
+        const progreso = await getProgreso(token)
+        if (progreso && progreso.modulos.length > 0) {
+          const ganadas: Record<number, boolean> = {}
+          let total = 0
+          for (const estado of progreso.modulos) {
+            if (estado.completado) ganadas[estado.orden] = true
+            total += Math.min(estado.lecciones_completadas.length, TOTALES_POR_ORDEN[estado.orden] ?? 0)
+          }
+          setInsigniasGanadas(ganadas)
+          setLeccionesCompletadas(total)
+          return
+        }
+      }
+
+      // Fallback a localStorage
+      const ganadas: Record<number, boolean> = {}
+      for (const ins of INSIGNIAS_DEF) {
+        ganadas[ins.orden] = localStorage.getItem(ins.flag) === "true"
+      }
+      setInsigniasGanadas(ganadas)
+
+      try {
+        const apiModulos = await getModulos()
         let completadas = 0
         for (const m of apiModulos) {
           const guardadas: number[] = JSON.parse(
@@ -37,12 +59,14 @@ export default function ProgresoPage() {
           completadas += Math.min(guardadas.length, TOTALES_POR_ORDEN[m.orden] ?? 0)
         }
         setLeccionesCompletadas(completadas)
-      })
-      .catch(() => {
-        const fallback = INSIGNIAS_DEF.filter((i) => insigniasGanadas[i.orden]).length
+      } catch {
+        const fallback = INSIGNIAS_DEF.filter((i) => ganadas[i.orden]).length
         setLeccionesCompletadas(fallback)
-      })
-  }, [insigniasGanadas])
+      }
+    }
+
+    cargar()
+  }, [session])
 
   const pct = Math.round((leccionesCompletadas / TOTAL_LECCIONES) * 100)
 
