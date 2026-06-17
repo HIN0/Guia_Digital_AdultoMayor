@@ -111,7 +111,12 @@ def obtener_mensajes_conversacion(db: Session, conversacion_id: int, usuario_id:
 # ── Preguntas (whitelist) — lectura ─────────────────────────────────────────
 
 def obtener_preguntas_activas(db: Session) -> list[PreguntaChatbot]:
-    return db.query(PreguntaChatbot).filter(PreguntaChatbot.activa == True).all()
+    return (
+        db.query(PreguntaChatbot)
+        .join(Patologia)
+        .filter(PreguntaChatbot.activa == True, Patologia.validada == True)
+        .all()
+    )
 
 def listar_todas_las_preguntas(db: Session) -> list[PreguntaChatbot]:
     return db.query(PreguntaChatbot).order_by(PreguntaChatbot.id).all()
@@ -158,7 +163,7 @@ def eliminar_pregunta(db: Session, pregunta_id: int) -> bool:
 # ── Patologías ───────────────────────────────────────────────────────────────
 
 def listar_patologias(db: Session) -> list[Patologia]:
-    return db.query(Patologia).order_by(Patologia.id).all()
+    return db.query(Patologia).filter(Patologia.validada == True).order_by(Patologia.id).all()
 
 def crear_patologia(db: Session, nombre: str) -> Patologia:
     patologia = Patologia(nombre=nombre)
