@@ -52,18 +52,25 @@ LECCIONES_DATA = [
           "n": 3,
           "tipo": "tour",
           "titulo": "Si algo se ve muy chico",
-          "texto": "¿La letra se ve pequeña? Elige el tamaño Grande para agrandarla. Puedes hacerlo en cualquier momento, en cualquier pantalla.",
-          "apoyo_visual": "Demostración del selector Pequeño / Mediano / Grande cambiando el tamaño del texto en vivo."
+          "texto": "¿La letra se ve pequeña? Tienes dos formas de cambiarla. En la barra superior, usa los botones A- y A+ para achicar o agrandar la letra rápidamente. También puedes ir a Ajustes y elegir el tamaño en la sección 'Tamaño de letra'. Puedes hacerlo en cualquier momento, en cualquier pantalla.",
+          "apoyo_visual": "Barra superior con los botones A- y A+ resaltados. Debajo, captura de la sección Tamaño de letra en Ajustes."
         },
         {
           "n": 4,
+          "tipo": "tour",
+          "titulo": "El botón Escuchar",
+          "texto": "Cada pantalla tiene un botón para que la app te lea el contenido en voz alta. En un computador verás el ícono de bocina con la palabra 'Escuchar'. En el celular verás solo la bocina, sin texto. Para detener el audio, toca el mismo botón: cambiará a 'Detener' o al ícono de parar.",
+          "apoyo_visual": "Dos versiones del botón Escuchar: escritorio (bocina + texto) y celular (solo bocina). Debajo, el botón Detener en ambos formatos."
+        },
+        {
+          "n": 5,
           "tipo": "mini_practica",
           "titulo": "Practiquemos juntos",
           "texto": "Vamos a practicar sin riesgo. Sigue las instrucciones: \"Toca el botón azul para continuar\" → \"Excelente, ahora toca la flecha para volver\" → \"Perfecto, así puedes navegar siempre\".",
           "apoyo_visual": "Guía paso a paso con refuerzo positivo después de cada toque."
         },
         {
-          "n": 5,
+          "n": 6,
           "tipo": "cierre",
           "titulo": "¡Lo estás haciendo muy bien!",
           "texto": "Ya conoces los botones más importantes. Recuerda: la flecha ← siempre te lleva atrás y el botón Inicio te lleva al menú principal. Nunca te vas a perder.",
