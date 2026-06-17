@@ -9,10 +9,6 @@ from typing import List, Optional
 class ProgresoLeccionCreate(BaseModel):
     leccion_id: int
 
-class IntentoQuizCreate(BaseModel):
-    quiz_id: int
-    puntaje: int
-
 class RespuestaItem(BaseModel):
     pregunta_id: int
     opcion_id: int
@@ -49,7 +45,16 @@ class LeccionCompletadaResponse(BaseModel):
     completada: bool
     insignia_otorgada: Optional[InsigniaResponse] = None
 
+class EstadoModulo(BaseModel):
+    modulo_id: int
+    orden: int
+    desbloqueado: bool
+    completado: bool
+    lecciones_completadas: List[int]
+
 class ResumenProgresoResponse(BaseModel):
     lecciones_completadas: List[int]
     quizzes_aprobados: List[int]
     insignias: List[InsigniaResponse]
+    modulos: List[EstadoModulo] = []
+    chatbot_desbloqueado: bool = False
