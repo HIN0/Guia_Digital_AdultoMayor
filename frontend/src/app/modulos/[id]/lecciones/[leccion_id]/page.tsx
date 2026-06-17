@@ -11,7 +11,7 @@ import { getLeccion, getModuloDetalle, completarLeccion, type LeccionDetalle, ty
 const IMAGENES_APOYO: Record<string, string> = {
   // L1 — Bienvenida y navegación
   'Ilustración cálida de una persona mayor sonriendo frente a un teléfono. Botón verde grande "Comenzar".': "/lecciones/modulo1/L1-1.svg",
-  "Flechas animadas señalando: ① la flecha ← para Volver, ② el menú principal (Inicio), ③ el botón de Chat, ④ el botón de progreso, ⑤ el ajuste de tamaño de letra (selector de tamaño de letra).": "/lecciones/modulo1/L1-2.svg",
+  "Flechas animadas señalando: ① la flecha ← para Volver, ② el menú principal (Inicio), ③ el botón de Chat, ④ el botón de progreso, ⑤ el selector de tamaño de letra.": "/lecciones/modulo1/L1-2.svg",
   "Demostración del selector Pequeño / Mediano / Grande cambiando el tamaño del texto en vivo.": "/lecciones/modulo1/L1-3.svg",
   "Guía paso a paso con refuerzo positivo después de cada toque.": "/lecciones/modulo1/L1-4.svg",
   "Mensaje de felicitación con marca de avance del módulo.": "/lecciones/modulo1/L1-5.svg",
