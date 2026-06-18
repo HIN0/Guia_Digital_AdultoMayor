@@ -13,7 +13,9 @@ const IMAGENES_APOYO: Record<string, string> = {
   'Ilustración cálida de una persona mayor sonriendo frente a un teléfono. Botón verde grande "Comenzar".': "/lecciones/modulo1/L1-1.svg",
   "Flechas animadas señalando: ① la flecha ← para Volver, ② el menú principal (Inicio), ③ el botón de Chat, ④ el botón de progreso, ⑤ el selector de tamaño de letra.": "/lecciones/modulo1/L1-2.svg",
   "Demostración del selector Pequeño / Mediano / Grande cambiando el tamaño del texto en vivo.": "/lecciones/modulo1/L1-3.svg",
+  "Barra superior con los botones A- y A+ resaltados. Debajo, captura de la sección Tamaño de letra en Ajustes.": "/lecciones/modulo1/L1-3.svg",
   "Guía paso a paso con refuerzo positivo después de cada toque.": "/lecciones/modulo1/L1-4.svg",
+  "Dos versiones del botón Escuchar: escritorio (bocina + texto) y celular (solo bocina). Debajo, el botón Detener en ambos formatos.": "/lecciones/modulo1/L1-4.svg",
   "Mensaje de felicitación con marca de avance del módulo.": "/lecciones/modulo1/L1-5.svg",
   // L2 — ¿Qué es la IA?
   "Ilustración simple: un computador rodeado de ejemplos con una flecha que sale hacia una respuesta.": "/lecciones/modulo1/L2-1.svg",
@@ -403,7 +405,7 @@ export default function LeccionPage() {
       <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--huap-fondo)" }}>
         <Header />
         <main
-          className="flex-1 flex flex-col px-5 py-6 w-full mx-auto"
+          className="flex-1 flex flex-col px-5 pt-6 pb-32 w-full mx-auto"
           style={{ maxWidth: "680px" }}
         >
           {/* Volver */}
@@ -1597,15 +1599,14 @@ export default function LeccionPage() {
                 IMAGENES_APOYO[pagina.apoyo_visual] ? (
                   (() => {
                     const src = IMAGENES_APOYO[pagina.apoyo_visual]
-                    const grande = src === "/lecciones/modulo2/L6-1.svg" || src === "/lecciones/modulo2/L6-5.svg"
                     return (
-                      <div style={{ display: "flex", justifyContent: grande ? "stretch" : "center", width: "100%" }}>
+                      <div style={{ width: "calc(100% + 48px)", marginLeft: "-24px", marginRight: "-24px" }}>
                         <Image
                           src={src}
                           alt="Ilustración de la lección"
-                          width={grande ? 620 : 340}
-                          height={grande ? 620 : 340}
-                          style={{ objectFit: "contain", width: grande ? "100%" : undefined, height: grande ? "auto" : undefined, maxWidth: "100%", maxHeight: grande ? "min(80vh, 700px)" : "min(55vh, 420px)" }}
+                          width={620}
+                          height={620}
+                          style={{ objectFit: "contain", width: "100%", height: "auto", maxWidth: "100%", maxHeight: "min(80vh, 700px)" }}
                         />
                       </div>
                     )
@@ -1704,7 +1705,7 @@ export default function LeccionPage() {
       <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--huap-fondo)" }}>
         <Header />
         <main
-          className="flex-1 flex flex-col px-5 py-6 w-full mx-auto"
+          className="flex-1 flex flex-col px-5 pt-6 pb-32 w-full mx-auto"
           style={{ maxWidth: "680px" }}
         >
           {/* Volver */}
@@ -2430,7 +2431,7 @@ export default function LeccionPage() {
       <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--huap-fondo)" }}>
         <Header />
         <main
-          className="flex-1 flex flex-col px-5 py-6 w-full mx-auto"
+          className="flex-1 flex flex-col px-5 pt-6 pb-32 w-full mx-auto"
           style={{ maxWidth: "680px" }}
         >
           {/* Volver */}
