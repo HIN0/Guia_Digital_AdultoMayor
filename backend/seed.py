@@ -14,7 +14,6 @@ from sqlalchemy.orm import Session
 sys.path.insert(0, ".")
 
 from core.database import SessionLocal, Base, engine
-from modules.auth.entity import Usuario
 from modules.educacion.entity import Modulo, Leccion, QuizFinal, PreguntaQuiz, OpcionRespuesta
 from modules.progreso.entity import ProgresoLeccion, IntentoQuiz, Insignia, InsigniaObtenida
 # from modules.chatbot.entity import Patologia  # pendiente: módulo chatbot sin entity aún
@@ -58,19 +57,12 @@ LECCIONES_DATA = [
         {
           "n": 4,
           "tipo": "tour",
-          "titulo": "El botón Escuchar",
-          "texto": "Cada pantalla tiene un botón para que la app te lea el contenido en voz alta. En un computador verás el ícono de bocina con la palabra 'Escuchar'. En el celular verás solo la bocina, sin texto. Para detener el audio, toca el mismo botón: cambiará a 'Detener' o al ícono de parar.",
+          "titulo": "¿Cómo escuchar el contenido?",
+          "texto": "En cada pantalla tienes un botón para escuchar el texto en voz alta. Si estás en computador, verás el ícono 🔊 junto a la palabra \"Escuchar\". Si estás en el celular, verás solo el ícono 🔊. Al tocarlo, el audio comienza. Para detenerlo, toca el mismo botón: cambiará a ⏹ \"Detener\". ¡Pruébalo ahora con el botón que ves arriba a la derecha!",
           "apoyo_visual": "Dos versiones del botón Escuchar: escritorio (bocina + texto) y celular (solo bocina). Debajo, el botón Detener en ambos formatos."
         },
         {
           "n": 5,
-          "tipo": "mini_practica",
-          "titulo": "Practiquemos juntos",
-          "texto": "Vamos a practicar sin riesgo. Sigue las instrucciones: \"Toca el botón azul para continuar\" → \"Excelente, ahora toca la flecha para volver\" → \"Perfecto, así puedes navegar siempre\".",
-          "apoyo_visual": "Guía paso a paso con refuerzo positivo después de cada toque."
-        },
-        {
-          "n": 6,
           "tipo": "cierre",
           "titulo": "¡Lo estás haciendo muy bien!",
           "texto": "Ya conoces los botones más importantes. Recuerda: la flecha ← siempre te lleva atrás y el botón Inicio te lleva al menú principal. Nunca te vas a perder.",
@@ -777,7 +769,7 @@ LECCIONES_DATA = [
             "motivo": "Dominio gob.cl y lenguaje formal: señales de sitio oficial."
           },
           {
-            "caso": "WhatsApp: Hola abuelita, soy Dr. Ramírez del HUAP, le tengo un remedio gratis para la artrosis, mándeme su dirección",
+            "caso": "WhatsApp: Hola, soy Dr. Ramírez del HUAP, le tengo un remedio gratis para la artrosis, mándeme su dirección",
             "respuesta": "SOSPECHOSO",
             "motivo": "Un médico real no contacta así ni pide tu dirección por WhatsApp."
           },
@@ -2262,21 +2254,45 @@ def reset_datos(db: Session):
     db.query(Leccion).delete()
     db.query(Modulo).delete()
     # db.query(Patologia).delete()  # pendiente: módulo chatbot sin entity aún
-    db.query(Usuario).delete()
     db.commit()
     print("✓ Datos eliminados. Listo para re-poblar.")
+
+
+def actualizar_contenido(db: Session):
+    modulos = {m.orden: m for m in db.query(Modulo).all()}
+    actualizadas = 0
+    for dato in LECCIONES_DATA:
+        modulo = modulos.get(dato["modulo_id"])
+        if not modulo:
+            print(f"⚠️  Módulo orden={dato['modulo_id']} no encontrado, se omite.")
+            continue
+        leccion = db.query(Leccion).filter_by(modulo_id=modulo.id, orden=dato["orden"]).first()
+        if leccion:
+            leccion.titulo = dato["titulo"]
+            leccion.contenido = dato["contenido"]
+            actualizadas += 1
+        else:
+            print(f"⚠️  Lección orden={dato['orden']} del módulo {dato['modulo_id']} no existe, se omite.")
+    db.commit()
+    print(f"✓ {actualizadas} lecciones actualizadas sin afectar progreso, usuarios ni insignias.")
 
 
 if __name__ == "__main__":
     crear_tablas()
     db = SessionLocal()
     try:
-        if "--reset" in sys.argv:
+        if "--update-content" in sys.argv:
+            actualizar_contenido(db)
+        elif "--reset" in sys.argv:
             reset_datos(db)
-        if db.query(Modulo).count() > 0 and "--reset" not in sys.argv:
-            print("⚠️  Ya hay datos. Usa  python seed.py --reset  para re-poblar.")
+            poblar(db)
+        elif db.query(Modulo).count() > 0:
+            print("⚠️  Ya hay datos. Usa:\n"
+                  "  python seed.py --update-content  → actualiza solo contenido (no borra progreso)\n"
+                  "  python seed.py --reset           → borra TODO y re-pobla desde cero")
             sys.exit(0)
-        poblar(db)
+        else:
+            poblar(db)
     except Exception as e:
         db.rollback()
         print(f"\n❌ Error: {e}")
