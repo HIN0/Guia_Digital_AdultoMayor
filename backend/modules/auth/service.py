@@ -1,7 +1,19 @@
+import uuid
 from sqlalchemy.orm import Session
 from core.security import verify_google_token, create_access_token
 from modules.auth import repository
 from modules.auth.entity import Usuario
+
+
+async def login_como_invitado(db: Session) -> tuple[str, Usuario]:
+    email = f"invitado_{uuid.uuid4().hex[:10]}@invitado.local"
+    nombre = "Invitado"
+    usuario = repository.crear_usuario_invitado(db, email=email, nombre=nombre)
+    access_token = create_access_token({
+        "sub": str(usuario.id),
+        "rol": usuario.rol.value,
+    })
+    return access_token, usuario
 
 
 async def login_con_google(db: Session, google_token: str) -> tuple[str, Usuario]:

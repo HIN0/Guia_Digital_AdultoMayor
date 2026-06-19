@@ -2092,7 +2092,7 @@ QUIZZES_DATA = [
         "submodulo": "2.3"
       },
       {
-        "pregunta": "En cualquier patología, ¿qué cosa NUNCA hace la IA?",
+        "pregunta": "En cualquier patología, ¿qué cosa NO debería hacer la IA?",
         "opciones": [
           
           {
@@ -2275,6 +2275,34 @@ def actualizar_contenido(db: Session):
             print(f"⚠️  Lección orden={dato['orden']} del módulo {dato['modulo_id']} no existe, se omite.")
     db.commit()
     print(f"✓ {actualizadas} lecciones actualizadas sin afectar progreso, usuarios ni insignias.")
+
+    # Actualizar quizzes finales
+    quizzes_actualizados = 0
+    for qdata in QUIZZES_DATA:
+        modulo = modulos.get(qdata["modulo_id"])
+        if not modulo:
+            continue
+        quiz = db.query(QuizFinal).filter_by(modulo_id=modulo.id).first()
+        if not quiz:
+            continue
+        quiz.minimo_aciertos = qdata["minimo_aciertos"]
+        quiz.bloqueante = qdata["bloqueante"]
+        preguntas_db = db.query(PreguntaQuiz).filter_by(quiz_final_id=quiz.id).all()
+        for i, pdata in enumerate(qdata["preguntas"]):
+            if i >= len(preguntas_db):
+                break
+            pregunta = preguntas_db[i]
+            pregunta.enunciado = pdata["pregunta"]
+            pregunta.feedback = pdata["feedback"]
+            opciones_db = db.query(OpcionRespuesta).filter_by(pregunta_id=pregunta.id).all()
+            for j, odata in enumerate(pdata["opciones"]):
+                if j >= len(opciones_db):
+                    break
+                opciones_db[j].texto = odata["texto"]
+                opciones_db[j].es_correcta = odata["correcta"]
+        quizzes_actualizados += 1
+    db.commit()
+    print(f"✓ {quizzes_actualizados} quizzes finales actualizados.")
 
 
 if __name__ == "__main__":

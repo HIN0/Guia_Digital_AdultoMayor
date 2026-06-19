@@ -37,7 +37,8 @@ export default function NavTabs() {
     const check = () => {
       const desbloqueado =
         localStorage.getItem("huap_chatbot_desbloqueado") === "true" ||
-        localStorage.getItem("huap_mod2_completado") === "true"
+        localStorage.getItem("huap_mod2_completado") === "true" ||
+        localStorage.getItem("huap_modo_demo") === "true"
       setChatbotDesbloqueado(desbloqueado)
     }
     check()

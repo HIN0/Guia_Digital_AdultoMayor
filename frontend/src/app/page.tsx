@@ -2,8 +2,16 @@
 
 import { signIn } from "next-auth/react"
 import Image from "next/image"
+import { useState } from "react"
 
 export default function Home() {
+  const [loadingGuest, setLoadingGuest] = useState(false)
+
+  async function handleGuestLogin() {
+    setLoadingGuest(true)
+    await signIn("credentials", { callbackUrl: "/bienvenida" })
+    setLoadingGuest(false)
+  }
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-4"
       style={{ backgroundColor: "var(--huap-fondo)" }}>
@@ -59,6 +67,28 @@ export default function Home() {
               <path fill="none" d="M0 0h48v48H0z"/>
             </svg>
             Entrar con Google 
+          </button>
+
+          <div className="w-full flex items-center gap-3">
+            <div style={{ flex: 1, height: "1px", backgroundColor: "var(--huap-ambar)" }} />
+            <span style={{ color: "var(--huap-texto)", fontSize: "14px" }}>o</span>
+            <div style={{ flex: 1, height: "1px", backgroundColor: "var(--huap-ambar)" }} />
+          </div>
+
+          <button
+            onClick={handleGuestLogin}
+            disabled={loadingGuest}
+            className="w-full py-3 px-6 rounded-lg font-medium"
+            style={{
+              backgroundColor: "transparent",
+              border: "2px solid var(--huap-azul)",
+              color: "var(--huap-azul)",
+              fontSize: "18px",
+              minHeight: "52px",
+              cursor: loadingGuest ? "not-allowed" : "pointer",
+              opacity: loadingGuest ? 0.7 : 1,
+            }}>
+            {loadingGuest ? "Ingresando..." : "Ingresar como Invitado"}
           </button>
 
           <button

@@ -16,11 +16,10 @@ DATA = {
         {
             "pregunta": "¿A qué hora atiende el hospital?",
             "respuesta": (
-                "El hospital atiende de lunes a viernes, de 8 de la mañana a 9 de la noche. "
-                "Los fines de semana, el servicio de urgencias atiende las 24 horas. Si tiene "
-                "una emergencia fuera del horario de atención, vaya a la urgencia más cercana "
-                "o llame al 131. Para confirmar los horarios, también puede preguntar en el "
-                "mesón de atención del hospital."
+                "El Hospital de Urgencia Asistencia Pública (HUAP) atiende las 24 horas del día, "
+                "los 7 días de la semana, todos los días del año. Si tiene una emergencia, puede "
+                "ir directamente al hospital en cualquier momento. Para consultas que no son urgencia, "
+                "le recomendamos llamar primero o acercarse al mesón de atención para orientarse."
             ),
             "variantes": [
                 "¿a qué hora atienden?",

@@ -100,27 +100,32 @@ export default function ModuloDetallePage() {
               </p>
 
               {/* Barra de progreso */}
-              {modulo.lecciones.length > 0 && (
-                <div style={{ marginTop: "16px" }}>
-                  <p style={{ color: "#666", fontSize: "0.85rem", marginBottom: "8px" }}>
-                    {leccionesCompletadas.size} de {modulo.lecciones.length} lecciones completadas
-                  </p>
-                  <div style={{
-                    backgroundColor: "#E8EDF2",
-                    borderRadius: "999px",
-                    height: "10px",
-                    overflow: "hidden",
-                  }}>
+              {modulo.lecciones.length > 0 && (() => {
+                const tieneQuiz = !!modulo.quiz_final
+                const total = modulo.lecciones.length + (tieneQuiz ? 1 : 0)
+                const completados = leccionesCompletadas.size + (tieneQuiz && quizAprobado ? 1 : 0)
+                return (
+                  <div style={{ marginTop: "16px" }}>
+                    <p style={{ color: "#666", fontSize: "0.85rem", marginBottom: "8px" }}>
+                      {completados} de {total} {tieneQuiz ? "pasos completados" : "lecciones completadas"}
+                    </p>
                     <div style={{
-                      backgroundColor: "var(--huap-verde)",
-                      height: "100%",
+                      backgroundColor: "#E8EDF2",
                       borderRadius: "999px",
-                      width: `${(leccionesCompletadas.size / modulo.lecciones.length) * 100}%`,
-                      transition: "width 0.4s ease",
-                    }} />
+                      height: "10px",
+                      overflow: "hidden",
+                    }}>
+                      <div style={{
+                        backgroundColor: "var(--huap-verde)",
+                        height: "100%",
+                        borderRadius: "999px",
+                        width: `${(completados / total) * 100}%`,
+                        transition: "width 0.4s ease",
+                      }} />
+                    </div>
                   </div>
-                </div>
-              )}
+                )
+              })()}
             </div>
 
             {/* Lista de lecciones + quiz final al final */}

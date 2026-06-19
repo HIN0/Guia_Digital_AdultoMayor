@@ -226,22 +226,24 @@ export async function getProgreso(token?: string): Promise<ResumenProgreso | nul
  * Sobreescribe las keys de progreso para eliminar datos obsoletos.
  */
 export function sincronizarLocalStorage(progreso: ResumenProgreso, moduloIds: number[]) {
+  const esDemo = localStorage.getItem("huap_modo_demo") === "true"
+
   for (const estado of progreso.modulos) {
     const key = `huap_mod${estado.modulo_id}_lecciones_completadas`
     localStorage.setItem(key, JSON.stringify(estado.lecciones_completadas))
 
     if (estado.orden === 1) {
       if (estado.completado) localStorage.setItem("huap_mod1_completado", "true")
-      else localStorage.removeItem("huap_mod1_completado")
+      else if (!esDemo) localStorage.removeItem("huap_mod1_completado")
     }
     if (estado.orden === 2) {
       if (estado.completado) localStorage.setItem("huap_mod2_completado", "true")
-      else localStorage.removeItem("huap_mod2_completado")
+      else if (!esDemo) localStorage.removeItem("huap_mod2_completado")
     }
   }
 
   if (progreso.chatbot_desbloqueado) localStorage.setItem("huap_chatbot_desbloqueado", "true")
-  else localStorage.removeItem("huap_chatbot_desbloqueado")
+  else if (!esDemo) localStorage.removeItem("huap_chatbot_desbloqueado")
 
   // Limpiar keys de módulos que no vinieron del backend
   for (const id of moduloIds) {
