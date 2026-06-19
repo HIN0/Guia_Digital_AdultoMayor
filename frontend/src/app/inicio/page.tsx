@@ -3,7 +3,7 @@
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import Header from "@/components/layout/Header"
-import { ChevronRight, Lightbulb, MessageCircle } from "lucide-react"
+import { Lightbulb, MessageCircle } from "lucide-react"
 
 export default function InicioPage() {
   const router = useRouter()
@@ -62,22 +62,17 @@ export default function InicioPage() {
           </div>
         </div>
 
-        {/* Tarjeta fusionada — diseño brillante → /chatbot */}
-        <button
-          onClick={() => router.push("/chatbot")}
+        {/* Tarjeta informativa */}
+        <div
           style={{
             width: "100%",
             background: "white",
-            border: "none",
             borderRadius: "20px",
             overflow: "hidden",
-            cursor: "pointer",
-            textAlign: "left",
-            padding: 0,
             boxShadow: "0 8px 32px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06)",
           }}
         >
-          {/* Sección superior: ámbar — franja izquierda + fondo plano */}
+          {/* Sección superior: ámbar */}
           <div style={{ display: "flex" }}>
             <div aria-hidden="true" style={{ width: "6px", backgroundColor: "#F59E0B", flexShrink: 0 }} />
             <div style={{
@@ -105,43 +100,41 @@ export default function InicioPage() {
                   {" "}Si tienes síntomas graves, acude a tu centro de salud más cercano o llama al 131.
                 </p>
               </div>
-              <ChevronRight size={20} color="#D97706" strokeWidth={2.5} style={{ flexShrink: 0, marginTop: "2px" }} />
             </div>
           </div>
 
           {/* Separador */}
           <div style={{ height: "0.5px", backgroundColor: "#E5E7EB" }} />
 
-          {/* Sección inferior: verde — franja izquierda + fondo plano */}
+          {/* Sección inferior: azul */}
           <div style={{ display: "flex" }}>
-            <div aria-hidden="true" style={{ width: "6px", backgroundColor: "#10B981", flexShrink: 0 }} />
+            <div aria-hidden="true" style={{ width: "6px", backgroundColor: "var(--huap-azul)", flexShrink: 0 }} />
             <div style={{
               flex: 1,
               display: "flex",
               alignItems: "center",
               gap: "14px",
               padding: "18px 16px",
-              backgroundColor: "#F0FDF4",
+              backgroundColor: "#EFF5FF",
             }}>
               <div style={{
                 width: 48, height: 48, borderRadius: "50%", flexShrink: 0,
-                backgroundColor: "#10B981",
+                backgroundColor: "var(--huap-azul)",
                 display: "flex", alignItems: "center", justifyContent: "center",
               }}>
                 <MessageCircle size={24} color="white" strokeWidth={2} />
               </div>
               <div style={{ flex: 1 }}>
-                <p style={{ fontWeight: 700, fontSize: "1rem", margin: "0 0 3px 0", color: "#064E3B" }}>
-                  Haz tu primera pregunta
+                <p style={{ fontWeight: 700, fontSize: "1rem", margin: "0 0 3px 0", color: "#1e3a5f" }}>
+                  Solo temas de salud del HUAP
                 </p>
-                <p style={{ fontSize: "0.93rem", color: "#065F46", lineHeight: 1.4, margin: 0 }}>
-                  Toca una pregunta sugerida o escribe la tuya abajo.
+                <p style={{ fontSize: "0.93rem", color: "#374151", lineHeight: 1.4, margin: 0 }}>
+                  Responde preguntas sobre enfermedades, síntomas y servicios del hospital validadas por profesionales.
                 </p>
               </div>
-              <ChevronRight size={20} color="#059669" strokeWidth={2.5} style={{ flexShrink: 0 }} />
             </div>
           </div>
-        </button>
+        </div>
 
       </main>
     </div>

@@ -13,3 +13,10 @@ def crear_usuario(db: Session, google_id: str, email: str, nombre: str) -> Usuar
     db.commit()
     db.refresh(usuario)
     return usuario
+
+def crear_usuario_invitado(db: Session, email: str, nombre: str) -> Usuario:
+    usuario = Usuario(google_id=None, email=email, nombre=nombre, es_invitado=True)
+    db.add(usuario)
+    db.commit()
+    db.refresh(usuario)
+    return usuario

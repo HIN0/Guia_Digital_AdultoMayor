@@ -120,7 +120,7 @@ export default function ModuloCard({ modulo }: ModuloCardProps) {
                 </span>
               ) : (
                 <span style={{ fontSize: "0.75rem", color: "#6B7280" }}>
-                  {modulo.leccionesCompletadas} de {modulo.leccionesTotales} lecciones
+                  {modulo.leccionesCompletadas} de {modulo.leccionesTotales} {modulo.tieneQuiz ? "pasos" : "lecciones"}
                 </span>
               )}
               <span style={{ fontSize: "0.75rem", fontWeight: 500, color: accentColor }}>

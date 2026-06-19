@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 from modules.auth.entity import RolUsuario
 
 class LoginRequest(BaseModel):
@@ -8,9 +8,10 @@ class LoginRequest(BaseModel):
 class UsuarioResponse(BaseModel):
     """Lo que devolvemos del usuario (nunca el token de Google)."""
     id: int
-    email: EmailStr
+    email: str
     nombre: str
     rol: RolUsuario
+    es_invitado: bool = False
 
     class Config:
         from_attributes = True  # Permite leer desde objetos SQLAlchemy

@@ -14,9 +14,17 @@ export default function Header() {
   const { data: session } = useSession()
   const router = useRouter()
   const [open, setOpen] = useState(false)
-  const [tamano, setTamano] = useState<Tamano>(() => (localStorage.getItem("fontTamano") ?? "mediano") as Tamano)
+  const [tamano, setTamano] = useState<Tamano>(() => {
+    if (typeof window === "undefined") return "mediano"
+    return (localStorage.getItem("fontTamano") ?? "mediano") as Tamano
+  })
+  const [modoDemo, setModoDemo] = useState(false)
   const buttonRef = useRef<HTMLDivElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    setModoDemo(localStorage.getItem("huap_modo_demo") === "true")
+  }, [open])
 
   useEffect(() => {
     document.documentElement.style.fontSize = FONT_MAP[tamano]
@@ -35,6 +43,17 @@ export default function Header() {
     if (open) document.addEventListener("mousedown", handleClickOutside)
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [open])
+
+  function desbloquearTodo() {
+    localStorage.removeItem("huap_mod1_completado")
+    localStorage.removeItem("huap_mod2_completado")
+    localStorage.setItem("huap_modo_demo", "true")
+    localStorage.setItem("huap_chatbot_desbloqueado", "true")
+    window.dispatchEvent(new Event("storage"))
+    setModoDemo(true)
+    setOpen(false)
+    router.refresh()
+  }
 
   function cambiarTamano(dir: -1 | 1) {
     const idx = TAMANOS.indexOf(tamano)
@@ -247,6 +266,27 @@ export default function Header() {
               <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
             </svg>
             Ajustes
+          </button>
+
+          {/* Modo demostración */}
+          <button
+            onClick={desbloquearTodo}
+            disabled={modoDemo}
+            style={{
+              width: "100%", padding: "18px 20px",
+              display: "flex", alignItems: "center", gap: "14px",
+              background: modoDemo ? "#f0fdf4" : "none",
+              border: "none", borderBottom: "1px solid #f0f0f0",
+              cursor: modoDemo ? "default" : "pointer",
+              color: modoDemo ? "#16a34a" : "#7c3aed",
+              fontWeight: 500, fontSize: "17px",
+              textAlign: "left",
+            }}
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+            </svg>
+            {modoDemo ? "Demo activo ✓" : "Desbloquear todo"}
           </button>
 
           {/* Cerrar sesión */}

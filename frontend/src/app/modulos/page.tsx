@@ -8,9 +8,9 @@ import ModuloCard from "@/components/modulos/ModuloCard"
 import { getModulos, getProgreso, sincronizarLocalStorage, type ModuloResumen, type ResumenProgreso } from "@/lib/api"
 import type { Modulo } from "@/types"
 
-const DISPLAY: Record<number, { titulo: string; descripcion: string; leccionesTotales: number }> = {
-  1: { titulo: "Entender qué es la IA",   descripcion: "Cómo funciona, qué puede y qué no puede hacer", leccionesTotales: 6 },
-  2: { titulo: "Practicar con la IA",     descripcion: "Hacer preguntas, leer respuestas, verificar",   leccionesTotales: 6 },
+const DISPLAY: Record<number, { titulo: string; descripcion: string; leccionesTotales: number; tieneQuiz?: boolean }> = {
+  1: { titulo: "Entender qué es la IA",   descripcion: "Cómo funciona, qué puede y qué no puede hacer", leccionesTotales: 7, tieneQuiz: true },
+  2: { titulo: "Practicar con la IA",     descripcion: "Hacer preguntas, leer respuestas, verificar",   leccionesTotales: 7, tieneQuiz: true },
   3: { titulo: "Asistente de IA",         descripcion: "Conversa sobre temas de salud",                 leccionesTotales: 1 },
 }
 
@@ -18,7 +18,7 @@ function construirDesdeBackend(apiModulos: ModuloResumen[], progreso: ResumenPro
   return apiModulos.map((m) => {
     const display = DISPLAY[m.orden] ?? { titulo: m.nombre, descripcion: "", leccionesTotales: 0 }
     const estado = progreso.modulos.find(e => e.modulo_id === m.id)
-    const leccionesTotales = display.leccionesTotales
+    const { leccionesTotales, tieneQuiz } = { tieneQuiz: false, ...display }
 
     if (!estado) {
       return {
@@ -27,7 +27,9 @@ function construirDesdeBackend(apiModulos: ModuloResumen[], progreso: ResumenPro
       }
     }
 
-    const completadas = Math.min(estado.lecciones_completadas.length, leccionesTotales)
+    const leccionesMax = tieneQuiz ? leccionesTotales - 1 : leccionesTotales
+    const leccionesCount = Math.min(estado.lecciones_completadas.length, leccionesMax)
+    const completadas = leccionesCount + (tieneQuiz && estado.completado ? 1 : 0)
     const pct = estado.completado ? 100 : leccionesTotales > 0 ? Math.round((completadas / leccionesTotales) * 100) : 0
 
     return {
@@ -42,15 +44,18 @@ function construirDesdeBackend(apiModulos: ModuloResumen[], progreso: ResumenPro
 function construirDesdeLocalStorage(apiModulos: ModuloResumen[]): Modulo[] {
   const mod1completado = localStorage.getItem("huap_mod1_completado") === "true"
   const mod2completado = localStorage.getItem("huap_mod2_completado") === "true"
+  const esDemo = localStorage.getItem("huap_modo_demo") === "true"
 
   return apiModulos.map((m) => {
     const display = DISPLAY[m.orden] ?? { titulo: m.nombre, descripcion: "", leccionesTotales: 0 }
-    const leccionesTotales = display.leccionesTotales
+    const { leccionesTotales, tieneQuiz } = { tieneQuiz: false, ...display }
     const guardadas: number[] = JSON.parse(localStorage.getItem(`huap_mod${m.id}_lecciones_completadas`) ?? "[]")
-    const completadas = guardadas.length
-    const progreso = leccionesTotales > 0 ? Math.round((completadas / leccionesTotales) * 100) : 0
+    const leccionesMax = tieneQuiz ? leccionesTotales - 1 : leccionesTotales
+    const leccionesCount = Math.min(guardadas.length, leccionesMax)
 
     if (m.orden === 1) {
+      const completadas = leccionesCount + (mod1completado ? 1 : 0)
+      const progreso = leccionesTotales > 0 ? Math.round((completadas / leccionesTotales) * 100) : 0
       return {
         id: m.id, numero: m.orden, ...display,
         estado: mod1completado ? "completado" : "disponible",
@@ -59,19 +64,25 @@ function construirDesdeLocalStorage(apiModulos: ModuloResumen[]): Modulo[] {
       }
     }
     if (m.orden === 2) {
+      const desbloqueado = mod1completado || esDemo
+      const completadas = desbloqueado ? leccionesCount + (mod2completado ? 1 : 0) : 0
+      const progreso = desbloqueado && leccionesTotales > 0 ? Math.round((completadas / leccionesTotales) * 100) : 0
       return {
         id: m.id, numero: m.orden, ...display,
-        estado: mod2completado ? "completado" : mod1completado ? "disponible" : "bloqueado",
-        progreso: mod2completado ? 100 : mod1completado ? progreso : 0,
-        leccionesCompletadas: mod2completado ? leccionesTotales : mod1completado ? completadas : 0,
+        estado: mod2completado ? "completado" : desbloqueado ? "disponible" : "bloqueado",
+        progreso: mod2completado ? 100 : desbloqueado ? progreso : 0,
+        leccionesCompletadas: mod2completado ? leccionesTotales : desbloqueado ? completadas : 0,
       }
     }
+    const desbloqueado = mod2completado || esDemo
+    const completadas = leccionesCount
+    const progreso = leccionesTotales > 0 ? Math.round((completadas / leccionesTotales) * 100) : 0
     const repasoCompletado = completadas >= 1
     return {
       id: m.id, numero: m.orden, ...display,
-      estado: repasoCompletado ? "completado" : mod2completado ? "disponible" : "bloqueado",
-      progreso: repasoCompletado ? 100 : mod2completado ? progreso : 0,
-      leccionesCompletadas: repasoCompletado ? 1 : mod2completado ? completadas : 0,
+      estado: repasoCompletado ? "completado" : desbloqueado ? "disponible" : "bloqueado",
+      progreso: repasoCompletado ? 100 : desbloqueado ? progreso : 0,
+      leccionesCompletadas: repasoCompletado ? 1 : desbloqueado ? completadas : 0,
     }
   })
 }
@@ -84,9 +95,11 @@ export default function ModulosPage() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const token = (session as any)?.accessToken as string | undefined
 
+    const esDemo = localStorage.getItem("huap_modo_demo") === "true"
+
     getModulos()
       .then(async (apiModulos) => {
-        if (token) {
+        if (token && !esDemo) {
           const progreso = await getProgreso(token)
           if (progreso && progreso.modulos.length > 0) {
             sincronizarLocalStorage(progreso, apiModulos.map(m => m.id))

@@ -11,4 +11,5 @@ export interface Modulo {
   progreso: number; // 0–100
   leccionesCompletadas?: number;
   leccionesTotales?: number;
+  tieneQuiz?: boolean;
 }

@@ -8,6 +8,18 @@ from modules.auth.schema import LoginRequest, TokenResponse, UsuarioResponse
 router = APIRouter(prefix="/auth", tags=["Autenticación"])
 
 
+@router.post("/invitado", response_model=TokenResponse)
+async def login_invitado(db: Session = Depends(get_db)):
+    """
+    Crea un usuario invitado único y devuelve un JWT para acceder a la plataforma.
+    """
+    try:
+        access_token, usuario = await service.login_como_invitado(db)
+        return TokenResponse(access_token=access_token, usuario=usuario)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.post("/login", response_model=TokenResponse)
 async def login(body: LoginRequest, db: Session = Depends(get_db)):
     """
