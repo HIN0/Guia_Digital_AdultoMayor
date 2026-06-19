@@ -1,3 +1,4 @@
+import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -58,9 +59,16 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# Orígenes permitidos para CORS.
+# En local usa http://localhost:3000; en producción define ALLOWED_ORIGINS
+# como lista separada por comas, ej:
+#   ALLOWED_ORIGINS=https://mi-app.vercel.app,http://localhost:3000
+_origins_env = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000")
+allowed_origins = [o.strip() for o in _origins_env.split(",") if o.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -75,3 +83,9 @@ app.include_router(chatbot_router, prefix="/api")
 @app.get("/")
 def root():
     return {"mensaje": "API funcionando. Visita /docs para ver la documentación."}
+
+
+@app.get("/health")
+def health():
+    """Endpoint liviano para el ping anti-sueño (no toca la base de datos)."""
+    return {"status": "ok"}

@@ -1,0 +1,21 @@
+# Entornos virtuales y caché de Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Variables de entorno locales (NUNCA subir al build/imagen)
+.env
+.env.*
+
+# Git
+.git/
+.gitignore
+
+# Editores / SO
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

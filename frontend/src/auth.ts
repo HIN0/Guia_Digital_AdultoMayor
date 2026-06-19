@@ -2,6 +2,10 @@ import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
 import Credentials from "next-auth/providers/credentials"
 
+// URL base del backend. En producción se define con NEXT_PUBLIC_API_URL
+// (ej: https://<tu-space>.hf.space/api). En local cae a localhost:8000.
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api"
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
     Google,
@@ -10,7 +14,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       credentials: {},
       async authorize() {
         try {
-          const response = await fetch("http://localhost:8000/api/auth/invitado", {
+          const response = await fetch(`${API_URL}/auth/invitado`, {
             method: "POST",
           })
           if (!response.ok) return null
@@ -34,7 +38,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async signIn({ account }) {
       if (account?.provider === "google" && account.id_token) {
         try {
-          const response = await fetch("http://localhost:8000/api/auth/login", {
+          const response = await fetch(`${API_URL}/auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ google_token: account.id_token }),
