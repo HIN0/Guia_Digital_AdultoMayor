@@ -36,6 +36,11 @@ DATA = {
                 "hasta que hora estan abiertos",
                 "atienden de noche",
                 "que dias atienden",
+                "horarios del huap",
+                "horarios del hospital",
+                "horario huap",
+                "horarios de atencion del huap",
+                "horarios",
             ],
         },
         {
