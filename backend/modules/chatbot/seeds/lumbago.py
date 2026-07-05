@@ -39,6 +39,7 @@ DATA = {
                 "dolor de espalda baja causas",
                 "me duele la zona lumbar",
                 "que es el dolor lumbar",
+                "sintomas del lumbago",
             ],
         },
         {

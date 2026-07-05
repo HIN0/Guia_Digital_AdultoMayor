@@ -40,6 +40,9 @@ DATA = {
                 "tos con flema y fiebre que sera",
                 "diferencia entre neumonia y pulmonia",
                 "que significa tener neumonia",
+                "sintomas de la neumonia",
+                "cuales son los sintomas de la pulmonia",
+                "como se manifiesta la neumonia",
             ],
         },
         {
@@ -115,6 +118,29 @@ DATA = {
                 "decaimiento puede ser neumonia",
                 "mi familiar mayor no reacciona bien",
                 "neumonia atipica adulto mayor sintomas",
+            ],
+        },
+        {
+            "pregunta": "¿Quiénes tienen más riesgo de enfermar de neumonía?",
+            "respuesta": (
+                "El riesgo aumenta con la edad, por eso las personas mayores deben "
+                "cuidarse más. También tienen más riesgo quienes fuman, quienes viven con "
+                "enfermedades crónicas (como diabetes o problemas al corazón) y quienes "
+                "tienen dificultades para tragar. La buena noticia es que la vacuna y no "
+                "fumar reducen mucho el riesgo. Pregunte en su CESFAM por su vacuna."
+            ),
+            "variantes": [
+                "factores de riesgo de la neumonía",
+                "quienes se enferman mas de neumonia",
+                "por que da la neumonia",
+                "que causa la neumonia",
+                "fumar da neumonia",
+                "el cigarro afecta los pulmones",
+                "soy diabetico tengo mas riesgo de neumonia",
+                "a quien le da pulmonia",
+                "por que los adultos mayores se enferman de neumonia",
+                "tengo mas riesgo de neumonia por mi edad",
+                "me atoro al tragar es un riesgo",
             ],
         },
         {
