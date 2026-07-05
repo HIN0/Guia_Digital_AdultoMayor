@@ -41,6 +41,9 @@ DATA = {
                 "vomito y diarrea que tengo",
                 "infeccion al estomago",
                 "que es una virosis estomacal",
+                "sintomas de la gastroenteritis",
+                "sintomas de infeccion estomacal",
+                "cuales son los sintomas de la gastroenteritis",
             ],
         },
         {
@@ -175,6 +178,29 @@ DATA = {
                 "comida blanda para la diarrea",
                 "que alimentos evitar con diarrea",
                 "que le doy de comer a mi mama con diarrea",
+            ],
+        },
+        {
+            "pregunta": "¿Por qué me dio gastroenteritis?",
+            "respuesta": (
+                "Casi siempre la causa un virus o una bacteria. Se contagia por alimentos "
+                "o agua contaminada, o por contacto con personas enfermas, sobre todo a "
+                "través de las manos sucias. Comer algo en mal estado o mal cocido también "
+                "puede provocarla. Por eso es tan importante lavarse bien las manos y "
+                "mantener buena higiene en la cocina."
+            ),
+            "variantes": [
+                "¿qué causa la gastroenteritis?",
+                "por que da la gastroenteritis",
+                "de donde viene la gastroenteritis",
+                "me enferme por algo que comi",
+                "comi algo en mal estado y estoy con diarrea",
+                "la comida puede darme diarrea",
+                "el agua puede darme diarrea",
+                "por que me enferme del estomago",
+                "que produce la infeccion estomacal",
+                "me intoxique con la comida",
+                "puede ser por la comida la diarrea",
             ],
         },
         {

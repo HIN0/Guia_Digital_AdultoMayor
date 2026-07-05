@@ -29,6 +29,25 @@ El asistente entrega información general validada para orientar; no reemplaza a
 
 ---
 
+## GLOSARIO DE SALUD — TÉRMINOS QUE CONVIENE CONOCER
+
+### ¿Qué es el CESFAM o consultorio?
+El CESFAM (Centro de Salud Familiar) es el consultorio del barrio, la puerta de entrada al sistema público de salud cuando no es una urgencia. Ahí se hacen los controles de enfermedades crónicas (como la presión o la diabetes), se colocan las vacunas, se entregan medicamentos y se pide hora con el médico general. Cada persona se atiende en el CESFAM que corresponde a su domicilio; para inscribirse basta acercarse con el carnet de identidad.
+
+### ¿Qué es FONASA?
+FONASA (Fondo Nacional de Salud) es el seguro público de salud de Chile, y la mayoría de las personas mayores son beneficiarias. Con el carnet de identidad se puede atender en el sistema público (CESFAM y hospitales). Según el tramo de FONASA, muchas atenciones son gratuitas o con un copago reducido. Para conocer su tramo o resolver dudas, la persona puede preguntar en su CESFAM o revisar la información oficial de FONASA.
+
+### ¿Qué es el GES (ex AUGE)?
+El GES (Garantías Explícitas en Salud), antes llamado AUGE, es un plan que garantiza por ley la atención de una lista de enfermedades, con plazos máximos y costos conocidos. Por ejemplo, la hipertensión está cubierta desde los 15 años, y el tratamiento de la neumonía en personas de 65 años y más tiene copago $0 para beneficiarios de FONASA. Si al paciente le diagnostican una enfermedad cubierta por el GES, en su CESFAM u hospital deben informárselo y activar la garantía.
+
+### ¿Qué es el 131 (SAMU)?
+El 131 es el número de teléfono de la ambulancia (SAMU) en Chile. La llamada es gratuita y atiende las 24 horas. Se debe llamar al 131 ante una emergencia: dolor de pecho, dificultad para respirar, pérdida de conocimiento, una caída con dolor intenso, debilidad repentina en un lado del cuerpo o dificultad para hablar. Al llamar, conviene decir con calma qué pasó y dónde está la persona, y seguir las indicaciones del operador.
+
+### ¿Urgencia o consultorio? Dónde consultar según el caso
+Si hay señales de alarma (dolor de pecho, falta de aire, confusión repentina, sangrado que no se detiene, caída con dolor fuerte), la persona debe ir a urgencias o llamar al 131 sin esperar. Si la molestia no es urgente (un control, un ardor al orinar sin fiebre, un dolor que lleva días pero es soportable), lo indicado es consultar en el CESFAM. Ante la duda de si es grave o no, es mejor acudir a urgencias: ahí orientarán a la persona.
+
+---
+
 ## GASTROENTERITIS AGUDA
 
 ### ¿Qué es la gastroenteritis aguda?

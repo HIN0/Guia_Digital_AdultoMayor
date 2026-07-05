@@ -41,6 +41,9 @@ DATA = {
                 "orina turbia y mal olor",
                 "infeccion a la vejiga",
                 "que es una itu",
+                "sintomas de la infeccion urinaria",
+                "sintomas de infeccion de orina",
+                "cuales son los sintomas de la cistitis",
             ],
         },
         {
@@ -112,6 +115,30 @@ DATA = {
                 "infeccion urinaria solo con confusion",
                 "mi abuelo cambio de animo sera infeccion",
                 "infeccion urinaria en adulto mayor confusion",
+            ],
+        },
+        {
+            "pregunta": "¿Los hombres también tienen infección urinaria?",
+            "respuesta": (
+                "Sí. Aunque es más común en mujeres, los hombres mayores también pueden "
+                "tenerla. Una causa frecuente es la próstata aumentada, que dificulta "
+                "vaciar bien la vejiga y favorece que las bacterias se acumulen. La "
+                "diabetes, la retención de orina y el uso de sonda también aumentan el "
+                "riesgo. Si un hombre tiene ardor al orinar, fiebre o va al baño a cada "
+                "rato, debe consultar en su CESFAM."
+            ),
+            "variantes": [
+                "infección urinaria en hombres",
+                "los hombres tienen cistitis",
+                "mi esposo tiene infeccion a la orina",
+                "mi papa tiene infeccion urinaria",
+                "soy hombre y me arde al orinar",
+                "la prostata da infeccion urinaria",
+                "la prostata agrandada causa infeccion",
+                "por que los hombres tienen infeccion de orina",
+                "el hombre tambien se infecta la orina",
+                "infeccion de orina en el hombre mayor",
+                "a los hombres les da infeccion urinaria",
             ],
         },
         {

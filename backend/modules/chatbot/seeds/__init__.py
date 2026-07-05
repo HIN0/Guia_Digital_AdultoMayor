@@ -9,9 +9,9 @@ PARA AGREGAR UNA PATOLOGÍA NUEVA:
 No hay que tocar seed.py nunca.
 """
 
-from . import general, gastroenteritis, neumonia, itu, cefalea, lumbago, huap
+from . import general, gastroenteritis, neumonia, itu, cefalea, lumbago, huap, hipertension, caidas, glosario
 
-_MODULOS = [general, gastroenteritis, neumonia, itu, cefalea, lumbago, huap]
+_MODULOS = [general, gastroenteritis, neumonia, itu, cefalea, lumbago, huap, hipertension, caidas, glosario]
 
 SEED_DATA = {}
 for _modulo in _MODULOS:

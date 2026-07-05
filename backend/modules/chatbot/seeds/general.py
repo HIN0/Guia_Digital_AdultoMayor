@@ -26,20 +26,27 @@ DATA = {
             "variantes": ["muchas gracias", "se agradece", "gracias por la ayuda",
                           "muy amable", "ok gracias", "graciaa", "mil gracias",
                           "gracias totales", "te pasaste gracias", "muchas grasias",
-                          "ya gracias", "perfecto gracias", "buenisimo gracias"],
+                          "ya gracias", "perfecto gracias", "buenisimo gracias",
+                          "se lo agradezco", "gracias por la informacion",
+                          "muchas gracias por su ayuda", "gracias eso queria saber",
+                          "excelente gracias", "me sirvio mucho gracias"],
         },
         {
             "pregunta": "adiós",
             "respuesta": "Hasta pronto. Cuídese mucho y recuerde asistir a sus controles médicos.",
             "variantes": ["chao", "hasta luego", "nos vemos", "me voy", "eso era todo",
                           "chau", "adios", "hasta pronto", "me despido", "gracias chao",
-                          "nos vemos luego", "hasta la proxima", "ya me voy"],
+                          "nos vemos luego", "hasta la proxima", "ya me voy",
+                          "chaito", "chao chao", "que este bien", "cuidese",
+                          "hasta mañana", "me retiro", "un gusto hasta luego",
+                          "listo eso era", "ya eso seria todo"],
         },
         {
             "pregunta": "¿qué puedes hacer?",
             "respuesta": (
-                "Puedo responder sus preguntas sobre salud: gastroenteritis, neumonía, "
-                "infección urinaria, dolor de cabeza y lumbago. También le oriento sobre "
+                "Puedo responder sus preguntas sobre salud: presión alta, caídas, "
+                "gastroenteritis, neumonía, infección urinaria, dolor de cabeza y lumbago. "
+                "También le explico términos como CESFAM, FONASA o GES, le oriento sobre "
                 "cuándo ir a urgencias o llamar al 131, y le doy información del HUAP. "
                 "¿Sobre qué le gustaría saber?"
             ),
@@ -48,7 +55,10 @@ DATA = {
                           "que haces", "para que sirve esto", "en que me ayudas",
                           "que cosas sabes", "que me puedes responder",
                           "sobre que puedo preguntar", "que temas manejas",
-                          "que puedo preguntarte", "ayudame"],
+                          "que puedo preguntarte", "ayudame",
+                          "menu", "opciones", "que temas cubres",
+                          "de que puedo hablar contigo", "muestrame los temas",
+                          "que informacion tienes", "lista de temas"],
         },
         {
             "pregunta": "¿quién eres?",
