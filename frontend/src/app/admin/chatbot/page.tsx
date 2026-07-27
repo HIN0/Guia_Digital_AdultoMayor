@@ -100,8 +100,16 @@ const FORM_VACIO: FormNuevaPregunta = {
 // ── Componente principal ──────────────────────────────────────────────────────
 
 export default function AdminChatbotPage() {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const router = useRouter()
+
+  useEffect(() => {
+    if (status === "loading") return
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if ((session as any)?.rol !== "admin") {
+      router.replace("/inicio")
+    }
+  }, [session, status, router])
 
   const [patologias, setPatologias] = useState<PatologiaOut[]>([])
   const [preguntas, setPreguntas] = useState<PreguntaChatbotOut[]>([])

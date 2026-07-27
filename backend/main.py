@@ -54,11 +54,15 @@ async def lifespan(app: FastAPI):
     yield
 
 
+_en_desarrollo = os.getenv("ENVIRONMENT", "production") == "development"
+
 app = FastAPI(
     title="Guía Digital Adulto Mayor - API",
     description="API educativa de IA y Salud para personas mayores",
     version="0.1.0",
     lifespan=lifespan,
+    docs_url="/docs" if _en_desarrollo else None,
+    redoc_url="/redoc" if _en_desarrollo else None,
 )
 
 # Orígenes permitidos para CORS.

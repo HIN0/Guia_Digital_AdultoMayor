@@ -37,7 +37,13 @@ def otorgar_insignia_modulo(db: Session, usuario_id: int, modulo_orden: int):
 
 
 def registrar_leccion(db: Session, usuario_id: int, progreso: ProgresoLeccionCreate):
-    """Inserta un nuevo registro de lección completada para un usuario."""
+    """Registra una lección como completada. Idempotente: no crea duplicados."""
+    existente = db.query(ProgresoLeccion).filter(
+        ProgresoLeccion.usuario_id == usuario_id,
+        ProgresoLeccion.leccion_id == progreso.leccion_id,
+    ).first()
+    if existente:
+        return existente
     nuevo_progreso = ProgresoLeccion(
         usuario_id=usuario_id,
         leccion_id=progreso.leccion_id,
@@ -132,7 +138,9 @@ def obtener_lecciones_completadas_de_modulo(db: Session, usuario_id: int, modulo
             ProgresoLeccion.usuario_id == usuario_id,
             Leccion.modulo_id == modulo_id,
             ProgresoLeccion.completada == True,
-        ).all()
+        )
+        .distinct()
+        .all()
     )
     return [r[0] for r in rows]
 

@@ -40,9 +40,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return true;
     },
 
-    async jwt({ token, account, user }) {
+    async jwt({ token, account }) {
       if (account?.backend_access_token) {
         token.accessToken = account.backend_access_token;
+        try {
+          const [, payload] = (account.backend_access_token as string).split(".")
+          // Los JWT usan base64url (- y _ en lugar de + y /); atob() requiere base64 estándar
+          const base64 = payload.replace(/-/g, "+").replace(/_/g, "/")
+          const decoded = JSON.parse(atob(base64))
+          token.rol = decoded.rol as string
+        } catch {
+          token.rol = "alumno"
+        }
       }
       return token;
     },
@@ -50,6 +59,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async session({ session, token }) {
       // @ts-expect-error (evitar error tipado si no has extendido los types de NextAuth)
       session.accessToken = token.accessToken;
+      // @ts-expect-error
+      session.rol = token.rol;
       return session;
     }
   },

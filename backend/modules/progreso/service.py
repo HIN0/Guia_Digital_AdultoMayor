@@ -76,6 +76,23 @@ def procesar_intento_quiz(db: Session, usuario_id: int, submit: schema.SubmitQui
     return repository.procesar_quiz(db, usuario_id, submit)
 
 
+def chatbot_esta_desbloqueado(db: Session, usuario_id: int) -> bool:
+    """Verifica en BD si el usuario completó Módulo 2 o Módulo 3."""
+    quizzes_aprobados = set(repository.obtener_quizzes_aprobados(db, usuario_id))
+    modulos = db.query(Modulo).filter(Modulo.orden.in_([2, 3])).all()
+    for modulo in modulos:
+        if modulo.quiz_final:
+            if modulo.quiz_final.id in quizzes_aprobados:
+                return True
+        else:
+            completadas = set(repository.obtener_lecciones_completadas_de_modulo(
+                db, usuario_id, modulo.id
+            ))
+            if completadas and len(completadas) >= len(modulo.lecciones):
+                return True
+    return False
+
+
 def obtener_resumen_usuario(db: Session, usuario_id: int):
     """Compila el estado global del usuario para el dashboard o vistas de perfil."""
     lecciones = repository.obtener_lecciones_usuario(db, usuario_id)
