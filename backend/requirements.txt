@@ -27,3 +27,6 @@ sentence-transformers>=2.7.0
 # OPCIÓN FUTURA — OpenAI (requiere OPENAI_API_KEY con billing)
 # langchain-openai==0.1.17
 # tiktoken>=0.7.0
+
+# --- Herramientas de desarrollo ---
+ruff>=0.5.0
