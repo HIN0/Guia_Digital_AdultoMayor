@@ -13,6 +13,8 @@ export function proxy(request: NextRequest) {
     request.nextUrl.pathname.startsWith("/quiz") ||
     request.nextUrl.pathname.startsWith("/chatbot") ||
     request.nextUrl.pathname.startsWith("/perfil") ||
+    request.nextUrl.pathname.startsWith("/progreso") ||
+    request.nextUrl.pathname.startsWith("/ajustes") ||
     request.nextUrl.pathname.startsWith("/admin")
 
   if (isProtectedRoute && !sessionToken) {
@@ -23,5 +25,15 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/inicio/:path*", "/bienvenida/:path*", "/modulos/:path*", "/quiz/:path*", "/chatbot/:path*", "/perfil/:path*"],
+  matcher: [
+    "/inicio/:path*",
+    "/bienvenida/:path*",
+    "/modulos/:path*",
+    "/quiz/:path*",
+    "/chatbot/:path*",
+    "/perfil/:path*",
+    "/progreso/:path*",
+    "/ajustes/:path*",
+    "/admin/:path*",
+  ],
 }
