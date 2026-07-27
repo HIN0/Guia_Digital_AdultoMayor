@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, Header
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from core.database import get_db
-from core.security import decode_token
+from core.dependencies import get_usuario_actual
 from modules.auth import service
+from modules.auth.entity import Usuario
 from modules.auth.schema import LoginRequest, TokenResponse, UsuarioResponse
 
 router = APIRouter(prefix="/auth", tags=["Autenticación"])
@@ -22,16 +23,6 @@ async def login(body: LoginRequest, db: Session = Depends(get_db)):
 
 
 @router.get("/me", response_model=UsuarioResponse)
-def get_me(authorization: str = Header(...), db: Session = Depends(get_db)):
-    """
-    Devuelve los datos del usuario autenticado.
-    El frontend debe enviar: Authorization: Bearer <token>
-    """
-    try:
-        token = authorization.replace("Bearer ", "")
-        payload = decode_token(token)
-        usuario_id = int(payload["sub"])
-        usuario = service.get_usuario_actual(db, usuario_id)
-        return usuario
-    except (ValueError, KeyError):
-        raise HTTPException(status_code=401, detail="No autenticado")
+def get_me(usuario: Usuario = Depends(get_usuario_actual)):
+    """Devuelve los datos del usuario autenticado. Requiere: Authorization: Bearer <token>"""
+    return usuario

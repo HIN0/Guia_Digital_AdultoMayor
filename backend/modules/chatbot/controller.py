@@ -13,6 +13,7 @@ from .schema import (
     PatologiaCreate, PatologiaOut,
 )
 from .service import generar_y_guardar_respuesta, cargar_preguntas_validadas
+from modules.progreso.service import chatbot_esta_desbloqueado
 from . import repository as repo
 
 logger = logging.getLogger(__name__)
@@ -28,6 +29,11 @@ def hacer_pregunta(
     db: Session = Depends(get_db),
     usuario: Usuario = Depends(get_usuario_actual),
 ):
+    if not chatbot_esta_desbloqueado(db, usuario.id):
+        raise HTTPException(
+            status_code=403,
+            detail="Debes completar el Módulo 2 para acceder al asistente.",
+        )
     try:
         resultado = generar_y_guardar_respuesta(
             db=db,

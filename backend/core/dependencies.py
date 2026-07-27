@@ -14,8 +14,10 @@ def get_usuario_actual(
     Úsala en cualquier endpoint que requiera login:
         def mi_endpoint(usuario: Usuario = Depends(get_usuario_actual)):
     """
+    scheme, _, token = authorization.partition(" ")
+    if scheme.lower() != "bearer" or not token:
+        raise HTTPException(status_code=401, detail="Header Authorization inválido")
     try:
-        token = authorization.replace("Bearer ", "")
         payload = decode_token(token)
         usuario_id = int(payload["sub"])
     except (ValueError, KeyError):
@@ -33,8 +35,10 @@ def get_usuario_opcional(
     """Igual que get_usuario_actual pero retorna None si no hay token válido."""
     if not authorization:
         return None
+    scheme, _, token = authorization.partition(" ")
+    if scheme.lower() != "bearer" or not token:
+        return None
     try:
-        token = authorization.replace("Bearer ", "")
         payload = decode_token(token)
         usuario_id = int(payload["sub"])
     except (ValueError, KeyError):
