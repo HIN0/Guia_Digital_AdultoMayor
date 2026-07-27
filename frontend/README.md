@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend — Guía Digital Adulto Mayor (Next.js)
 
-## Getting Started
+Plataforma educativa de IA y salud para adultos mayores del HUAP. Permite a los usuarios completar módulos de aprendizaje y consultar un asistente de salud con IA.
 
-First, run the development server:
+## Requisitos previos
+
+- Node.js 20+
+- Backend FastAPI corriendo (ver `../backend/README.md`)
+
+## Instalación
+
+```bash
+cd frontend
+npm install
+```
+
+## Variables de entorno
+
+Copiar `.env.example` a `.env.local` y completar los valores:
+
+```bash
+cp .env.example .env.local
+```
+
+| Variable | Descripción | Ejemplo local |
+|---|---|---|
+| `NEXT_PUBLIC_API_URL` | URL del backend FastAPI | `http://localhost:8000/api` |
+| `AUTH_GOOGLE_ID` | Client ID de Google OAuth | Ver Google Cloud Console |
+| `AUTH_GOOGLE_SECRET` | Client Secret de Google OAuth | Ver Google Cloud Console |
+| `AUTH_SECRET` | Clave secreta para NextAuth | Generar con `openssl rand -hex 32` |
+| `AUTH_URL` | URL pública del frontend | `http://localhost:3000` |
+
+> Las credenciales de Google OAuth (`AUTH_GOOGLE_ID` y `AUTH_GOOGLE_SECRET`) son las **mismas** que usa el backend.
+
+## Levantar en desarrollo
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Otros comandos
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build   # build de producción
+npm run lint    # análisis estático con ESLint
+npm run start   # servidor de producción (requiere build previo)
+```
 
-## Learn More
+## Stack
 
-To learn more about Next.js, take a look at the following resources:
+- **Next.js 16** con App Router
+- **React 19**, **TypeScript 5**
+- **NextAuth v5 beta** para autenticación con Google
+- **TailwindCSS v4**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Estructura principal
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+├── app/                  ← páginas (App Router)
+│   ├── modulos/[id]/lecciones/[leccion_id]/page.tsx
+│   ├── quiz/[id]/page.tsx
+│   ├── chatbot/page.tsx
+│   └── progreso/page.tsx
+├── components/layout/    ← Header, NavTabs, Footer, SessionProvider
+├── lib/api.ts            ← todas las llamadas al backend y sus tipos
+└── auth.ts               ← configuración de NextAuth
+```

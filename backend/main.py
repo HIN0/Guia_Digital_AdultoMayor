@@ -1,20 +1,22 @@
+import logging
 import os
 from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from core.database import Base, engine, SessionLocal
-
 from modules.auth import entity as auth_entity
-from modules.educacion import entity as educacion_entity
-from modules.progreso import entity as progreso_entity
-from modules.chatbot import entity as chatbot_entity
-
 from modules.auth.controller import router as auth_router
-from modules.educacion.controller import router as educacion_router
-from modules.progreso.controller import router as progreso_router
+from modules.chatbot import entity as chatbot_entity
 from modules.chatbot.controller import router as chatbot_router
 from modules.chatbot.service import inicializar_chatbot
+from modules.educacion import entity as educacion_entity
+from modules.educacion.controller import router as educacion_router
+from modules.progreso import entity as progreso_entity
+from modules.progreso.controller import router as progreso_router
+
+logger = logging.getLogger(__name__)
 
 Base.metadata.create_all(bind=engine)
 
@@ -26,11 +28,11 @@ async def lifespan(app: FastAPI):
     try:
         if db.query(educacion_entity.Modulo).count() == 0:
             from seed import poblar
-            print("⏳ Base de datos vacía — poblando con seed educativo...")
+            logger.info("Base de datos vacía — poblando con seed educativo...")
             poblar(db)
     except Exception as e:
         db.rollback()
-        print(f"❌ Error en auto-seed educativo: {e}")
+        logger.error("Error en auto-seed educativo: %s", e)
     finally:
         db.close()
 
@@ -39,15 +41,15 @@ async def lifespan(app: FastAPI):
         from modules.chatbot.seed import seed_chatbot
         seed_chatbot()
     except Exception as e:
-        print(f"⚠️  Error en seed del chatbot: {e}")
+        logger.warning("Error en seed del chatbot: %s", e)
 
     # 3. Inicializar FAISS (ya con la whitelist poblada)
-    print("⏳ Cargando base de conocimiento del chatbot...")
+    logger.info("Cargando base de conocimiento del chatbot...")
     try:
         inicializar_chatbot()
-        print("✅ Chatbot listo.")
+        logger.info("Chatbot listo.")
     except Exception as e:
-        print(f"⚠️  Chatbot no pudo inicializarse: {e}")
+        logger.warning("Chatbot no pudo inicializarse: %s", e)
 
     yield
 

@@ -1,0 +1,14 @@
+target-version = "py312"
+line-length = 100
+
+[lint]
+# E/W: pycodestyle | F: pyflakes (variables sin usar, imports sin usar) | I: isort
+select = ["E", "W", "F", "I"]
+ignore = [
+    "E501",  # línea demasiado larga — el formateador lo maneja
+]
+
+[lint.per-file-ignores]
+# Los seeds son scripts, permiten prints y lógica larga
+"seed.py" = ["E402", "T201"]
+"tests/*" = ["F811"]  # redefinición de fixtures en pytest
