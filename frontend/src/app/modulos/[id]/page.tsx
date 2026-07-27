@@ -289,7 +289,7 @@ export default function ModuloDetallePage() {
                     }}>
                       <div style={{ flex: 1, height: "1px", backgroundColor: "#D0D0D0" }} />
                       <span style={{ fontSize: "0.75rem", color: "#999", fontWeight: 600, whiteSpace: "nowrap" }}>
-                        QUIZ FINAL
+                        CUESTIONARIO FINAL
                       </span>
                       <div style={{ flex: 1, height: "1px", backgroundColor: "#D0D0D0" }} />
                     </div>
@@ -374,7 +374,7 @@ export default function ModuloDetallePage() {
                           lineHeight: 1.3,
                           color: bloqueado ? "#AAAAAA" : "#1a1a1a",
                         }}>
-                          Quiz Final del Módulo
+                          Cuestionario Final del Módulo
                         </p>
                         <p style={{
                           fontSize: "0.8rem",
@@ -386,7 +386,7 @@ export default function ModuloDetallePage() {
                           {bloqueado
                             ? `Completa las ${modulo.lecciones.length} lecciones para desbloquearlo`
                             : quizAprobado
-                              ? "Has superado el quiz de este módulo"
+                              ? "Has superado el cuestionario de este módulo"
                               : `Mínimo ${modulo.quiz_final.minimo_aciertos} de ${modulo.quiz_final.preguntas.length} correctas para aprobar`
                           }
                         </p>

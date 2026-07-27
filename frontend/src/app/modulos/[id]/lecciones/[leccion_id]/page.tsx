@@ -110,6 +110,8 @@ interface EstadoEjercicio {
   completado: boolean
 }
 
+const SEGUNDOS_LECTURA = 8
+
 export default function LeccionPage() {
   const params = useParams()
   const router = useRouter()
@@ -120,6 +122,7 @@ export default function LeccionPage() {
   const [leccion, setLeccion] = useState<LeccionDetalle | null>(null)
   const [error, setError] = useState(false)
   const [paginaActual, setPaginaActual] = useState(0)
+  const [segundosRestantes, setSegundosRestantes] = useState(SEGUNDOS_LECTURA)
   const [fase, setFase] = useState<Fase>("paginas")
   const [quiz, setQuiz] = useState<EstadoQuiz>({
     indice: 0,
@@ -235,6 +238,18 @@ export default function LeccionPage() {
       return () => clearTimeout(t)
     }
   }, [quiz.seleccion, quiz.mostrandoFeedback])
+
+  useEffect(() => {
+    if (!leccion) return
+    setSegundosRestantes(SEGUNDOS_LECTURA)
+    const id = setInterval(() => {
+      setSegundosRestantes((s) => {
+        if (s <= 1) { clearInterval(id); return 0 }
+        return s - 1
+      })
+    }, 1000)
+    return () => clearInterval(id)
+  }, [paginaActual, leccion])
 
   function avanzarPagina() {
     if (!leccion) return
@@ -1654,19 +1669,24 @@ export default function LeccionPage() {
             )}
             <button
               onClick={avanzarPagina}
+              disabled={segundosRestantes > 0}
               style={{
                 flex: 2,
                 padding: "16px",
                 borderRadius: "12px",
                 border: "none",
-                backgroundColor: "var(--huap-azul)",
+                backgroundColor: segundosRestantes > 0 ? "#94a3b8" : "var(--huap-azul)",
                 color: "white",
                 fontSize: "0.95rem",
                 fontWeight: 600,
-                cursor: "pointer",
+                cursor: segundosRestantes > 0 ? "not-allowed" : "pointer",
+                transition: "background-color 0.4s",
               }}
             >
-              {paginaActual < totalPaginas - 1 ? "Siguiente →" : leccion.contenido.ejercicio ? "Ir al ejercicio →" : "Ir al quiz →"}
+              {segundosRestantes > 0
+                ? `Leyendo… ${segundosRestantes}s`
+                : paginaActual < totalPaginas - 1 ? "Siguiente →" : leccion.contenido.ejercicio ? "Ir al ejercicio →" : "Ir a las preguntas →"
+              }
             </button>
           </div>
         </main>
@@ -1797,7 +1817,7 @@ export default function LeccionPage() {
                   width: "100%",
                 }}
               >
-                Continuar al quiz →
+                Ir a las preguntas →
               </button>
             </div>
           ) : (
@@ -2456,7 +2476,7 @@ export default function LeccionPage() {
           {/* Progreso del quiz — pill style (ModuloCard) */}
           <div ref={progresoRef} style={{ marginBottom: "20px" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-              <span style={{ fontSize: "0.8rem", color: "#6B7280" }}>Quiz rápido</span>
+              <span style={{ fontSize: "0.8rem", color: "#6B7280" }}>Prueba rápida</span>
               <span style={{ fontSize: "0.8rem", color: "#6B7280", fontWeight: 500 }}>
                 {quiz.indice + 1} / {preguntas.length}
               </span>

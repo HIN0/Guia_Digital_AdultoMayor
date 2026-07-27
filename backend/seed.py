@@ -58,7 +58,7 @@ LECCIONES_DATA = [
           "n": 4,
           "tipo": "tour",
           "titulo": "¿Cómo escuchar el contenido?",
-          "texto": "En cada pantalla tienes un botón para escuchar el texto en voz alta. Si estás en computador, verás el ícono 🔊 junto a la palabra \"Escuchar\". Si estás en el celular, verás solo el ícono 🔊. Al tocarlo, el audio comienza. Para detenerlo, toca el mismo botón: cambiará a ⏹ \"Detener\". ¡Pruébalo ahora con el botón que ves arriba a la derecha!",
+          "texto": "En cada pantalla tienes un botón para escuchar el texto en voz alta. Si estás en computador, verás el botón 🔊 junto a la palabra \"Escuchar\". Si estás en el celular, verás solo el botón 🔊. Al tocarlo, el audio comienza. Para detenerlo, toca el mismo botón: cambiará a ⏹ \"Detener\". ¡Pruébalo ahora con el botón que ves arriba a la derecha!",
           "apoyo_visual": "Dos versiones del botón Escuchar: escritorio (bocina + texto) y celular (solo bocina). Debajo, el botón Detener en ambos formatos."
         },
         {
@@ -115,7 +115,7 @@ LECCIONES_DATA = [
                 "correcta": True
               },
               {
-                "texto": "Cerrar la app y no volver",
+                "texto": "Cerrar la aplicación y no volver",
                 "correcta": False
               },
               {
@@ -155,7 +155,7 @@ LECCIONES_DATA = [
           "n": 2,
           "tipo": "ejemplos",
           "titulo": "Ya la has usado sin darte cuenta",
-          "texto": "Probablemente ya conviviste con la IA: cuando tu teléfono reconoce tu cara, cuando el corrector te arregla una palabra, cuando una app te sugiere la ruta más rápida o cuando le hablas a un asistente de voz. Todo eso es inteligencia artificial.",
+          "texto": "Probablemente ya conviviste con la IA: cuando tu teléfono reconoce tu cara, cuando el corrector te arregla una palabra, cuando una aplicación te sugiere la ruta más rápida o cuando le hablas a un asistente de voz. Todo eso es inteligencia artificial.",
           "apoyo_visual": "Cuatro tarjetas: 📷 reconocer cara, ✍️ corregir texto, 🗺️ sugerir ruta, 🔊 asistente de voz."
         },
         {
@@ -176,7 +176,7 @@ LECCIONES_DATA = [
           "n": 5,
           "tipo": "concepto",
           "titulo": "Chatbots de IA",
-          "texto": "Los chatbots como ChatGPT pueden responder tus preguntas en lenguaje natural. Suenan muy seguros, pero pueden dar información incorrecta. Siempre verifica las respuestas sobre salud.",
+          "texto": "Los programas de IA como ChatGPT pueden responder tus preguntas en lenguaje natural. Suenan muy seguros, pero pueden dar información incorrecta. Siempre verifica las respuestas sobre salud.",
           "apoyo_visual": "Ilustración de un chatbot conversando con un usuario."
         },
         {
@@ -294,7 +294,7 @@ LECCIONES_DATA = [
           "tipo": "concepto",
           "titulo": "La IA puede ayudarte con tu salud",
           "texto": "En temas de salud, la IA puede ser una buena aliada para entender mejor la información. Recuerda siempre: te orienta y te explica, pero no te diagnostica ni te receta. La última palabra siempre la tiene tu médico.",
-          "apoyo_visual": "Ícono de corazón con un signo de ayuda."
+          "apoyo_visual": "Imagen de un corazón con un signo de ayuda."
         },
         {
           "n": 2,
@@ -315,7 +315,7 @@ LECCIONES_DATA = [
           "tipo": "advertencia",
           "titulo": "Lo Que NO Debes Hacer",
           "texto": "Nunca uses la IA para: autodiagnosticarte, cambiar tu medicación, reemplazar la visita al médico, o tomar decisiones urgentes de salud. La IA es para aprender, no para decisiones médicas.",
-          "apoyo_visual": "Lista con íconos rojos de \"no\" frente a cada límite."
+          "apoyo_visual": "Lista con imágenes en rojo de \"no\" frente a cada límite."
         },
         {
           "n": 5,
@@ -740,7 +740,7 @@ LECCIONES_DATA = [
           "n": 3,
           "tipo": "concepto",
           "titulo": "Cómo verificar si algo es real",
-          "texto": "Para saber si una página o mensaje es real: busca el nombre del hospital en Google, llama por teléfono al hospital usando el número oficial, y nunca hagas clic en links que te llegan por WhatsApp de desconocidos.",
+          "texto": "Para saber si una página o mensaje es real: busca el nombre del hospital en Google, llama por teléfono al hospital usando el número oficial, y nunca toques las direcciones que te llegan por WhatsApp de desconocidos.",
           "apoyo_visual": "Pasos ilustrados: buscar en Google, llamar al número oficial, no tocar links de WhatsApp."
         },
         {
@@ -754,7 +754,7 @@ LECCIONES_DATA = [
           "n": 5,
           "tipo": "cierre",
           "titulo": "En resumen",
-          "texto": "Las estafas de salud prometen milagros, te apuran y te piden dinero o datos. Ante cualquier duda: cuelga, no toques el link, y llama tú mismo al hospital al número oficial. Más vale confirmar que lamentar.",
+          "texto": "Las estafas de salud prometen milagros, te apuran y te piden dinero o datos. Ante cualquier duda: cuelga, no toques esa dirección, y llama tú mismo al hospital al número oficial. Más vale confirmar que lamentar.",
           "apoyo_visual": "Resumen con las tres señales y la acción de verificar."
         }
       ],
@@ -1312,35 +1312,35 @@ LECCIONES_DATA = [
           "tipo": "caso_patologia",
           "titulo": "Hipertensión (presión alta)",
           "texto": "Pregunta útil: \"¿Qué cuidados generales ayudan a mantener la presión controlada?\". La IA puede orientarte sobre hábitos como reducir la sal o caminar. Lo que NO puede: decirte tu dosis de remedio ni si tu presión de hoy es peligrosa. Eso lo ve tu médico.",
-          "apoyo_visual": "Ícono de tensiómetro. Pregunta útil vs. lo que es del médico."
+          "apoyo_visual": "Imagen de un tensiómetro. Pregunta útil vs. lo que es del médico."
         },
         {
           "n": 3,
           "tipo": "caso_patologia",
           "titulo": "Diabetes tipo 2",
           "texto": "Pregunta útil: \"¿Qué alimentos conviene cuidar si tengo azúcar alta?\". La IA orienta sobre alimentación general. Lo que NO puede: ajustar tu insulina ni interpretar tu examen de glicemia. Eso es del equipo de salud.",
-          "apoyo_visual": "Ícono de gota/glucómetro. Pregunta útil vs. lo que es del médico."
+          "apoyo_visual": "Imagen de un glucómetro. Pregunta útil vs. lo que es del médico."
         },
         {
           "n": 4,
           "tipo": "caso_patologia",
           "titulo": "Artrosis (dolor de articulaciones)",
           "texto": "Pregunta útil: \"¿Qué ejercicios suaves ayudan con el dolor de rodillas?\". La IA orienta sobre cuidados generales. Lo que NO puede: recetarte analgésicos ni decirte si necesitas una operación. Eso lo decide el traumatólogo.",
-          "apoyo_visual": "Ícono de articulación. Pregunta útil vs. lo que es del médico."
+          "apoyo_visual": "Imagen de una articulación. Pregunta útil vs. lo que es del médico."
         },
         {
           "n": 5,
           "tipo": "caso_patologia",
           "titulo": "Colesterol alto",
           "texto": "Pregunta útil: \"¿Qué significa tener el colesterol alto y por qué importa?\". La IA explica el concepto. Lo que NO puede: leer tu perfil lipídico ni indicarte un medicamento. Eso lo evalúa tu médico con tus exámenes.",
-          "apoyo_visual": "Ícono de corazón/arteria. Pregunta útil vs. lo que es del médico."
+          "apoyo_visual": "Imagen de un corazón. Pregunta útil vs. lo que es del médico."
         },
         {
           "n": 6,
           "tipo": "caso_patologia",
           "titulo": "Insuficiencia venosa (várices, piernas hinchadas)",
           "texto": "Pregunta útil: \"¿Qué cuidados ayudan a las piernas hinchadas en el día a día?\". La IA orienta sobre hábitos como elevar las piernas. Lo que NO puede: diagnosticar la gravedad ni indicar tratamiento. Eso lo ve tu médico.",
-          "apoyo_visual": "Ícono de pierna. Pregunta útil vs. lo que es del médico."
+          "apoyo_visual": "Imagen de una pierna. Pregunta útil vs. lo que es del médico."
         },
         {
           "n": 7,
@@ -1652,7 +1652,7 @@ LECCIONES_DATA = [
           "n": 3,
           "tipo": "numeros_emergencia",
           "titulo": "Números de emergencia",
-          "texto": "Guarda estos números. En una emergencia, llamar es siempre lo primero, antes que cualquier app:",
+          "texto": "Guarda estos números. En una emergencia, llamar es siempre lo primero, antes que cualquier aplicación:",
           "numeros": [
             {
               "servicio": "SAMU",
@@ -1674,8 +1674,8 @@ LECCIONES_DATA = [
           "n": 4,
           "tipo": "concepto",
           "titulo": "Y para estos casos, tu médico de cabecera",
-          "texto": "No todo es urgencia, pero tampoco todo es para la IA. Cosas como un dolor que dura semanas, sentirte muy triste o sin ánimo por mucho tiempo, o un malestar que no mejora, son para tu médico de cabecera, no para el chatbot.",
-          "apoyo_visual": "Tres situaciones para médico de cabecera con ícono de médico."
+          "texto": "No todo es urgencia, pero tampoco todo es para la IA. Cosas como un dolor que dura semanas, sentirte muy triste o sin ánimo por mucho tiempo, o un malestar que no mejora, son para tu médico de cabecera, no para el asistente de IA.",
+          "apoyo_visual": "Tres situaciones para médico de cabecera con imagen de médico."
         },
         {
           "n": 5,

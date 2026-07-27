@@ -160,7 +160,7 @@ export default function QuizFinalPage() {
         <Header />
         <main className="flex-1 flex flex-col items-center justify-center px-5 gap-6">
           <p style={{ color: "var(--huap-rojo)", fontSize: "18px", textAlign: "center" }}>
-            No se pudo cargar el quiz. Vuelve al módulo e inténtalo de nuevo.
+            No se pudo cargar la prueba. Vuelve al módulo e inténtalo de nuevo.
           </p>
           <button
             onClick={() => router.back()}
@@ -188,7 +188,7 @@ export default function QuizFinalPage() {
         <Header />
         <main className="flex-1 flex items-center justify-center">
           <p style={{ color: "#888", fontSize: "18px" }}>
-            {enviando ? "Corrigiendo respuestas…" : "Cargando quiz…"}
+            {enviando ? "Corrigiendo respuestas…" : "Cargando cuestionario…"}
           </p>
         </main>
       </div>
@@ -201,7 +201,7 @@ export default function QuizFinalPage() {
         <Header />
         <main className="flex-1 flex items-center justify-center px-5">
           <p style={{ color: "#888", fontSize: "18px", textAlign: "center" }}>
-            Este módulo no tiene quiz final.
+            Este módulo no tiene cuestionario final.
           </p>
         </main>
       </div>
@@ -243,7 +243,7 @@ export default function QuizFinalPage() {
           {/* Encabezado */}
           <div style={{ marginBottom: "20px" }}>
             <h1 style={{ color: "var(--huap-azul)", fontSize: "22px", fontWeight: 700, marginBottom: "6px" }}>
-              Quiz Final — Módulo {modulo.orden}
+              Cuestionario Final — Módulo {modulo.orden}
             </h1>
             <p style={{ color: "#666", fontSize: "15px" }}>{modulo.nombre}</p>
 
@@ -602,7 +602,7 @@ export default function QuizFinalPage() {
                   cursor: "pointer",
                 }}
               >
-                Reintentar quiz
+                Intentar de nuevo
               </button>
             )}
             <button
