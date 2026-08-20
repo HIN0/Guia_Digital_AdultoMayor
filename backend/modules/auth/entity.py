@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Enum, Boolean
+from sqlalchemy import Column, Integer, String, Enum
 from core.database import Base
 import enum
 
@@ -14,4 +14,3 @@ class Usuario(Base):
     email = Column(String, unique=True, nullable=False)
     nombre = Column(String, nullable=False)
     rol = Column(Enum(RolUsuario), default=RolUsuario.alumno, nullable=False)
-    es_invitado = Column(Boolean, default=False, nullable=False)
