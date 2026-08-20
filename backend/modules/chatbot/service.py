@@ -35,8 +35,11 @@ DISTANCE_THRESHOLD = float(os.getenv("CHATBOT_DISTANCE_THRESHOLD", "0.45"))
 # preguntas de salud en alcance marcó máximo 1.34).
 UMBRAL_FUERA_DE_ALCANCE = float(os.getenv("CHATBOT_FUERA_DE_ALCANCE", "1.4"))
 
-MODELO_PRIMARIO = "llama-3.1-8b-instant"
-MODELO_RESPALDO = "llama-3.3-70b-versatile"
+# Groq descontinuo llama-3.1-8b-instant y llama-3.3-70b-versatile el
+# 16/8/2026 (https://console.groq.com/docs/deprecations). Reemplazos
+# recomendados oficialmente por Groq:
+MODELO_PRIMARIO = "openai/gpt-oss-20b"
+MODELO_RESPALDO = "openai/gpt-oss-120b"
 
 MENSAJE_SOBRECARGA = (
     "En este momento estamos recibiendo muchas consultas. "
