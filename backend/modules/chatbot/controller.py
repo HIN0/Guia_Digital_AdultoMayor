@@ -1,8 +1,9 @@
 import logging
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from core.database import get_db
 from core.dependencies import get_usuario_actual, requiere_admin
+from core.rate_limit import limiter
 from modules.auth.entity import Usuario
 
 from .schema import (
@@ -24,8 +25,10 @@ router = APIRouter(prefix="/chatbot", tags=["Chatbot"])
 # ── Endpoint de usuario ──────────────────────────────────────────────────────
 
 @router.post("/preguntar", response_model=ChatResponse)
+@limiter.limit("15/minute")
 def hacer_pregunta(
-    request: ChatRequest,
+    request: Request,
+    body: ChatRequest,
     db: Session = Depends(get_db),
     usuario: Usuario = Depends(get_usuario_actual),
 ):
@@ -38,8 +41,8 @@ def hacer_pregunta(
         resultado = generar_y_guardar_respuesta(
             db=db,
             usuario_id=usuario.id,
-            pregunta=request.pregunta,
-            conversacion_id=request.conversacion_id,
+            pregunta=body.pregunta,
+            conversacion_id=body.conversacion_id,
         )
         return resultado
     except Exception:
