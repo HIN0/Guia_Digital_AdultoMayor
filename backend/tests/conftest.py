@@ -34,6 +34,18 @@ from modules.educacion import entity as educacion_entity  # noqa: F401
 from modules.progreso import entity as progreso_entity  # noqa: F401
 
 
+@pytest.fixture(autouse=True)
+def _reset_rate_limiter():
+    """El Limiter de slowapi es un singleton en memoria a nivel de proceso.
+    Sin este reset, todos los tests comparten los mismos contadores (el
+    TestClient siempre reporta la misma IP), y tests de rate limiting
+    contaminarían a los demás."""
+    from core.rate_limit import limiter
+
+    limiter.reset()
+    yield
+
+
 @pytest.fixture()
 def db_session():
     """Sesión SQLAlchemy sobre una base SQLite en memoria, aislada por test."""
