@@ -3,7 +3,7 @@ services:
     image: postgres:15-alpine
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 54321
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-54321}
       POSTGRES_DB: guia_digital
     ports:
       - "5432:5432"
@@ -22,7 +22,7 @@ services:
     env_file:
       - ./backend/.env
     environment:
-      DATABASE_URL: postgresql://postgres:54321@db:5432/guia_digital
+      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-54321}@db:5432/guia_digital
       ALLOWED_ORIGINS: http://localhost:3000
     depends_on:
       db:
