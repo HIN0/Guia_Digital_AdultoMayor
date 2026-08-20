@@ -4,8 +4,11 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
 
 from core.database import Base, engine, SessionLocal
+from core.rate_limit import limiter
 from modules.auth import entity as auth_entity
 from modules.auth.controller import router as auth_router
 from modules.chatbot import entity as chatbot_entity
@@ -65,6 +68,9 @@ app = FastAPI(
     redoc_url="/redoc" if _en_desarrollo else None,
 )
 
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
 # Orígenes permitidos para CORS.
 # En local usa http://localhost:3000; en producción define ALLOWED_ORIGINS
 # como lista separada por comas, ej:
@@ -76,8 +82,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PATCH", "DELETE"],
+    allow_headers=["Authorization", "Content-Type"],
 )
 
 app.include_router(auth_router, prefix="/api")
