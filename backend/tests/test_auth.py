@@ -134,3 +134,44 @@ def test_endpoint_login_luego_me_con_el_token_recibido(client):
 
     assert me_resp.status_code == 200
     assert me_resp.json()["email"] == "nueva@example.com"
+
+
+# ── controller: POST /api/auth/refresh ──────────────────────────────────────
+
+def test_endpoint_refresh_sin_token_devuelve_422(client):
+    response = client.post("/api/auth/refresh")
+    assert response.status_code == 422
+
+
+def test_endpoint_refresh_token_invalido_devuelve_401(client):
+    response = client.post("/api/auth/refresh", headers={"Authorization": "Bearer no-es-un-jwt"})
+    assert response.status_code == 401
+
+
+def test_endpoint_refresh_token_valido_devuelve_token_nuevo_y_funcional(client, crear_usuario, token_para):
+    usuario = crear_usuario(email="renovado@example.com")
+    token_original = token_para(usuario)
+
+    refresh_resp = client.post("/api/auth/refresh", headers={"Authorization": f"Bearer {token_original}"})
+
+    assert refresh_resp.status_code == 200
+    body = refresh_resp.json()
+    assert body["usuario"]["email"] == "renovado@example.com"
+
+    nuevo_token = body["access_token"]
+    me_resp = client.get("/api/auth/me", headers={"Authorization": f"Bearer {nuevo_token}"})
+    assert me_resp.status_code == 200
+    assert me_resp.json()["email"] == "renovado@example.com"
+
+
+def test_endpoint_refresh_token_expirado_devuelve_401(client, crear_usuario, monkeypatch):
+    from core.config import settings
+    from core.security import create_access_token
+
+    usuario = crear_usuario()
+    monkeypatch.setattr(settings, "ACCESS_TOKEN_EXPIRE_MINUTES", -1)
+    token_expirado = create_access_token({"sub": str(usuario.id), "rol": usuario.rol.value})
+
+    response = client.post("/api/auth/refresh", headers={"Authorization": f"Bearer {token_expirado}"})
+
+    assert response.status_code == 401

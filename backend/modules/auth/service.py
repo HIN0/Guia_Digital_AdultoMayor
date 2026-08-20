@@ -4,6 +4,14 @@ from modules.auth import repository
 from modules.auth.entity import Usuario
 
 
+def generar_token(usuario: Usuario) -> str:
+    """Crea un JWT propio con el id del usuario y su rol."""
+    return create_access_token({
+        "sub": str(usuario.id),
+        "rol": usuario.rol.value,
+    })
+
+
 async def login_con_google(db: Session, google_token: str) -> tuple[str, Usuario]:
     """
     1. Verifica el token con Google
@@ -11,7 +19,7 @@ async def login_con_google(db: Session, google_token: str) -> tuple[str, Usuario
     3. Genera un JWT para el frontend
     """
     datos_google = await verify_google_token(google_token)
-    
+
     # Buscar usuario existente o crear uno nuevo
     usuario = repository.get_usuario_by_google_id(db, datos_google["google_id"])
     if not usuario:
@@ -21,14 +29,8 @@ async def login_con_google(db: Session, google_token: str) -> tuple[str, Usuario
             email=datos_google["email"],
             nombre=datos_google["nombre"],
         )
-    
-    # Crear JWT con el id del usuario y su rol
-    access_token = create_access_token({
-        "sub": str(usuario.id),
-        "rol": usuario.rol.value,
-    })
-    
-    return access_token, usuario
+
+    return generar_token(usuario), usuario
 
 
 def get_usuario_actual(db: Session, usuario_id: int) -> Usuario:

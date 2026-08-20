@@ -28,3 +28,15 @@ async def login(request: Request, body: LoginRequest, db: Session = Depends(get_
 def get_me(usuario: Usuario = Depends(get_usuario_actual)):
     """Devuelve los datos del usuario autenticado. Requiere: Authorization: Bearer <token>"""
     return usuario
+
+
+@router.post("/refresh", response_model=TokenResponse)
+@limiter.limit("20/minute")
+def refresh(request: Request, usuario: Usuario = Depends(get_usuario_actual)):
+    """
+    Renueva el JWT de un usuario ya autenticado (requiere que el token actual
+    todavía sea válido) para extender la sesión sin volver a pasar por el
+    login de Google cada vez que expira (ACCESS_TOKEN_EXPIRE_MINUTES).
+    """
+    access_token = service.generar_token(usuario)
+    return TokenResponse(access_token=access_token, usuario=usuario)
