@@ -29,8 +29,14 @@ def test_decode_token_token_invalido_lanza_value_error():
 
 def test_decode_token_firma_alterada_lanza_value_error():
     token = create_access_token({"sub": "1"})
-    # Alterar el último carácter de la firma para invalidar el token.
-    alterado = token[:-1] + ("A" if token[-1] != "A" else "B")
+    header, payload, signature = token.split(".")
+    # Alterar un carácter del medio de la firma: el último carácter de un
+    # base64url de una firma HMAC-SHA256 a veces solo codifica bits de
+    # padding y no siempre cambia los bytes reales al alterarlo.
+    pos = len(signature) // 2
+    caracter_alterado = "A" if signature[pos] != "A" else "B"
+    firma_alterada = signature[:pos] + caracter_alterado + signature[pos + 1:]
+    alterado = f"{header}.{payload}.{firma_alterada}"
     with pytest.raises(ValueError):
         decode_token(alterado)
 
