@@ -80,11 +80,10 @@ def crear_usuario(db_session):
 
     def _crear(
         google_id="google-123", email="ana@example.com", nombre="Ana",
-        rol=RolUsuario.alumno, es_invitado=False,
+        rol=RolUsuario.alumno,
     ):
         usuario = Usuario(
-            google_id=google_id, email=email, nombre=nombre,
-            rol=rol, es_invitado=es_invitado,
+            google_id=google_id, email=email, nombre=nombre, rol=rol,
         )
         db_session.add(usuario)
         db_session.commit()
