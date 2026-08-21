@@ -1,9 +1,12 @@
 """
 Mapean las entidades del dominio de Progreso a tablas físicas en PostgreSQL. Modelos ORM de SQLAlchemy.
 """
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime
-from core.database import Base
 from datetime import datetime
+
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String
+
+from core.database import Base
+
 
 class ProgresoLeccion(Base):
     __tablename__ = "progreso_leccion"

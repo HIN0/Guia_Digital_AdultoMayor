@@ -1,5 +1,6 @@
-from fastapi import Depends, HTTPException, Header
+from fastapi import Depends, Header, HTTPException
 from sqlalchemy.orm import Session
+
 from core.database import get_db
 from core.security import decode_token
 from modules.auth import repository as auth_repo

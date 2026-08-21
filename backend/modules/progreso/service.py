@@ -4,7 +4,9 @@ Coordina la lógica de evaluación, asignación de insignias y desbloqueos.
 """
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
+
 from modules.educacion.entity import Leccion, Modulo, QuizFinal
+
 from . import repository, schema
 
 
@@ -126,7 +128,7 @@ def obtener_resumen_usuario(db: Session, usuario_id: int):
     chatbot_desbloqueado = mod2_completado or mod3_completado
 
     return schema.ResumenProgresoResponse(
-        lecciones_completadas=[l.leccion_id for l in lecciones],
+        lecciones_completadas=[leccion.leccion_id for leccion in lecciones],
         quizzes_aprobados=quizzes,
         insignias=insignias,
         modulos=estados,

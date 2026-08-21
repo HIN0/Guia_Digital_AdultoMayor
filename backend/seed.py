@@ -9,13 +9,15 @@ Solo ejecutar UNA VEZ. Para re-poblar desde cero:
     python seed.py --reset
 """
 import sys
+
 from sqlalchemy.orm import Session
 
 sys.path.insert(0, ".")
 
-from core.database import SessionLocal, Base, engine
-from modules.educacion.entity import Modulo, Leccion, QuizFinal, PreguntaQuiz, OpcionRespuesta
-from modules.progreso.entity import ProgresoLeccion, IntentoQuiz, Insignia, InsigniaObtenida
+from core.database import Base, SessionLocal, engine
+from modules.educacion.entity import Leccion, Modulo, OpcionRespuesta, PreguntaQuiz, QuizFinal
+from modules.progreso.entity import Insignia, InsigniaObtenida, IntentoQuiz, ProgresoLeccion
+
 # from modules.chatbot.entity import Patologia  # pendiente: módulo chatbot sin entity aún
 
 
@@ -934,7 +936,7 @@ LECCIONES_DATA = [
           {
             "pregunta": "¿Cuál de estas es una mejor pregunta para la IA?",
             "opciones": [
-            
+
               {
                 "texto": "Me siento raro, ¿qué será?",
                 "correcta": False
@@ -989,7 +991,7 @@ LECCIONES_DATA = [
           {
             "pregunta": "¿Es una buena pregunta para la IA: \"Tengo dolor en el pecho. ¿Qué debo hacer?\"?",
             "opciones": [
-              
+
               {
                 "texto": "Sí, es una pregunta clara y concreta",
                 "correcta": False
@@ -1088,7 +1090,7 @@ LECCIONES_DATA = [
         {
           "pregunta": "Si la IA te dice \"podría ser indigestión o algo más serio\", ¿qué significa?",
           "opciones": [
-          
+
             {
               "texto": "Que tienes indigestión seguro",
               "correcta": False
@@ -1125,7 +1127,7 @@ LECCIONES_DATA = [
         {
           "pregunta": "Una IA te dice con mucha seguridad \"usted tiene diabetes\". ¿Confías?",
           "opciones": [
-           
+
             {
               "texto": "Sí, porque lo dijo con seguridad",
               "correcta": False
@@ -1246,7 +1248,7 @@ LECCIONES_DATA = [
         {
           "pregunta": "La IA y tu médico te dicen cosas distintas. ¿A quién le haces caso?",
           "opciones": [
-            
+
             {
               "texto": "A la IA, porque responde más rápido",
               "correcta": False
@@ -1265,7 +1267,7 @@ LECCIONES_DATA = [
         {
           "pregunta": "¿Por qué conviene verificar lo que dice la IA?",
           "opciones": [
-            
+
             {
               "texto": "Porque la IA siempre miente",
               "correcta": False
@@ -1392,7 +1394,7 @@ LECCIONES_DATA = [
         {
           "pregunta": "Para la hipertensión, ¿qué pregunta es apropiada para la IA?",
           "opciones": [
-            
+
             {
               "texto": "¿Qué dosis de remedio tomo hoy?",
               "correcta": False
@@ -1411,7 +1413,7 @@ LECCIONES_DATA = [
         {
           "pregunta": "Tienes diabetes y quieres entender tu examen de glicemia. ¿Quién debe interpretarlo?",
           "opciones": [
-            
+
             {
               "texto": "La IA, que da el número exacto",
               "correcta": False
@@ -1430,7 +1432,7 @@ LECCIONES_DATA = [
         {
           "pregunta": "En las cinco patologías, ¿qué cosa NUNCA hace la IA?",
           "opciones": [
-            
+
             {
               "texto": "Explicar qué es la enfermedad",
               "correcta": False
@@ -1551,7 +1553,7 @@ LECCIONES_DATA = [
         {
           "pregunta": "¿La IA puede reemplazar a tu cardiólogo?",
           "opciones": [
-            
+
             {
               "texto": "Sí, es igual que un especialista",
               "correcta": False
@@ -1588,7 +1590,7 @@ LECCIONES_DATA = [
         {
           "pregunta": "Tu médico te dijo \"tiene insuficiencia venosa\". ¿Para qué te sirve la IA?",
           "opciones": [
-            
+
             {
               "texto": "Para cambiar el diagnóstico",
               "correcta": False
@@ -1722,7 +1724,7 @@ LECCIONES_DATA = [
         {
           "pregunta": "Si tienes dolor fuerte en el pecho, ¿qué haces primero?",
           "opciones": [
-            
+
             {
               "texto": "Le preguntas a la IA",
               "correcta": False
@@ -1759,7 +1761,7 @@ LECCIONES_DATA = [
         {
           "pregunta": "Si dudas si algo es urgente, ¿es mejor sobreestimar o subestimar?",
           "opciones": [
-            
+
             {
               "texto": "Subestimar: esperar a ver si pasa",
               "correcta": False
@@ -1896,7 +1898,7 @@ QUIZZES_DATA = [
       {
         "pregunta": "En palabras simples, ¿qué es la inteligencia artificial?",
         "opciones": [
-          
+
           {
             "texto": "Una persona del hospital que responde en secreto",
             "correcta": False
@@ -1951,7 +1953,7 @@ QUIZZES_DATA = [
       {
         "pregunta": "La IA te responde con mucha seguridad sobre un remedio. ¿Le crees de inmediato?",
         "opciones": [
-          
+
           {
             "texto": "Sí, porque sonó muy segura",
             "correcta": False
@@ -1970,7 +1972,7 @@ QUIZZES_DATA = [
       {
         "pregunta": "¿Cuál de estos datos NO debes compartir nunca con una IA?",
         "opciones": [
-          
+
           {
             "texto": "Una duda general sobre la diabetes",
             "correcta": False
@@ -1989,7 +1991,7 @@ QUIZZES_DATA = [
       {
         "pregunta": "¿Cuál es la señal más clara de una estafa de salud en internet?",
         "opciones": [
-          
+
           {
             "texto": "Te dan información gratis",
             "correcta": False
@@ -2008,7 +2010,7 @@ QUIZZES_DATA = [
       {
         "pregunta": "Si no entiendes algo en la app, ¿qué puedes hacer?",
         "opciones": [
-          
+
           {
             "texto": "Cerrar la app y no volver",
             "correcta": False
@@ -2036,7 +2038,7 @@ QUIZZES_DATA = [
       {
         "pregunta": "¿Cuál es una mejor pregunta para hacerle a la IA?",
         "opciones": [
-          
+
           {
             "texto": "Me siento raro, ¿qué será?",
             "correcta": False
@@ -2094,7 +2096,7 @@ QUIZZES_DATA = [
       {
         "pregunta": "En cualquier patología, ¿qué cosa NO debería hacer la IA?",
         "opciones": [
-          
+
           {
             "texto": "Explicar qué es la enfermedad",
             "correcta": False
@@ -2114,7 +2116,7 @@ QUIZZES_DATA = [
       {
         "pregunta": "Antes de tu consulta médica, la IA puede ayudarte a...",
         "opciones": [
-          
+
           {
             "texto": "Elegir tu medicamento",
             "correcta": False
@@ -2134,7 +2136,7 @@ QUIZZES_DATA = [
       {
         "pregunta": "Si tienes dolor fuerte en el pecho, ¿qué haces primero?",
         "opciones": [
-          
+
           {
             "texto": "Le preguntas a la IA",
             "correcta": False
@@ -2154,7 +2156,7 @@ QUIZZES_DATA = [
       {
         "pregunta": "Si dudas si algo es urgente, ¿qué es mejor?",
         "opciones": [
-          
+
           {
             "texto": "Esperar a ver si se pasa solo",
             "correcta": False

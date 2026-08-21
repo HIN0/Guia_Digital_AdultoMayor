@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta
-from jose import JWTError, jwt
+
 import httpx
+from jose import JWTError, jwt
+
 from core.config import settings
 
 GOOGLE_TOKEN_INFO_URL = "https://oauth2.googleapis.com/tokeninfo"
@@ -14,13 +16,13 @@ async def verify_google_token(token: str) -> dict:
         )
     if response.status_code != 200:
         raise ValueError("Token de Google inválido")
-    
+
     data = response.json()
-    
+
     # Verificar que el token es para nuestra app
     if data.get("aud") != settings.GOOGLE_CLIENT_ID:
         raise ValueError("Token no corresponde a esta aplicación")
-    
+
     return {
         "google_id": data["sub"],
         "email": data["email"],

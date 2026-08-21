@@ -8,7 +8,9 @@ NUNCA duplica datos, y las respuestas editadas por un admin no se pisan.
 """
 
 import logging
+
 from core.database import SessionLocal
+
 from .entity import Patologia, PreguntaChatbot
 from .seeds import SEED_DATA
 

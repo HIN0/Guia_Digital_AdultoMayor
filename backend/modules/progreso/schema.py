@@ -2,9 +2,10 @@
 Esquemas Pydantic para validación de datos de entrada (Request)
 y serialización de datos de salida (Response).
 """
-from pydantic import BaseModel
-from datetime import datetime
 from typing import List, Optional
+
+from pydantic import BaseModel
+
 
 class ProgresoLeccionCreate(BaseModel):
     leccion_id: int

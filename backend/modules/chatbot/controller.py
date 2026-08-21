@@ -1,21 +1,29 @@
 import logging
+
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
+
 from core.database import get_db
 from core.dependencies import get_usuario_actual, requiere_admin
 from core.rate_limit import limiter
 from modules.auth.entity import Usuario
-
-from .schema import (
-    ChatRequest, ChatResponse,
-    FeedbackRequest, FeedbackResponse,
-    ConversacionOut, MensajeOut,
-    PreguntaChatbotCreate, PreguntaChatbotUpdate, PreguntaChatbotOut,
-    PatologiaCreate, PatologiaOut,
-)
-from .service import generar_y_guardar_respuesta, cargar_preguntas_validadas
 from modules.progreso.service import chatbot_esta_desbloqueado
+
 from . import repository as repo
+from .schema import (
+    ChatRequest,
+    ChatResponse,
+    ConversacionOut,
+    FeedbackRequest,
+    FeedbackResponse,
+    MensajeOut,
+    PatologiaCreate,
+    PatologiaOut,
+    PreguntaChatbotCreate,
+    PreguntaChatbotOut,
+    PreguntaChatbotUpdate,
+)
+from .service import cargar_preguntas_validadas, generar_y_guardar_respuesta
 
 logger = logging.getLogger(__name__)
 
