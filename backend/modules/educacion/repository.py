@@ -1,8 +1,8 @@
 """
-Session es el objeto que representa una conexión activa con la base de datos. 
-Cada vez que un endpoint recibe una petición, FastAPI le crea una sesión nueva (gracias a get_db()), 
-la pasa al repository, y la cierra al terminar. La sesión es la que ejecuta los queries. 
-Aquí la importas solo para usarla como tipo en los parámetros de las funciones (db: Session), 
+Session es el objeto que representa una conexión activa con la base de datos.
+Cada vez que un endpoint recibe una petición, FastAPI le crea una sesión nueva (gracias a get_db()),
+la pasa al repository, y la cierra al terminar. La sesión es la que ejecuta los queries.
+Aquí la importas solo para usarla como tipo en los parámetros de las funciones (db: Session),
 lo que le dice a Python y a tu editor qué tipo de objeto es db.
 """
 from sqlalchemy.orm import Session
@@ -11,8 +11,7 @@ from sqlalchemy.orm import Session
 mportas las clases que representan las tablas. Se necesitan aca porque el query trabaja con ellas:
 db.query(Modulo) le dice a SQLAlchemy "quiero buscar en la tabla modulo".
 """
-from modules.educacion.entity import Modulo, Leccion, QuizFinal
-
+from modules.educacion.entity import Leccion, Modulo, QuizFinal  # noqa: E402
 
 """
 - db: Session siempre es el primer parámetro. Es la sesión de base de datos que viene desde el endpoint via Depends(get_db)

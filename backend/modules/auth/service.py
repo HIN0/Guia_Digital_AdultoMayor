@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
-from core.security import verify_google_token, create_access_token
+
+from core.security import create_access_token, verify_google_token
 from modules.auth import repository
 from modules.auth.entity import Usuario
 

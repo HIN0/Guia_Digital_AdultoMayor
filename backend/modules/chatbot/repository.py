@@ -1,7 +1,7 @@
-from sqlalchemy.orm import Session
 from sqlalchemy import func
-from .entity import Conversacion, MensajeChat, PreguntaChatbot, Patologia
+from sqlalchemy.orm import Session
 
+from .entity import Conversacion, MensajeChat, Patologia, PreguntaChatbot
 
 # ── Conversaciones ───────────────────────────────────────────────────────────
 
@@ -114,7 +114,7 @@ def obtener_preguntas_activas(db: Session) -> list[PreguntaChatbot]:
     return (
         db.query(PreguntaChatbot)
         .join(Patologia)
-        .filter(PreguntaChatbot.activa == True, Patologia.validada == True)
+        .filter(PreguntaChatbot.activa, Patologia.validada)
         .all()
     )
 
@@ -163,7 +163,7 @@ def eliminar_pregunta(db: Session, pregunta_id: int) -> bool:
 # ── Patologías ───────────────────────────────────────────────────────────────
 
 def listar_patologias(db: Session) -> list[Patologia]:
-    return db.query(Patologia).filter(Patologia.validada == True).order_by(Patologia.id).all()
+    return db.query(Patologia).filter(Patologia.validada).order_by(Patologia.id).all()
 
 def crear_patologia(db: Session, nombre: str) -> Patologia:
     patologia = Patologia(nombre=nombre)

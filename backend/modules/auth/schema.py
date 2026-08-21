@@ -1,5 +1,7 @@
 from pydantic import BaseModel
+
 from modules.auth.entity import RolUsuario
+
 
 class LoginRequest(BaseModel):
     """Lo que el frontend envía al hacer login con Google."""

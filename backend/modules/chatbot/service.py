@@ -1,22 +1,21 @@
 import os
 import threading
-from sqlalchemy.orm import Session
-
-from langchain_groq import ChatGroq
-from langchain_huggingface import HuggingFaceEmbeddings
-
-from core.config import settings
 
 from langchain_community.vectorstores import FAISS
 from langchain_core.prompts import PromptTemplate
+from langchain_groq import ChatGroq
+from langchain_huggingface import HuggingFaceEmbeddings
+from sqlalchemy.orm import Session
 
+from core.config import settings
 from core.database import SessionLocal
+
 from .normalizacion import normalizar_texto
 from .repository import (
-    obtener_o_crear_conversacion,
     guardar_mensaje,
-    obtener_preguntas_activas,
     obtener_mensajes_recientes,
+    obtener_o_crear_conversacion,
+    obtener_preguntas_activas,
 )
 
 # Umbrales de distancia L2² para FAISS sobre embeddings NORMALIZADOS

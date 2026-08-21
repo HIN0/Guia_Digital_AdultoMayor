@@ -7,16 +7,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
-from core.database import Base, engine, SessionLocal
+from core.database import Base, SessionLocal, engine
 from core.rate_limit import limiter
-from modules.auth import entity as auth_entity
 from modules.auth.controller import router as auth_router
-from modules.chatbot import entity as chatbot_entity
 from modules.chatbot.controller import router as chatbot_router
 from modules.chatbot.service import inicializar_chatbot
 from modules.educacion import entity as educacion_entity
 from modules.educacion.controller import router as educacion_router
-from modules.progreso import entity as progreso_entity
 from modules.progreso.controller import router as progreso_router
 
 logger = logging.getLogger(__name__)

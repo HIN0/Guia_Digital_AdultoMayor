@@ -1,5 +1,7 @@
 from logging.config import fileConfig
+
 from sqlalchemy import engine_from_config, pool
+
 from alembic import context
 
 # ── Configuración de Alembic ─────────────────────────────────────────────────
@@ -9,16 +11,16 @@ if config.config_file_name is not None:
 
 # ── Importar settings y modelos ───────────────────────────────────────────────
 # Importamos settings para leer DATABASE_URL desde .env
-from core.config import settings
+from core.config import settings  # noqa: E402
 
 # Importamos Base y TODOS los módulos de entidades para que SQLAlchemy
 # registre los modelos antes de que Alembic compare contra la BD.
 # Si agregas un nuevo módulo con modelos, agrégalo aquí también.
-from core.database import Base
-from modules.auth import entity as _auth              # noqa: F401
-from modules.educacion import entity as _educacion    # noqa: F401
-from modules.progreso import entity as _progreso      # noqa: F401
-from modules.chatbot import entity as _chatbot        # noqa: F401
+from core.database import Base  # noqa: E402
+from modules.auth import entity as _auth  # noqa: E402, F401
+from modules.chatbot import entity as _chatbot  # noqa: E402, F401
+from modules.educacion import entity as _educacion  # noqa: E402, F401
+from modules.progreso import entity as _progreso  # noqa: E402, F401
 
 # Inyectamos la URL desde .env (no desde alembic.ini)
 config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)

@@ -1,15 +1,11 @@
 """estado_inicial
 
 Revision ID: 536e8f6de3a8
-Revises: 
+Revises:
 Create Date: 2026-06-07 16:51:30.150179
 
 """
 from typing import Sequence, Union
-
-from alembic import op
-import sqlalchemy as sa
-
 
 # revision identifiers, used by Alembic.
 revision: str = '536e8f6de3a8'

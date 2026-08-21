@@ -1,5 +1,7 @@
 from sqlalchemy.orm import Session
+
 from modules.auth.entity import Usuario
+
 
 def get_usuario_by_google_id(db: Session, google_id: str) -> Usuario | None:
     return db.query(Usuario).filter(Usuario.google_id == google_id).first()

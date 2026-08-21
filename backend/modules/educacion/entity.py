@@ -1,18 +1,19 @@
-#SQLAlchemy es la librería que conecta Python con PostgreSQL. 
-#Aquí importas los tipos de columna que vas a usar para definir las tablas. 
+#SQLAlchemy es la librería que conecta Python con PostgreSQL.
+#Aquí importas los tipos de columna que vas a usar para definir las tablas.
 #Cada uno representa un tipo de dato en la base de datos:
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, JSON
+from sqlalchemy import JSON, Boolean, Column, ForeignKey, Integer, String
 
-#relationship es lo que te permite navegar entre tablas como si fueran objetos Python. 
-#Por ejemplo, en vez de hacer un JOIN manual en SQL, 
+#relationship es lo que te permite navegar entre tablas como si fueran objetos Python.
+#Por ejemplo, en vez de hacer un JOIN manual en SQL,
 #puedes escribir modulo.lecciones y te devuelve la lista automáticamente.
 from sqlalchemy.orm import relationship
 
-#Base es la clase madre de la que heredan todos tus modelos.Está definida en core/database.py 
+#Base es la clase madre de la que heredan todos tus modelos.Está definida en core/database.py
 #y es lo que le dice a SQLAlchemy "registra esta clase como una tabla de la base de datos"
 from core.database import Base
 
-#Declaras una clase Python normal, pero al heredar de Base, SQLAlchemy la trata como una tabla. 
+
+#Declaras una clase Python normal, pero al heredar de Base, SQLAlchemy la trata como una tabla.
 #La clase = la tabla. Las instancias de la clase = las filas.
 class Modulo(Base):
 
@@ -27,9 +28,9 @@ class Modulo(Base):
 
     #Es una relación virtual que SQLAlchemy usa para navegar entre objetos.
     #- "Leccion": apunta a la clase Leccion (en string para evitar problemas de orden de definición)
-    #- back_populates="modulo": le dice que en la clase Leccion hay un atributo llamado modulo 
+    #- back_populates="modulo": le dice que en la clase Leccion hay un atributo llamado modulo
     #que apunta de vuelta a Modulo. Los dos lados se sincronizan
-    #- order_by="Leccion.orden": cuando pidas las lecciones de un módulo, 
+    #- order_by="Leccion.orden": cuando pidas las lecciones de un módulo,
     #vienen ordenadas por su campo orden automáticamente
     lecciones = relationship("Leccion", back_populates="modulo", order_by="Leccion.orden")
 

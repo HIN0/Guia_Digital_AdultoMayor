@@ -9,7 +9,18 @@ PARA AGREGAR UNA PATOLOGÍA NUEVA:
 No hay que tocar seed.py nunca.
 """
 
-from . import general, gastroenteritis, neumonia, itu, cefalea, lumbago, huap, hipertension, caidas, glosario
+from . import (
+    caidas,
+    cefalea,
+    gastroenteritis,
+    general,
+    glosario,
+    hipertension,
+    huap,
+    itu,
+    lumbago,
+    neumonia,
+)
 
 _MODULOS = [general, gastroenteritis, neumonia, itu, cefalea, lumbago, huap, hipertension, caidas, glosario]
 

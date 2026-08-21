@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
+
 from core.database import get_db
 from core.dependencies import get_usuario_actual
 from core.rate_limit import limiter

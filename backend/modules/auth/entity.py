@@ -1,6 +1,9 @@
-from sqlalchemy import Column, Integer, String, Enum
-from core.database import Base
 import enum
+
+from sqlalchemy import Column, Enum, Integer, String
+
+from core.database import Base
+
 
 class RolUsuario(str, enum.Enum):
     alumno = "alumno"

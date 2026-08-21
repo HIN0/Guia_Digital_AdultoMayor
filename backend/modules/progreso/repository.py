@@ -3,12 +3,17 @@ Capa de abstracción de datos.
 Aísla todas las transacciones directas (queries) contra la base de datos.
 """
 from sqlalchemy.orm import Session
-from .entity import ProgresoLeccion, IntentoQuiz, InsigniaObtenida, Insignia
+
+from modules.educacion.entity import Leccion, Modulo, OpcionRespuesta, PreguntaQuiz, QuizFinal
+
+from .entity import Insignia, InsigniaObtenida, IntentoQuiz, ProgresoLeccion
 from .schema import (
-    ProgresoLeccionCreate, SubmitQuizCreate,
-    ResultadoQuizResponse, FeedbackPregunta, InsigniaResponse,
+    FeedbackPregunta,
+    InsigniaResponse,
+    ProgresoLeccionCreate,
+    ResultadoQuizResponse,
+    SubmitQuizCreate,
 )
-from modules.educacion.entity import QuizFinal, PreguntaQuiz, OpcionRespuesta, Modulo, Leccion
 
 # Mapeo orden de módulo → nombre de insignia en BD
 _INSIGNIA_POR_MODULO = {
@@ -58,7 +63,7 @@ def obtener_lecciones_usuario(db: Session, usuario_id: int):
     """Retorna todas las lecciones marcadas como completadas por el usuario."""
     return db.query(ProgresoLeccion).filter(
         ProgresoLeccion.usuario_id == usuario_id,
-        ProgresoLeccion.completada == True,
+        ProgresoLeccion.completada,
     ).all()
 
 def procesar_quiz(db: Session, usuario_id: int, submit: SubmitQuizCreate) -> ResultadoQuizResponse:
@@ -84,7 +89,7 @@ def procesar_quiz(db: Session, usuario_id: int, submit: SubmitQuizCreate) -> Res
 
         opcion_correcta = db.query(OpcionRespuesta).filter(
             OpcionRespuesta.pregunta_id == resp.pregunta_id,
-            OpcionRespuesta.es_correcta == True,
+            OpcionRespuesta.es_correcta,
         ).first()
 
         es_correcta = opcion_seleccionada is not None and opcion_seleccionada.es_correcta
@@ -126,7 +131,7 @@ def usuario_aprobo_quiz(db: Session, usuario_id: int, quiz_id: int) -> bool:
     return db.query(IntentoQuiz).filter(
         IntentoQuiz.usuario_id == usuario_id,
         IntentoQuiz.quiz_id == quiz_id,
-        IntentoQuiz.aprobado == True,
+        IntentoQuiz.aprobado,
     ).first() is not None
 
 def obtener_lecciones_completadas_de_modulo(db: Session, usuario_id: int, modulo_id: int) -> list[int]:
@@ -137,7 +142,7 @@ def obtener_lecciones_completadas_de_modulo(db: Session, usuario_id: int, modulo
         .filter(
             ProgresoLeccion.usuario_id == usuario_id,
             Leccion.modulo_id == modulo_id,
-            ProgresoLeccion.completada == True,
+            ProgresoLeccion.completada,
         )
         .distinct()
         .all()
@@ -148,7 +153,7 @@ def obtener_quizzes_aprobados(db: Session, usuario_id: int) -> list[int]:
     """Retorna los IDs de quizzes que el usuario aprobó al menos una vez."""
     intentos = db.query(IntentoQuiz.quiz_id).filter(
         IntentoQuiz.usuario_id == usuario_id,
-        IntentoQuiz.aprobado == True,
+        IntentoQuiz.aprobado,
     ).distinct().all()
     return [i[0] for i in intentos]
 
