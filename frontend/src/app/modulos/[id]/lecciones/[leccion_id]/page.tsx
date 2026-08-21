@@ -123,6 +123,15 @@ export default function LeccionPage() {
   const [error, setError] = useState(false)
   const [paginaActual, setPaginaActual] = useState(0)
   const [segundosRestantes, setSegundosRestantes] = useState(SEGUNDOS_LECTURA)
+  // Reinicia el freno de lectura durante el render, no en un efecto: evita el
+  // setState síncrono al entrar a la función del efecto y el re-render extra
+  // que eso provoca. Ver: https://react.dev/learn/you-might-not-need-an-effect
+  const [claveCountdown, setClaveCountdown] = useState<string | null>(null)
+  const claveCountdownActual = leccion ? `${leccionId}-${paginaActual}` : null
+  if (claveCountdownActual !== null && claveCountdownActual !== claveCountdown) {
+    setClaveCountdown(claveCountdownActual)
+    setSegundosRestantes(SEGUNDOS_LECTURA)
+  }
   const [fase, setFase] = useState<Fase>("paginas")
   const [quiz, setQuiz] = useState<EstadoQuiz>({
     indice: 0,
@@ -241,7 +250,6 @@ export default function LeccionPage() {
 
   useEffect(() => {
     if (!leccion) return
-    setSegundosRestantes(SEGUNDOS_LECTURA)
     const id = setInterval(() => {
       setSegundosRestantes((s) => {
         if (s <= 1) { clearInterval(id); return 0 }
