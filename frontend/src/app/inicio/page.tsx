@@ -1,13 +1,10 @@
 "use client"
 
 import Image from "next/image"
-import { useRouter } from "next/navigation"
 import Header from "@/components/layout/Header"
 import { Lightbulb, MessageCircle } from "lucide-react"
 
 export default function InicioPage() {
-  const router = useRouter()
-
   return (
     <div className="min-h-screen pb-28" style={{ backgroundColor: "var(--huap-fondo)" }}>
       <Header />

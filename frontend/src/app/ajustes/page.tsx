@@ -18,13 +18,13 @@ const FONT_MAP: Record<string, string> = {
 
 export default function AjustesPage() {
   const router = useRouter()
-  const [tamano, setTamano] = useState("mediano")
-
-  // Leer la preferencia guardada solo en el navegador (tras montar),
-  // para no romper el prerender del build donde no existe localStorage.
-  useEffect(() => {
-    setTamano(localStorage.getItem("fontTamano") ?? "mediano")
-  }, [])
+  // Inicializador perezoso: en el servidor (prerender) no existe localStorage,
+  // así que ahí se usa "mediano"; en el cliente lee la preferencia guardada
+  // en el primer render, sin pasar por un efecto de montaje.
+  const [tamano, setTamano] = useState(() => {
+    if (typeof window === "undefined") return "mediano"
+    return localStorage.getItem("fontTamano") ?? "mediano"
+  })
 
   useEffect(() => {
     document.documentElement.style.fontSize = FONT_MAP[tamano]
