@@ -24,13 +24,8 @@ jobs:
       - name: Instalar dependencias
         run: pip install -r requirements.txt
 
-      # NOTA: el repo tiene deuda de lint preexistente (imports desordenados,
-      # espacios en blanco, etc.) ajena a este workflow. Se reporta pero no
-      # bloquea el build hasta que se limpie; luego se puede quitar el
-      # continue-on-error para que sea un gate real.
-      - name: Ruff (informativo)
+      - name: Ruff
         run: ruff check .
-        continue-on-error: true
 
       - name: Tests
         run: pytest tests/ -v
@@ -52,8 +47,8 @@ jobs:
       - name: Instalar dependencias
         run: npm ci
 
-      # NOTA: mismo caso que ruff en el backend — hay errores de ESLint
-      # preexistentes sin relación con este workflow.
-      - name: ESLint (informativo)
+      - name: ESLint
         run: npm run lint
-        continue-on-error: true
+
+      - name: Tests
+        run: npm run test
