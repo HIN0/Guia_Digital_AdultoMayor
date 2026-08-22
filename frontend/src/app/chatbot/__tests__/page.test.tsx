@@ -59,6 +59,7 @@ describe("ChatbotPage", () => {
       respuesta: "La neumonía es una infección pulmonar.",
       conversacion_id: 1,
       mensaje_id: 5,
+      tipo: "bot",
     })
 
     render(<ChatbotPage />)
@@ -75,6 +76,7 @@ describe("ChatbotPage", () => {
       respuesta: "La neumonía es una infección pulmonar.",
       conversacion_id: 1,
       mensaje_id: 5,
+      tipo: "bot",
     })
     vi.mocked(valorarMensaje).mockResolvedValue(undefined)
 

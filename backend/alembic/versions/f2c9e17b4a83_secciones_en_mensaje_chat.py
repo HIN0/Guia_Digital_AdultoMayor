@@ -13,6 +13,7 @@ Create Date: 2026-08-21
 from typing import Sequence, Union
 
 import sqlalchemy as sa
+
 from alembic import op
 
 revision: str = 'f2c9e17b4a83'
