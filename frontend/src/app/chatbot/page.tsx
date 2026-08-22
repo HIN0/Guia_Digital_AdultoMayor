@@ -1,10 +1,10 @@
 "use client"
 
-import { useState, useEffect, useRef, useCallback } from "react"
+import { useState, useEffect, useRef, useCallback, useSyncExternalStore } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import Header from "@/components/layout/Header"
-import { MessageCircle, Send, AlertTriangle, ThumbsUp, ThumbsDown, Volume2, VolumeX, RotateCcw, History, X, ChevronRight } from "lucide-react"
+import { MessageCircle, Send, AlertTriangle, ThumbsUp, ThumbsDown, Volume2, VolumeX, RotateCcw, History, X, ChevronRight, Phone } from "lucide-react"
 import {
   preguntarChatbot,
   valorarMensaje,
@@ -14,7 +14,7 @@ import {
   ConversacionOut,
 } from "@/lib/api"
 
-type TipoMensaje = "usuario" | "bot" | "error"
+type TipoMensaje = "usuario" | "bot" | "error" | "emergencia"
 type Valoracion = "positiva" | "negativa" | null
 
 interface Mensaje {
@@ -48,6 +48,61 @@ const SALUDO_TEXTO =
 
 const SALUDO: Mensaje = { id: 0, tipo: "bot", contenido: SALUDO_TEXTO }
 
+// "(pointer: coarse)" distingue un dedo de un mouse: es la forma estándar de
+// saber si el aparato puede marcar un teléfono. Definidas fuera del componente
+// para que useSyncExternalStore no vuelva a suscribirse en cada render.
+const _CONSULTA_PUNTERO = "(pointer: coarse)"
+
+function _suscribirPunteroGrueso(alCambiar: () => void) {
+  const mq = window.matchMedia(_CONSULTA_PUNTERO)
+  mq.addEventListener("change", alCambiar)
+  return () => mq.removeEventListener("change", alCambiar)
+}
+
+function _leerPunteroGrueso() {
+  return window.matchMedia(_CONSULTA_PUNTERO).matches
+}
+
+// Botones de acción de la barra inferior (Historial, Sugerencias, Nueva).
+// Mismo azul y mismo radio que la pestaña activa de inicio/aprender/chat, para
+// que se lean como botones y no como etiquetas.
+const btnAccion = (activo = false): React.CSSProperties => ({
+  flex: 1,
+  minWidth: 0,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: "6px",
+  padding: "8px 6px",
+  borderRadius: "10px",
+  border: "none",
+  backgroundColor: activo ? "#123A5C" : "var(--huap-azul)",
+  color: "white",
+  cursor: "pointer",
+  fontSize: "0.85rem",
+  fontWeight: 600,
+  whiteSpace: "nowrap",
+  boxShadow: "0 1px 3px rgba(27,79,122,0.22)",
+})
+
+// Recuadro de llamada del aviso de emergencia. Mismo peso visual en celular y
+// en computador: lo que cambia es si además marca el número.
+const estiloLlamar: React.CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: "9px",
+  marginTop: "14px",
+  padding: "15px",
+  borderRadius: "12px",
+  backgroundColor: "var(--huap-rojo)",
+  color: "white",
+  fontWeight: 700,
+  fontSize: "1.15rem",
+  textDecoration: "none",
+  boxShadow: "0 2px 8px rgba(200,0,0,0.25)",
+}
+
 export default function ChatbotPage() {
   const { data: session } = useSession()
   const router = useRouter()
@@ -55,6 +110,14 @@ export default function ChatbotPage() {
   const [input, setInput] = useState("")
   const [cargando, setCargando] = useState(false)
   const [conversacionId, setConversacionId] = useState<number | null>(null)
+  // Si el dispositivo puede marcar un teléfono. En el servidor no existe
+  // window, así que el snapshot del servidor es false y el cliente lo corrige
+  // al hidratar.
+  const puedeLlamar = useSyncExternalStore(
+    _suscribirPunteroGrueso,
+    _leerPunteroGrueso,
+    () => false,
+  )
   const [mostrarSugerencias, setMostrarSugerencias] = useState(false)
   const [mostrarHistorial, setMostrarHistorial] = useState(false)
   const [historial, setHistorial] = useState<ConversacionOut[]>([])
@@ -126,7 +189,8 @@ export default function ChatbotPage() {
         ...prev,
         {
           id: Date.now() + 1,
-          tipo: "bot",
+          // Una emergencia se destaca y ofrece llamar al 131; el resto se pinta igual.
+          tipo: data.tipo === "emergencia" ? "emergencia" : "bot",
           contenido: data.respuesta,
           mensajeId: data.mensaje_id,
           valoracion: null,
@@ -215,7 +279,7 @@ export default function ChatbotPage() {
           .filter((m) => m.tipo !== "fallback" || m.contenido.length > 0)
           .map((m, i) => ({
             id: i + 1,
-            tipo: (m.tipo === "usuario" ? "usuario" : m.tipo === "bot" || m.tipo === "fallback" ? "bot" : "bot") as TipoMensaje,
+            tipo: (m.tipo === "usuario" ? "usuario" : m.tipo === "emergencia" ? "emergencia" : "bot") as TipoMensaje,
             contenido: m.contenido,
             mensajeId: m.tipo !== "usuario" ? m.id : undefined,
             valoracion: m.valoracion as Valoracion,
@@ -263,23 +327,47 @@ export default function ChatbotPage() {
 
       {/* Área de mensajes */}
       <div ref={listaRef} style={{ flex: 1, overflowY: "auto", padding: "20px 16px", display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "100%", maxWidth: "680px" }}>
+        <div
+            aria-live="polite"
+            aria-label="Conversación con el asistente" style={{ display: "flex", flexDirection: "column", gap: "16px", width: "100%", maxWidth: "680px" }}>
 
           {mensajes.map((msg) => (
             <div key={msg.id}>
               <div style={{ display: "flex", justifyContent: msg.tipo === "usuario" ? "flex-end" : "flex-start", alignItems: msg.tipo === "usuario" ? "flex-end" : "flex-start", gap: "8px" }}>
                 {msg.tipo !== "usuario" && (
-                  <div style={{ width: 36, height: 36, borderRadius: "50%", flexShrink: 0, background: msg.tipo === "error" ? "var(--huap-rojo)" : "linear-gradient(135deg, var(--huap-azul), #3b6fd4)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 6px rgba(26,82,160,0.25)" }}>
+                  <div style={{ width: 36, height: 36, borderRadius: "50%", flexShrink: 0, background: msg.tipo === "error" || msg.tipo === "emergencia" ? "var(--huap-rojo)" : "linear-gradient(135deg, var(--huap-azul), #3b6fd4)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 6px rgba(26,82,160,0.25)" }}>
                     <MessageCircle size={18} color="white" strokeWidth={2} />
                   </div>
                 )}
-                <div style={{ maxWidth: "78%", padding: "13px 17px", borderRadius: msg.tipo === "usuario" ? "20px 20px 5px 20px" : "20px 20px 20px 5px", background: msg.tipo === "usuario" ? "linear-gradient(135deg, var(--huap-azul), #3b6fd4)" : msg.tipo === "error" ? "#FFF0F0" : "white", color: msg.tipo === "usuario" ? "white" : msg.tipo === "error" ? "var(--huap-rojo)" : "var(--huap-texto)", boxShadow: msg.tipo === "usuario" ? "0 2px 8px rgba(26,82,160,0.25)" : "0 1px 6px rgba(0,0,0,0.07)", fontSize: "1rem", lineHeight: 1.65, whiteSpace: "pre-wrap", border: msg.tipo === "bot" ? "1px solid rgba(0,0,0,0.05)" : "none" }}>
+                <div style={{ maxWidth: "78%", padding: "13px 17px", borderRadius: msg.tipo === "usuario" ? "20px 20px 5px 20px" : "20px 20px 20px 5px", background: msg.tipo === "usuario" ? "linear-gradient(135deg, var(--huap-azul), #3b6fd4)" : msg.tipo === "error" || msg.tipo === "emergencia" ? "#FFF0F0" : "white", color: msg.tipo === "usuario" ? "white" : msg.tipo === "error" ? "var(--huap-rojo)" : "var(--huap-texto)", boxShadow: msg.tipo === "usuario" ? "0 2px 8px rgba(26,82,160,0.25)" : "0 1px 6px rgba(0,0,0,0.07)", fontSize: msg.tipo === "emergencia" ? "1.05rem" : "1rem", lineHeight: 1.65, whiteSpace: "pre-wrap", border: msg.tipo === "emergencia" ? "2px solid var(--huap-rojo)" : msg.tipo === "bot" ? "1px solid rgba(0,0,0,0.05)" : "none" }}>
+                  {msg.tipo === "emergencia" && (
+                    <div style={{ display: "flex", alignItems: "center", gap: "7px", color: "var(--huap-rojo)", fontWeight: 700, marginBottom: "9px", fontSize: "0.95rem" }}>
+                      <AlertTriangle size={19} strokeWidth={2.5} />
+                      Puede ser una emergencia
+                    </div>
+                  )}
                   {msg.contenido}
+                  {msg.tipo === "emergencia" && (
+                    puedeLlamar ? (
+                      <a href="tel:131" style={estiloLlamar}>
+                        <Phone size={22} strokeWidth={2.5} />
+                        Llamar al 131
+                      </a>
+                    ) : (
+                      // En un computador el enlace tel: no hace nada. Se muestra
+                      // el mismo recuadro pero sin prometer una acción: aquí lo
+                      // útil es que el número se lea grande y se pueda copiar.
+                      <div style={{ ...estiloLlamar, cursor: "default", userSelect: "text" }}>
+                        <Phone size={22} strokeWidth={2.5} />
+                        Llame al 131
+                      </div>
+                    )
+                  )}
                 </div>
               </div>
 
               {/* Acciones de mensajes bot */}
-              {msg.tipo === "bot" && msg.id !== 0 && (
+              {(msg.tipo === "bot" || msg.tipo === "emergencia") && msg.id !== 0 && (
                 <div style={{ display: "flex", gap: "6px", marginLeft: "44px", marginTop: "5px", alignItems: "center" }}>
                   {/* TTS */}
                   <button
@@ -377,31 +465,34 @@ export default function ChatbotPage() {
           </div>
         )}
 
-        {/* Fila de acciones con etiquetas (Opción B) */}
-        <div style={{ display: "flex", gap: "6px", maxWidth: "680px", margin: "0 auto 8px", flexWrap: "nowrap", overflowX: "auto" }}>
+        {/* Barra de acciones: una sola fila, los botones se reparten el ancho
+            disponible. Así no se corta ninguno ni se roba altura al chat. */}
+        <div style={{ display: "flex", gap: "6px", maxWidth: "680px", margin: "0 auto 8px" }}>
           <button
             onClick={abrirHistorial}
-            style={{ display: "flex", alignItems: "center", gap: "5px", padding: "6px 12px", borderRadius: "20px", border: "1.5px solid #D1D5DB", background: "white", cursor: "pointer", color: "#555", fontSize: "0.82rem", fontWeight: 500, whiteSpace: "nowrap", flexShrink: 0 }}
+            aria-expanded={mostrarHistorial}
+            style={btnAccion(mostrarHistorial)}
           >
-            <History size={14} />
+            <History size={15} />
             Historial
           </button>
 
           <button
             onClick={() => setMostrarSugerencias((v) => !v)}
-            style={{ display: "flex", alignItems: "center", gap: "5px", padding: "6px 12px", borderRadius: "20px", border: "1.5px solid", borderColor: mostrarSugerencias ? "var(--huap-azul)" : "#D1D5DB", background: mostrarSugerencias ? "#EFF5FF" : "white", cursor: "pointer", color: mostrarSugerencias ? "var(--huap-azul)" : "#555", fontSize: "0.82rem", fontWeight: 500, whiteSpace: "nowrap", flexShrink: 0 }}
+            aria-expanded={mostrarSugerencias}
+            style={btnAccion(mostrarSugerencias)}
           >
-            <ChevronRight size={14} style={{ transform: mostrarSugerencias ? "rotate(90deg)" : "none", transition: "transform 0.15s" }} />
             Sugerencias
+            <ChevronRight size={15} style={{ transform: mostrarSugerencias ? "rotate(-90deg)" : "rotate(90deg)", transition: "transform 0.15s" }} />
           </button>
 
           {mensajes.length > 1 && (
             <button
               onClick={reiniciar}
-              title="Nueva conversación"
-              style={{ display: "flex", alignItems: "center", gap: "5px", padding: "6px 12px", borderRadius: "20px", border: "1.5px solid #D1D5DB", background: "white", cursor: "pointer", color: "#555", fontSize: "0.82rem", fontWeight: 500, whiteSpace: "nowrap", flexShrink: 0 }}
+              title="Empezar una conversación nueva"
+              style={btnAccion()}
             >
-              <RotateCcw size={13} />
+              <RotateCcw size={15} />
               Nueva
             </button>
           )}
@@ -433,50 +524,83 @@ export default function ChatbotPage() {
       </div>
 
       {/* Drawer — historial de conversaciones */}
+      {/* Historial: panel lateral que entra desde la derecha. El fondo oscuro
+          y la animación de entrada dejan claro que es una capa sobre el chat. */}
       {mostrarHistorial && (
         <div
           onClick={() => setMostrarHistorial(false)}
-          style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.4)", zIndex: 300, display: "flex", justifyContent: "flex-end" }}
+          style={{ position: "fixed", inset: 0, backgroundColor: "rgba(15,23,42,0.45)", zIndex: 300, display: "flex", justifyContent: "flex-end", animation: "fundido 0.18s ease-out" }}
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            style={{ width: "min(360px, 92vw)", height: "100%", backgroundColor: "white", boxShadow: "-4px 0 24px rgba(0,0,0,0.15)", display: "flex", flexDirection: "column" }}
+            role="dialog"
+            aria-label="Mis conversaciones"
+            style={{
+              width: "min(390px, 92vw)", height: "100%", backgroundColor: "white",
+              boxShadow: "-8px 0 32px rgba(15,23,42,0.22)",
+              display: "flex", flexDirection: "column",
+              animation: "entra-lateral 0.22s cubic-bezier(0.32, 0.72, 0, 1)",
+            }}
           >
-            {/* Header del drawer */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 20px 16px", borderBottom: "1px solid #F0F0F0" }}>
-              <div>
-                <div style={{ fontWeight: 700, fontSize: "1.1rem", color: "var(--huap-texto)" }}>Mis conversaciones</div>
-                <div style={{ fontSize: "0.8rem", color: "#999", marginTop: "2px" }}>Últimas 20</div>
+            {/* Encabezado en el azul de la aplicación */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "18px 18px 18px 22px", backgroundColor: "var(--huap-azul)" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <History size={20} color="white" strokeWidth={2.2} />
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: "1.05rem", color: "white", lineHeight: 1.2 }}>Mis conversaciones</div>
+                  <div style={{ fontSize: "0.78rem", color: "rgba(255,255,255,0.75)", marginTop: "2px" }}>Toque una para retomarla</div>
+                </div>
               </div>
-              <button onClick={() => setMostrarHistorial(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "#888", padding: "4px" }}>
-                <X size={20} />
+              <button
+                onClick={() => setMostrarHistorial(false)}
+                aria-label="Cerrar historial"
+                title="Cerrar"
+                style={{
+                  width: 38, height: 38, borderRadius: "50%", flexShrink: 0,
+                  backgroundColor: "var(--huap-rojo)", border: "none", cursor: "pointer",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.25)",
+                }}
+              >
+                <X size={20} color="white" strokeWidth={2.6} />
               </button>
             </div>
 
-            {/* Lista */}
-            <div style={{ flex: 1, overflowY: "auto", padding: "12px 0" }}>
+            <div style={{ flex: 1, overflowY: "auto", backgroundColor: "#FAFBFD" }}>
               {cargandoHistorial ? (
-                <div style={{ padding: "40px 20px", textAlign: "center", color: "#aaa", fontSize: "0.9rem" }}>Cargando...</div>
+                <div style={{ padding: "44px 20px", textAlign: "center", color: "#9AA3AF", fontSize: "0.95rem" }}>Cargando…</div>
               ) : historial.length === 0 ? (
-                <div style={{ padding: "40px 20px", textAlign: "center", color: "#aaa", fontSize: "0.9rem" }}>No hay conversaciones guardadas.</div>
+                <div style={{ padding: "44px 24px", textAlign: "center", color: "#9AA3AF", fontSize: "0.95rem", lineHeight: 1.6 }}>
+                  Todavía no tiene conversaciones guardadas.
+                </div>
               ) : (
-                historial.map((conv) => (
-                  <button
-                    key={conv.id}
-                    onClick={() => cargarConversacion(conv)}
-                    style={{ width: "100%", padding: "14px 20px", background: "none", border: "none", borderBottom: "1px solid #F5F5F5", cursor: "pointer", textAlign: "left", display: "flex", flexDirection: "column", gap: "4px" }}
-                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#F8FAFF")}
-                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
-                  >
-                    <div style={{ fontSize: "0.82rem", color: "#999" }}>
-                      {new Date(conv.fecha_inicio).toLocaleDateString("es-CL", { day: "2-digit", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" })}
-                      <span style={{ marginLeft: "8px", color: "#C7D8F5", fontWeight: 600 }}>· {conv.total_mensajes} msgs</span>
-                    </div>
-                    <div style={{ fontSize: "0.93rem", color: "var(--huap-texto)", fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                      {conv.preview}
-                    </div>
-                  </button>
-                ))
+                <div style={{ padding: "12px" }}>
+                  {historial.map((conv) => (
+                    <button
+                      key={conv.id}
+                      onClick={() => cargarConversacion(conv)}
+                      style={{
+                        width: "100%", padding: "14px 16px", marginBottom: "8px",
+                        backgroundColor: "white", border: "1.5px solid #E5E9F0",
+                        borderRadius: "14px", cursor: "pointer", textAlign: "left",
+                        display: "flex", flexDirection: "column", gap: "5px",
+                        transition: "border-color 0.15s, box-shadow 0.15s",
+                      }}
+                      onMouseEnter={(e) => { e.currentTarget.style.borderColor = "var(--huap-azul)"; e.currentTarget.style.boxShadow = "0 2px 10px rgba(27,79,122,0.12)" }}
+                      onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#E5E9F0"; e.currentTarget.style.boxShadow = "none" }}
+                    >
+                      <div style={{ fontSize: "0.97rem", color: "var(--huap-texto)", fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        {conv.preview}
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.78rem", color: "#9AA3AF" }}>
+                        <span>{new Date(conv.fecha_inicio).toLocaleDateString("es-CL", { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })}</span>
+                        <span style={{ backgroundColor: "#EEF3FA", color: "var(--huap-azul)", padding: "2px 8px", borderRadius: "999px", fontWeight: 600 }}>
+                          {conv.total_mensajes} mensajes
+                        </span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
               )}
             </div>
           </div>
@@ -484,6 +608,14 @@ export default function ChatbotPage() {
       )}
 
       <style>{`
+        @keyframes entra-lateral {
+          from { transform: translateX(100%); }
+          to { transform: translateX(0); }
+        }
+        @keyframes fundido {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
         @keyframes typing-bounce {
           0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
           40% { transform: translateY(-6px); opacity: 1; }
