@@ -1,0 +1,51 @@
+# Despliegue en producción — servidor propio.
+# Procedimiento completo en docs/Guia_traspaso_tecnico_HUAP.docx
+#
+# Diferencias con docker-compose.yml (que es solo para desarrollo local):
+#   1. Postgres NO se publica en el host: solo es accesible desde la red interna
+#      de Docker. El backend le habla por el nombre de servicio "db".
+#   2. No hay contraseña por defecto. Si POSTGRES_PASSWORD no está definida,
+#      el arranque falla con un mensaje explícito en vez de usar una débil.
+#   3. No se sobrescriben DATABASE_URL ni ALLOWED_ORIGINS: se leen de
+#      backend/.env, que es donde la guía indica configurarlas.
+#   4. El backend escucha solo en 127.0.0.1; nginx hace de proxy inverso.
+#
+# Requiere un archivo .env en esta misma carpeta con POSTGRES_USER y
+# POSTGRES_PASSWORD (ver .env.example).
+#
+# Uso:
+#   docker compose -f docker-compose.prod.yml up -d --build
+
+services:
+  db:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?Define POSTGRES_USER en el archivo .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Define POSTGRES_PASSWORD en el archivo .env}
+      POSTGRES_DB: ${POSTGRES_DB:-guia_digital}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    # Solo accesible desde el propio servidor. nginx expone /api hacia afuera.
+    ports:
+      - "127.0.0.1:8000:7860"
+    # IMPORTANTE: DATABASE_URL debe apuntar al host "db" (nombre del servicio),
+    # no a localhost. Ejemplo en backend/.env:
+    #   DATABASE_URL=postgresql://usuario:clave@db:5432/guia_digital
+    env_file:
+      - ./backend/.env
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

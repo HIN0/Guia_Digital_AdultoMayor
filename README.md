@@ -45,8 +45,13 @@ npm run dev
 
 ## Despliegue en producción
 
-- **Backend**: Hugging Face Spaces (Docker SDK) — ver `backend/Dockerfile`.
-- **Frontend**: Vercel.
+El despliegue se realiza en servidor propio con Docker (ver `backend/Dockerfile` y
+`docker-compose.yml`). El frontend se compila con `npm run build` y se sirve detrás
+de un proxy inverso con TLS.
+
+El procedimiento completo —credenciales, configuración de OAuth, dominio, variables
+de entorno y puesta en marcha— está documentado en
+[`docs/Guia_traspaso_tecnico_HUAP.docx`](docs/Guia_traspaso_tecnico_HUAP.docx).
 
 ## Tests y análisis estático
 

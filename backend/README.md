@@ -1,17 +1,8 @@
----
-title: Guia Digital Adulto Mayor API
-emoji: 🏥
-colorFrom: blue
-colorTo: green
-sdk: docker
-app_port: 7860
-pinned: false
----
-
 # Backend — Guía Digital Adulto Mayor (FastAPI)
 
-> **Nota despliegue:** este Space corre en Docker (ver `Dockerfile`) y escucha en el puerto `7860`.
-> La documentación interactiva queda en `https://<tu-space>.hf.space/docs` y el ping de salud en `/health`.
+> **Nota despliegue:** el backend corre en Docker (ver `Dockerfile`) y escucha en el
+> puerto `7860` dentro del contenedor. El ping de salud está en `/health`.
+> La documentación interactiva (`/docs`) solo se expone cuando `ENVIRONMENT=development`.
 
 Guía completa para alguien que **nunca ha usado FastAPI**.
 

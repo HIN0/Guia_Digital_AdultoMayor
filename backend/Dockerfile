@@ -1,5 +1,6 @@
-# Backend FastAPI para Hugging Face Spaces (Docker SDK)
-# HF Spaces espera que la app escuche en el puerto 7860.
+# Imagen de contenedor del backend FastAPI.
+# La aplicación escucha en el puerto 7860 dentro del contenedor;
+# el mapeo al puerto del host se define en docker-compose.yml.
 FROM python:3.12-slim
 
 # Dependencias de sistema (compiladores por si alguna lib las necesita)
@@ -7,7 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# HF Spaces recomienda correr como usuario no-root con UID 1000
+# Se ejecuta como usuario no-root (UID 1000) por buenas prácticas de seguridad
 RUN useradd -m -u 1000 user
 USER user
 ENV HOME=/home/user \
