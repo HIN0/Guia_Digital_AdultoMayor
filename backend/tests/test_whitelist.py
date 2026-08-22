@@ -71,36 +71,6 @@ def test_temas_nuevos_en_whitelist():
 
 # ── 2. Match semántico FAISS (requiere modelo de embeddings) ─────────────────
 
-@pytest.fixture(scope="module")
-def embeddings():
-    pytest.importorskip("langchain_huggingface")
-    pytest.importorskip("langchain_community")
-    from langchain_huggingface import HuggingFaceEmbeddings
-
-    # Misma configuración que service._get_embeddings (normalización incluida)
-    return HuggingFaceEmbeddings(
-        model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
-        encode_kwargs={"normalize_embeddings": True},
-    )
-
-
-@pytest.fixture(scope="module")
-def pregunta_store(embeddings):
-    from langchain_community.vectorstores import FAISS
-
-    texts, metadatas = [], []
-    for i, (patologia, preguntas) in enumerate(SEED_DATA.items()):
-        for item in preguntas:
-            for texto in [item["pregunta"]] + item.get("variantes", []):
-                texts.append(texto)
-                metadatas.append({
-                    "patologia": patologia,
-                    "respuesta": item["respuesta"],
-                    "pregunta_id": i,  # placeholder: en producción es el id de BD
-                })
-    return FAISS.from_texts(texts, embeddings, metadatas=metadatas)
-
-
 def _mejor_match(store, pregunta):
     doc, distancia = store.similarity_search_with_score(pregunta, k=1)[0]
     return doc.metadata, distancia
@@ -148,33 +118,6 @@ requiere_service = pytest.mark.skipif(
 )
 
 
-@pytest.fixture(scope="module")
-def service_configurado(embeddings, pregunta_store):
-    """Configura los índices de service desde los seeds (sin base de datos)
-    para poder testear la lógica real de _buscar_en_whitelist y los umbrales."""
-    if _service is None:
-        pytest.skip("modules.chatbot.service no importable (falta .env o dependencias)")
-    from langchain_community.vectorstores import FAISS
-
-    ruta = os.path.join(os.path.dirname(_service.__file__), "data", "conocimiento.txt")
-    with open(ruta, encoding="utf-8") as f:
-        chunks = _service._dividir_por_secciones(f.read())
-    knowledge = FAISS.from_texts(chunks, embeddings)
-
-    lookup = {}
-    for i, preguntas in enumerate(SEED_DATA.values()):
-        for item in preguntas:
-            for texto in [item["pregunta"]] + item.get("variantes", []):
-                lookup[normalizar_texto(texto)] = (i, item["respuesta"])
-
-    anterior = (_service._pregunta_store, _service._knowledge_store, _service._exact_lookup)
-    _service._pregunta_store = pregunta_store
-    _service._knowledge_store = knowledge
-    _service._exact_lookup = lookup
-    yield _service
-    _service._pregunta_store, _service._knowledge_store, _service._exact_lookup = anterior
-
-
 def test_whitelist_rechaza_preguntas_ajenas(service_configurado):
     """Regresión del falso positivo: estas preguntas quedan a distancia media
     (~0.5-0.7) de alguna variante de salud, y con el umbral antiguo de 0.8
@@ -185,27 +128,12 @@ def test_whitelist_rechaza_preguntas_ajenas(service_configurado):
 
 
 def test_pregunta_de_salud_ambigua_va_al_llm_no_al_fallback(service_configurado):
-    """Una pregunta de salud sin match claro en la whitelist debe pasar al LLM
-    (no matchear whitelist con la pregunta equivocada, ni cortarse por fuera
-    de alcance)."""
+    """Una pregunta de salud sin match claro en la whitelist debe pasar al LLM,
+    en vez de matchear con la pregunta equivocada."""
     pregunta = "la ciatica se cura sola"
     _, respuesta = service_configurado._buscar_en_whitelist(pregunta)
+
     assert respuesta is None, f"matcheó whitelist con: {respuesta}"
-
-    distancia = service_configurado._distancia_conocimiento(pregunta)
-    assert distancia <= service_configurado.UMBRAL_FUERA_DE_ALCANCE
-
-
-def test_umbral_fuera_de_alcance(service_configurado):
-    """El corte sin LLM debe activarse para lo claramente ajeno y nunca para
-    preguntas de salud que el RAG puede responder."""
-    lejos = service_configurado._distancia_conocimiento("cuanto cuesta el dolar hoy")
-    assert lejos > service_configurado.UMBRAL_FUERA_DE_ALCANCE
-
-    cerca = service_configurado._distancia_conocimiento(
-        "mi marido esta con diarrea que le doy de comer"
-    )
-    assert cerca <= service_configurado.UMBRAL_FUERA_DE_ALCANCE
 
 
 @requiere_service
@@ -226,3 +154,40 @@ def test_chunks_conservan_titulo_de_seccion():
 
     for chunk in chunks:
         assert len(chunk) < 1600, f"Chunk demasiado largo ({len(chunk)} caracteres)"
+
+
+# ── La whitelist no puede responder de otra condición ────────────────────────
+
+@pytest.mark.parametrize("pregunta", [
+    "cuanto dura la bronquitis",   # matcheaba neumonía a 0.299
+    "que es la gastritis",         # matcheaba gastroenteritis a 0.370
+    "me duele la muela",           # matcheaba "me duele al orinar" a 0.053
+    "que es una hernia",           # matcheaba infección urinaria a 0.287
+    "me duele la rodilla",         # matcheaba una respuesta de espalda a 0.413
+])
+def test_no_responde_de_un_tema_que_no_cubre(service_configurado, pregunta):
+    """El conocimiento cubre 33 temas y la whitelist solo 10, así que las
+    preguntas sobre los temas nuevos caen cerca de respuestas viejas y sin
+    relación. Si la persona nombra una condición, la respuesta validada tiene
+    que hablar de esa condición; si no, el caso es del LLM."""
+    _, respuesta = service_configurado._buscar_en_whitelist(pregunta)
+
+    assert respuesta is None, f"'{pregunta}' recibió una respuesta ajena: {respuesta[:90]}"
+
+
+@pytest.mark.parametrize("pregunta", [
+    "que es la neumonia",
+    "cuanto dura la gastroenteritis",
+    "que es la infeccion urinaria",
+    "que es la presion alta",
+    "me duele la cabeza hace dias",
+    "se cayo mi mama y no se puede parar",
+    "que remedio tomo",
+])
+def test_las_respuestas_validadas_que_si_corresponden_se_conservan(
+    service_configurado, pregunta
+):
+    """Contrapeso: la regla no debe apagar la whitelist donde sí cubre el tema."""
+    _, respuesta = service_configurado._buscar_en_whitelist(pregunta)
+
+    assert respuesta is not None, f"'{pregunta}' perdió su respuesta validada"

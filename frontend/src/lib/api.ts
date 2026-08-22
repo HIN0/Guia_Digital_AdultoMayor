@@ -258,6 +258,7 @@ export interface ChatResponse {
   respuesta: string
   conversacion_id: number
   mensaje_id: number
+  tipo: 'bot' | 'fallback' | 'emergencia'
 }
 
 export async function preguntarChatbot(
@@ -425,4 +426,52 @@ export async function adminRecargarWhitelist(token: string): Promise<void> {
     headers: { Authorization: `Bearer ${token}` },
   })
   if (!res.ok) throw new Error('Error al recargar whitelist')
+}
+
+export async function adminRecargarConocimiento(token: string): Promise<void> {
+  const res = await fetch(`${API_URL}/chatbot/admin/recargar-conocimiento`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  if (!res.ok) throw new Error('Error al recargar la base de conocimiento')
+}
+
+// ── Revisión de calidad del chatbot (admin) ──────────────────────────────────
+
+export interface ResumenChatbotOut {
+  preguntas: number
+  respuestas: number
+  fallbacks: number
+  emergencias: number
+  valoraciones_positivas: number
+  valoraciones_negativas: number
+}
+
+export interface RevisionItemOut {
+  mensaje_id: number
+  conversacion_id: number
+  fecha: string
+  motivo: 'fallback' | 'valoracion_negativa'
+  pregunta: string
+  respuesta: string
+  secciones: string[]
+}
+
+export async function adminResumenChatbot(token: string): Promise<ResumenChatbotOut> {
+  const res = await fetch(`${API_URL}/chatbot/admin/resumen`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  if (!res.ok) throw new Error('Error al cargar el resumen')
+  return res.json()
+}
+
+export async function adminListarRevision(
+  token: string,
+  limite = 50,
+): Promise<RevisionItemOut[]> {
+  const res = await fetch(`${API_URL}/chatbot/admin/revision?limite=${limite}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  if (!res.ok) throw new Error('Error al cargar la revisión')
+  return res.json()
 }

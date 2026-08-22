@@ -30,6 +30,7 @@ from core.database import Base, get_db
 # Importar todas las entidades para que se registren en Base.metadata
 # antes de crear las tablas de prueba.
 from modules.auth import entity as auth_entity  # noqa: F401
+from modules.chatbot import entity as chatbot_entity  # noqa: F401
 from modules.educacion import entity as educacion_entity  # noqa: F401
 from modules.progreso import entity as progreso_entity  # noqa: F401
 
@@ -209,3 +210,117 @@ def crear_insignia(db_session):
         return insignia
 
     return _crear
+
+
+# ── Fixtures del chatbot ─────────────────────────────────────────────────────
+# Compartidas por test_whitelist.py y test_conversacion_multiturno.py.
+# Perezosas: el modelo de embeddings (~470 MB) solo se carga si un test las pide.
+
+@pytest.fixture(scope="module")
+def embeddings():
+    pytest.importorskip("langchain_huggingface")
+    pytest.importorskip("langchain_community")
+    from langchain_huggingface import HuggingFaceEmbeddings
+
+    # Misma configuración que service._get_embeddings (normalización incluida)
+    return HuggingFaceEmbeddings(
+        model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+        encode_kwargs={"normalize_embeddings": True},
+    )
+
+
+@pytest.fixture(scope="module")
+def pregunta_store(embeddings):
+    from langchain_community.vectorstores import FAISS
+
+    from modules.chatbot.seeds import SEED_DATA
+
+    texts, metadatas = [], []
+    for i, (patologia, preguntas) in enumerate(SEED_DATA.items()):
+        for item in preguntas:
+            for texto in [item["pregunta"]] + item.get("variantes", []):
+                texts.append(texto)
+                metadatas.append({
+                    "patologia": patologia,
+                    "respuesta": item["respuesta"],
+                    "pregunta_id": i,  # placeholder: en producción es el id de BD
+                })
+    return FAISS.from_texts(texts, embeddings, metadatas=metadatas)
+
+
+@pytest.fixture(scope="module")
+def service_configurado(embeddings, pregunta_store):
+    """Configura los índices de service desde los seeds (sin base de datos)
+    para poder testear la lógica real de _buscar_en_whitelist y los umbrales."""
+    _service = pytest.importorskip(
+        "modules.chatbot.service",
+        reason="modules.chatbot.service no importable (falta .env o dependencias)",
+    )
+    from langchain_community.vectorstores import FAISS
+
+    from modules.chatbot.normalizacion import normalizar_texto
+    from modules.chatbot.seeds import SEED_DATA
+
+    ruta = os.path.join(os.path.dirname(_service.__file__), "data", "conocimiento.txt")
+    with open(ruta, encoding="utf-8") as f:
+        chunks = _service._dividir_por_secciones(f.read())
+    knowledge = FAISS.from_texts(
+        chunks, embeddings, metadatas=_service.metadatas_de_chunks(chunks)
+    )
+
+    lookup = {}
+    for i, preguntas in enumerate(SEED_DATA.values()):
+        for item in preguntas:
+            for texto in [item["pregunta"]] + item.get("variantes", []):
+                lookup[normalizar_texto(texto)] = (i, item["respuesta"])
+
+    anterior = (
+        _service._pregunta_store,
+        _service._knowledge_store,
+        _service._exact_lookup,
+        _service._retriever,
+    )
+    _service._pregunta_store = pregunta_store
+    _service._knowledge_store = knowledge
+    _service._exact_lookup = lookup
+    # Mismo k que inicializar_base_conocimiento, para que los tests de
+    # recuperación ejerciten el retriever real y no una réplica.
+    _service._retriever = knowledge.as_retriever(search_kwargs={"k": 3})
+    yield _service
+    (
+        _service._pregunta_store,
+        _service._knowledge_store,
+        _service._exact_lookup,
+        _service._retriever,
+    ) = anterior
+
+
+@pytest.fixture()
+def bot(service_configurado, db_session, crear_usuario, monkeypatch):
+    """Ejecuta generar_y_guardar_respuesta de verdad (SQLite en memoria) con el
+    LLM reemplazado por un doble que registra con qué consulta se recuperó."""
+    from types import SimpleNamespace
+
+    usuario = crear_usuario(email="abuela@example.com")
+    llamadas = []
+
+    def _llm_doble(pregunta, historial, tema=None):
+        llamadas.append({"pregunta": pregunta, "historial": historial, "tema": tema})
+        return "Respuesta del modelo.", ["NEUMONÍA ADQUIRIDA EN LA COMUNIDAD — Síntomas"]
+
+    monkeypatch.setattr(service_configurado, "_invocar_llm", _llm_doble)
+    service_configurado._llm_cache.clear()
+
+    estado = {"conversacion_id": None}
+
+    def _preguntar(texto):
+        resultado = service_configurado.generar_y_guardar_respuesta(
+            db=db_session,
+            usuario_id=usuario.id,
+            pregunta=texto,
+            conversacion_id=estado["conversacion_id"],
+        )
+        estado["conversacion_id"] = resultado["conversacion_id"]
+        return resultado
+
+    return SimpleNamespace(preguntar=_preguntar, llamadas=llamadas)

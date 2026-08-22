@@ -19,7 +19,7 @@ El Hospital de Urgencia Asistencia Pública (HUAP) atiende las 24 horas del día
 La Guía Digital del HUAP es una plataforma educativa en línea diseñada especialmente para personas mayores. Ofrece lecciones interactivas sobre tecnología, salud y bienestar. Cada módulo contiene lecciones con texto, imágenes y audio para facilitar el aprendizaje.
 
 ### Soporte técnico
-Si tiene problemas para entrar a la plataforma o para usarla, puede pedir ayuda en el mesón de atención del HUAP, o pedirle a un familiar que le acompañe la primera vez. No se preocupe si algo no le resulta: es normal al empezar y siempre hay alguien que puede apoyarle.
+Si tiene problemas para acceder a la plataforma, puede acercarse al mesón de atención del HUAP en horario de lunes a viernes de 8:00 a 17:00 hrs, o llamar al número de soporte indicado en su tarjeta de atención. Si no encuentra el número, puede preguntar en el mesón.
 
 ### Dirección, teléfono y cómo atenderse
 Para obtener la dirección y los teléfonos correctos y al día del hospital, lo mejor es revisar la información oficial del HUAP o preguntar en el mesón de atención, de modo de no usar datos desactualizados. Para saber cómo atenderse o pedir una hora, la persona debe consultar directamente en el HUAP o en su CESFAM según corresponda a su caso; ahí le indicarán los pasos y los documentos necesarios. Tener a mano el carnet y los datos de FONASA facilita el trámite. Si es una urgencia, no esperar una hora: acudir a la urgencia o llamar al 131.
@@ -386,7 +386,7 @@ Las hernias no se cierran solas. El tratamiento habitual es una operación para 
 ## CONSTIPACIÓN (ESTREÑIMIENTO O ESTAR ESTÍTICO)
 
 ### ¿Qué es la constipación?
-La constipación, también llamada estreñimiento, o estar estítico o estíptico como se dice comúnmente en Chile, es tener menos de tres deposiciones por semana. Muchas personas lo describen como que la guatita se hincha, que están tapadas o que no pueden obrar, o deposiciones duras, secas y difíciles de eliminar. No es necesario obrar todos los días para estar sano: lo importante es que no cueste y que no haya cambios bruscos respecto a lo habitual.
+La constipación, también llamada estreñimiento, o estar estítico o estíptico como se dice comúnmente en Chile, es tener menos de tres deposiciones por semana, o deposiciones duras, secas y difíciles de eliminar. También se le dice estar "tapado" o no poder obrar. No es necesario obrar todos los días para estar sano: lo importante es que no cueste y que no haya cambios bruscos respecto a lo habitual.
 
 ### Por qué es frecuente en personas mayores
 Con la edad influyen la menor actividad física, tomar poca agua, comer poca fibra y varios medicamentos de uso común. Algunos remedios para el dolor, para la presión o para el ánimo pueden dejar más lento el intestino.
@@ -443,7 +443,7 @@ También pueden dolerle el pecho una neumonía o una inflamación de la pleura, 
 ## DOLOR ABDOMINAL
 
 ### ¿Qué es el dolor abdominal?
-Es el dolor en la zona de la guata o guatita, como se dice comúnmente en Chile: la barriga, el vientre o el estómago. En el abdomen hay muchos órganos, así que las causas posibles son muchas. Un dolor muy fuerte no siempre significa algo grave, y un dolor leve no siempre significa que el problema sea menor: por eso importa mirar cómo evoluciona y qué otras señales aparecen.
+Es el dolor en la zona de la guata. En el abdomen hay muchos órganos, así que las causas posibles son muchas. Un dolor muy fuerte no siempre significa algo grave, y un dolor leve no siempre significa que el problema sea menor: por eso importa mirar cómo evoluciona y qué otras señales aparecen.
 
 ### Causas frecuentes
 Gases, indigestión, estreñimiento, gastroenteritis, gastritis, cálculos en la vesícula, infección urinaria y hernias. En personas mayores también hay que descartar problemas de la circulación del intestino, que pueden dar dolor intenso.
