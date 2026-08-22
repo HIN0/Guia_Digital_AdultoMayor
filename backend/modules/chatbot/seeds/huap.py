@@ -72,11 +72,10 @@ DATA = {
         {
             "pregunta": "¿A quién pido ayuda si tengo problemas con la plataforma?",
             "respuesta": (
-                "Si tiene problemas para entrar a la plataforma, puede acercarse al mesón de "
-                "atención del HUAP, de lunes a viernes de 8:00 a 17:00 horas. También puede "
-                "llamar al número de soporte que aparece en su tarjeta de atención. Si no "
-                "encuentra el número, pregunte en el mesón y le ayudarán. No se preocupe: "
-                "siempre hay alguien para apoyarle."
+                "Si tiene problemas para entrar a la plataforma o para usarla, puede pedir "
+                "ayuda en el mesón de atención del HUAP, o pedirle a un familiar que le "
+                "acompañe la primera vez. No se preocupe si algo no le resulta: es normal al "
+                "empezar y siempre hay alguien que puede apoyarle."
             ),
             "variantes": [
                 "soporte técnico",

@@ -1,5 +1,5 @@
 import logging
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.orm import Session
 from core.database import get_db
 from core.dependencies import get_usuario_actual, requiere_admin
@@ -12,8 +12,13 @@ from .schema import (
     ConversacionOut, MensajeOut,
     PreguntaChatbotCreate, PreguntaChatbotUpdate, PreguntaChatbotOut,
     PatologiaCreate, PatologiaOut,
+    ResumenChatbotOut, RevisionItemOut,
 )
-from .service import generar_y_guardar_respuesta, cargar_preguntas_validadas
+from .service import (
+    generar_y_guardar_respuesta,
+    cargar_preguntas_validadas,
+    inicializar_base_conocimiento,
+)
 from modules.progreso.service import chatbot_esta_desbloqueado
 from . import repository as repo
 
@@ -56,19 +61,23 @@ def hacer_pregunta(
 # ── Valoración de mensajes ───────────────────────────────────────────────────
 
 @router.post("/valorar", response_model=FeedbackResponse)
+@limiter.limit("30/minute")
 def valorar_mensaje(
-    request: FeedbackRequest,
+    request: Request,
+    body: FeedbackRequest,
     db: Session = Depends(get_db),
     usuario: Usuario = Depends(get_usuario_actual),
 ):
-    ok = repo.valorar_mensaje(db, request.mensaje_id, usuario.id, request.valoracion)
+    ok = repo.valorar_mensaje(db, body.mensaje_id, usuario.id, body.valoracion)
     return {"ok": ok}
 
 
 # ── Historial de conversaciones ──────────────────────────────────────────────
 
 @router.get("/conversaciones", response_model=list[ConversacionOut])
+@limiter.limit("60/minute")
 def listar_conversaciones(
+    request: Request,
     db: Session = Depends(get_db),
     usuario: Usuario = Depends(get_usuario_actual),
 ):
@@ -76,7 +85,9 @@ def listar_conversaciones(
 
 
 @router.get("/conversaciones/{conversacion_id}/mensajes", response_model=list[MensajeOut])
+@limiter.limit("60/minute")
 def obtener_mensajes(
+    request: Request,
     conversacion_id: int,
     db: Session = Depends(get_db),
     usuario: Usuario = Depends(get_usuario_actual),
@@ -85,6 +96,29 @@ def obtener_mensajes(
     if mensajes is None:
         raise HTTPException(status_code=404, detail="Conversación no encontrada")
     return mensajes
+
+
+# ── Endpoints admin — Revisión de calidad ────────────────────────────────────
+
+@router.get("/admin/resumen", response_model=ResumenChatbotOut)
+def resumen_chatbot(
+    db: Session = Depends(get_db),
+    _: Usuario = Depends(requiere_admin),
+):
+    """Cómo se está portando el bot: cuántas preguntas contestó, cuántas cayeron
+    en fallback y cómo las valoraron los usuarios."""
+    return repo.resumen_chatbot(db)
+
+
+@router.get("/admin/revision", response_model=list[RevisionItemOut])
+def listar_para_revision(
+    limite: int = Query(50, ge=1, le=200),
+    db: Session = Depends(get_db),
+    _: Usuario = Depends(requiere_admin),
+):
+    """Preguntas que el bot no supo responder o cuya respuesta fue valorada
+    negativamente. Es el insumo para decidir qué agregar a la whitelist."""
+    return repo.listar_para_revision(db, limite=limite)
 
 
 # ── Endpoints admin — Patologías ─────────────────────────────────────────────
@@ -165,3 +199,17 @@ def recargar_whitelist(_: Usuario = Depends(requiere_admin)):
     except Exception:
         logger.exception("Error recargando whitelist")
         raise HTTPException(status_code=500, detail="No se pudo recargar la whitelist")
+
+
+@router.post("/admin/recargar-conocimiento", status_code=200)
+def recargar_conocimiento(_: Usuario = Depends(requiere_admin)):
+    """Reconstruye el índice FAISS desde conocimiento.txt. Sin esto había que
+    reiniciar el backend para que un cambio en el archivo tuviera efecto."""
+    try:
+        inicializar_base_conocimiento()
+        return {"detail": "Base de conocimiento recargada correctamente"}
+    except Exception:
+        logger.exception("Error recargando la base de conocimiento")
+        raise HTTPException(
+            status_code=500, detail="No se pudo recargar la base de conocimiento"
+        )

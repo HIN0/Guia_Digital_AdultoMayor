@@ -11,10 +11,15 @@ import {
   adminActualizarPregunta,
   adminEliminarPregunta,
   adminRecargarWhitelist,
+  adminRecargarConocimiento,
+  adminResumenChatbot,
+  adminListarRevision,
   type PatologiaOut,
   type PreguntaChatbotOut,
+  type ResumenChatbotOut,
+  type RevisionItemOut,
 } from "@/lib/api"
-import { RefreshCw, Plus, Pencil, Trash2, Check, X, ChevronDown, ChevronUp } from "lucide-react"
+import { RefreshCw, Plus, Pencil, Trash2, Check, X, ChevronDown, ChevronUp, AlertTriangle, ThumbsDown } from "lucide-react"
 
 // ── Helpers de estilo ─────────────────────────────────────────────────────────
 
@@ -131,18 +136,25 @@ export default function AdminChatbotPage() {
 
   const [expandidaId, setExpandidaId] = useState<number | null>(null)
 
+  const [resumen, setResumen] = useState<ResumenChatbotOut | null>(null)
+  const [revision, setRevision] = useState<RevisionItemOut[]>([])
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const token = (session as any)?.accessToken as string | undefined
 
   const cargarDatos = useCallback(async () => {
     if (!token) return
     try {
-      const [pats, pregs] = await Promise.all([
+      const [pats, pregs, res, rev] = await Promise.all([
         adminListarPatologias(token),
         adminListarPreguntas(token),
+        adminResumenChatbot(token),
+        adminListarRevision(token),
       ])
       setPatologias(pats)
       setPreguntas(pregs)
+      setResumen(res)
+      setRevision(rev)
     } catch (e: unknown) {
       if (e instanceof Error && e.message.includes("403")) setError403(true)
     } finally {
@@ -210,10 +222,12 @@ export default function AdminChatbotPage() {
     setRecargando(true)
     setMsgRecarga(null)
     try {
-      await adminRecargarWhitelist(token)
-      setMsgRecarga("Índice FAISS recargado correctamente.")
+      // Los dos índices: la whitelist (desde la BD) y el conocimiento (desde
+      // conocimiento.txt). Antes el segundo exigía reiniciar el backend.
+      await Promise.all([adminRecargarWhitelist(token), adminRecargarConocimiento(token)])
+      setMsgRecarga("Índices FAISS recargados correctamente.")
     } catch {
-      setMsgRecarga("Error al recargar el índice.")
+      setMsgRecarga("Error al recargar los índices.")
     } finally {
       setRecargando(false)
       setTimeout(() => setMsgRecarga(null), 4000)
@@ -278,7 +292,7 @@ export default function AdminChatbotPage() {
           <button
             onClick={handleRecargar}
             disabled={recargando}
-            title="Reconstruir índice FAISS de whitelist"
+            title="Reconstruir los índices FAISS (whitelist y conocimiento)"
             style={{
               ...btnPrimary,
               backgroundColor: "rgba(255,255,255,0.2)",
@@ -293,6 +307,100 @@ export default function AdminChatbotPage() {
       </div>
 
       <main style={{ padding: "20px 16px", maxWidth: "720px", margin: "0 auto" }}>
+
+        {/* ── Sección Revisión de calidad ── */}
+        <section style={{ marginBottom: "32px" }}>
+          <h2 style={{ fontWeight: 700, fontSize: "1rem", color: "var(--huap-azul)", margin: "0 0 12px" }}>
+            Cómo se está portando el bot
+          </h2>
+
+          {resumen && (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: "10px", marginBottom: "16px" }}>
+              {[
+                { etiqueta: "Preguntas", valor: resumen.preguntas, color: "var(--huap-azul)" },
+                {
+                  etiqueta: "Sin respuesta",
+                  valor: resumen.fallbacks,
+                  color: "#B45309",
+                  nota: resumen.preguntas > 0
+                    ? `${Math.round((resumen.fallbacks / resumen.preguntas) * 100)}% de las preguntas`
+                    : undefined,
+                },
+                { etiqueta: "Emergencias", valor: resumen.emergencias, color: "var(--huap-rojo)" },
+                {
+                  etiqueta: "Valoraciones",
+                  valor: `${resumen.valoraciones_positivas} 👍 / ${resumen.valoraciones_negativas} 👎`,
+                  color: "var(--huap-texto)",
+                },
+              ].map((tile) => (
+                <div key={tile.etiqueta} style={{ ...card, marginBottom: 0, padding: "14px" }}>
+                  <p style={{ margin: 0, fontSize: "0.75rem", color: "#888", textTransform: "uppercase", letterSpacing: "0.03em" }}>
+                    {tile.etiqueta}
+                  </p>
+                  <p style={{ margin: "4px 0 0", fontSize: "1.4rem", fontWeight: 700, color: tile.color }}>
+                    {tile.valor}
+                  </p>
+                  {tile.nota && (
+                    <p style={{ margin: "2px 0 0", fontSize: "0.75rem", color: "#888" }}>{tile.nota}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          <h2 style={{ fontWeight: 700, fontSize: "1rem", color: "var(--huap-azul)", margin: "0 0 4px" }}>
+            Preguntas para revisar
+          </h2>
+          <p style={{ margin: "0 0 12px", fontSize: "0.85rem", color: "#888" }}>
+            Lo que el bot no supo responder o los usuarios valoraron mal. Cada una es
+            una candidata a entrar en la whitelist.
+          </p>
+
+          {revision.length === 0 ? (
+            <div style={{ ...card, textAlign: "center", color: "#888", fontSize: "0.9rem" }}>
+              Nada pendiente de revisar por ahora.
+            </div>
+          ) : (
+            revision.map((item) => (
+              <div key={item.mensaje_id} style={{ ...card, padding: "14px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
+                  <span
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "5px",
+                      fontSize: "0.75rem",
+                      fontWeight: 600,
+                      padding: "3px 9px",
+                      borderRadius: "999px",
+                      backgroundColor: item.motivo === "fallback" ? "#FEF3C7" : "#FEE2E2",
+                      color: item.motivo === "fallback" ? "#B45309" : "var(--huap-rojo)",
+                    }}
+                  >
+                    {item.motivo === "fallback" ? <AlertTriangle size={12} /> : <ThumbsDown size={12} />}
+                    {item.motivo === "fallback" ? "Sin respuesta" : "Valorada mal"}
+                  </span>
+                  <span style={{ fontSize: "0.75rem", color: "#aaa" }}>
+                    {new Date(item.fecha).toLocaleDateString("es-CL", {
+                      day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit",
+                    })}
+                  </span>
+                </div>
+                <p style={{ margin: "0 0 6px", fontWeight: 600, color: "var(--huap-texto)", fontSize: "0.95rem" }}>
+                  {item.pregunta || "(sin pregunta registrada)"}
+                </p>
+                <p style={{ margin: 0, fontSize: "0.85rem", color: "#777", lineHeight: 1.5 }}>
+                  {item.respuesta.length > 180 ? `${item.respuesta.slice(0, 180)}…` : item.respuesta}
+                </p>
+                {item.secciones.length > 0 && (
+                  <p style={{ margin: "8px 0 0", fontSize: "0.75rem", color: "#aaa" }}>
+                    Secciones usadas: {item.secciones.join(" · ")}
+                  </p>
+                )}
+              </div>
+            ))
+          )}
+        </section>
 
         {/* ── Sección Patologías ── */}
         <section style={{ marginBottom: "32px" }}>
