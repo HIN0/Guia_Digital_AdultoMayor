@@ -1,3 +1,11 @@
+# Desarrollo local: Postgres + backend + frontend.
+# Para producción usar docker-compose.prod.yml (ver la guía de traspaso).
+#
+# Nota: este compose levanta el frontend ya compilado, igual que en producción.
+# Para desarrollo activo del frontend (recarga en caliente) sigue siendo mejor
+# "cd frontend && npm run dev" y levantar aquí solo db y backend:
+#   docker compose up db backend
+
 services:
   db:
     image: postgres:15-alpine
@@ -27,6 +35,25 @@ services:
     depends_on:
       db:
         condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        # Se hornea en el build. En local apunta al backend publicado arriba.
+        NEXT_PUBLIC_API_URL: http://localhost:8000/api
+    ports:
+      - "3000:3000"
+    environment:
+      # Llamadas de servidor a servidor (NextAuth valida el token de Google
+      # contra el backend). Van por la red interna de Docker: dentro de este
+      # contenedor "localhost" no es el backend.
+      BACKEND_INTERNAL_URL: http://backend:7860/api
+    # Variables de runtime de NextAuth (AUTH_SECRET, AUTH_URL, AUTH_GOOGLE_*)
+    env_file:
+      - ./frontend/.env.local
+    depends_on:
+      - backend
 
 volumes:
   postgres_data:
