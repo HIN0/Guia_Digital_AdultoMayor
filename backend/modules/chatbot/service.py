@@ -13,7 +13,12 @@ from core.config import settings
 from core.database import SessionLocal
 
 from .advertencias import con_advertencia, pide_diagnostico
-from .banderas_rojas import MENSAJE_EMERGENCIA, detectar_bandera_roja
+from .banderas_rojas import (
+    MENSAJE_CRISIS_SALUD_MENTAL,
+    MENSAJE_EMERGENCIA,
+    detectar_bandera_roja,
+    detectar_crisis_salud_mental,
+)
 from .normalizacion import normalizar_texto
 from .repository import (
     guardar_mensaje,
@@ -161,19 +166,25 @@ def _es_fallback(respuesta: str) -> bool:
 
 
 def _mensaje_sin_informacion(tema: str | None = None) -> str:
-    """Mensaje de "no sé", nombrando el tema si la conversación tenía uno.
+    """Mensaje de "no sé". A media conversación NO nombra ninguna patología.
 
     Ofrecer la lista completa de temas en medio de una conversación desorienta:
     la persona venía hablando de lumbago y se le respondía "puedo ayudarle con
-    presión alta, caídas, dolor de cabeza...", temas que no venían al caso."""
+    presión alta, caídas, dolor de cabeza...", temas que no venían al caso. Por
+    eso el mensaje con contexto es corto.
+
+    Antes nombraba el tema detectado ("sobre lumbago puedo contarle otras
+    cosas"), pero esa detección se equivoca justo en los seguimientos vagos, que
+    es cuando más aparece este mensaje: a una consulta sobre neumonía se le
+    respondía "sobre esguinces, contusiones y golpes puedo contarle otras
+    cosas". Afirmar de qué SÍ se puede hablar exige acertar el tema; no
+    afirmarlo no cuesta nada y nunca miente."""
     if not tema:
         return MENSAJE_SIN_INFORMACION
 
-    # "LUMBAGO (DOLOR DE ESPALDA BAJA)" -> "lumbago"
-    nombre = tema.split("(")[0].strip().lower()
     return (
-        f"{FRASE_SIN_INFORMACION} Sobre {nombre} puedo contarle otras cosas, "
-        "y siempre puede consultarlo en su CESFAM. ¿Quiere preguntarme algo más?"
+        f"{FRASE_SIN_INFORMACION} Puede consultarlo en su CESFAM o con su "
+        "médico. ¿Quiere preguntarme algo más?"
     )
 
 
@@ -361,10 +372,23 @@ def inicializar_chatbot():
 # "para" está en "DIFICULTAD PARA RESPIRAR" y en ningún otro encabezado, así que
 # el filtro por frecuencia la daba por distintiva: "me inyecto más insulina para
 # comer" se resolvía como una consulta sobre dificultad para respirar.
+#
+# El segundo bloque son palabras del vocabulario corriente de salud que, por
+# aparecer en un solo encabezado, quedaban como identificador exclusivo de ese
+# tema. Medido: "¿qué enfermedad tengo?" se resolvía como EPOC (por "ENFERMEDAD
+# pulmonar obstructiva crónica"), "tengo dificultad para caminar" como disnea, y
+# "tengo ataques de ansiedad" habría caído en el ataque cerebrovascular. Importa
+# más desde que un tema nombrado literalmente tiene prioridad sobre la votación
+# de embeddings: un término distintivo malo ya no lo corrige nadie.
 _PALABRAS_VACIAS = frozenset({
     "para", "sobre", "como", "entre", "desde", "cuando", "donde", "este",
     "esta", "esto", "otro", "otra", "otros", "otras", "todo", "toda", "todos",
     "todas", "cada", "muy", "mas", "menos", "sino", "pero", "porque", "segun",
+    # Vocabulario común de salud, no identificadores de un tema
+    "enfermedad", "enfermedades", "cronica", "cronico", "aguda", "agudo",
+    "salud", "general", "informacion", "documento", "fuentes", "comun",
+    "falta", "dificultad", "estar", "ataque", "repentina", "adultos",
+    "personas", "mayores", "digital", "guia",
 })
 
 
@@ -440,17 +464,29 @@ def _tema_de_conversacion(mensajes: list) -> str | None:
     usuario: el texto del bot arrastra el tema hacia la sección que citó, y el
     mensaje de fallback nombra todos los temas a la vez ("presión alta, caídas,
     dolor de cabeza..."), con lo que cualquier conversación terminaría con el
-    tema equivocado."""
+    tema equivocado.
+
+    Un tema NOMBRADO con todas sus letras gana sobre uno deducido por
+    embeddings, aunque venga de un mensaje más antiguo. Los seguimientos vagos
+    no nombran nada y la votación de vecinos les asigna igual un tema, con
+    plena confianza y a menudo equivocado: medido, "cuanto puede durar?" cae en
+    ESGUINCES y "que remedios se recomienda?" en GASTROENTERITIS. Sin esta
+    preferencia, ese tema falso sepultaba al que la persona sí había nombrado
+    ("¿qué es la neumonía?" dos mensajes antes) y desviaba tanto la búsqueda
+    como el mensaje de "no sé"."""
     if not _knowledge_store or not mensajes:
         return None
 
+    respaldo = None
     for mensaje in reversed(mensajes):
         if mensaje.tipo != "usuario":
             continue
-        tema = _tema_de_texto(mensaje.contenido)
-        if tema:
-            return tema
-    return None
+        nombrado = _tema_nombrado(mensaje.contenido)
+        if nombrado:
+            return nombrado
+        if respaldo is None:
+            respaldo = _tema_de_texto(mensaje.contenido)
+    return respaldo
 
 
 def _contextualizar(pregunta: str, tema: str | None) -> str:
@@ -672,6 +708,19 @@ def generar_y_guardar_respuesta(db: Session, usuario_id: int, pregunta: str, con
     if detectar_bandera_roja(pregunta):
         msg = guardar_mensaje(db, conv.id, tipo="emergencia", contenido=MENSAJE_EMERGENCIA)
         return {"respuesta": MENSAJE_EMERGENCIA, "conversacion_id": conv.id, "mensaje_id": msg.id, "tipo": "emergencia"}
+
+    # 1b. Crisis de salud mental. Va después de la urgencia médica porque un
+    #     infarto en curso es lo más inmediato, y antes que todo lo demás por la
+    #     misma razón que las banderas rojas: no puede depender de que Groq
+    #     responda ni de que el match semántico acierte. Medido antes de existir
+    #     esta capa, "¿para qué sigo viviendo si ya no sirvo para nada?" seguía
+    #     el flujo normal y terminaba en un "no tengo esa información".
+    #     Se marca con un tipo propio y no como "emergencia": el frontend pinta
+    #     las emergencias con marco rojo de alarma, presentación equivocada para
+    #     un mensaje de contención.
+    if detectar_crisis_salud_mental(pregunta):
+        msg = guardar_mensaje(db, conv.id, tipo="crisis", contenido=MENSAJE_CRISIS_SALUD_MENTAL)
+        return {"respuesta": MENSAJE_CRISIS_SALUD_MENTAL, "conversacion_id": conv.id, "mensaje_id": msg.id, "tipo": "crisis"}
 
     # Tema de la conversación: sin él, un seguimiento sin tema propio ("¿y
     # cuánto dura?") se busca literalmente y aterriza en otra patología. El RAG

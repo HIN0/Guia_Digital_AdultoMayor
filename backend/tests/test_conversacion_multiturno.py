@@ -346,16 +346,40 @@ def test_se_reconoce_una_negativa_aunque_el_modelo_use_sus_palabras(
     assert service_configurado._es_fallback(texto) is es_negativa
 
 
-def test_el_no_se_nombra_el_tema_de_la_conversacion(service_configurado):
-    """Ofrecer la lista completa de temas en medio de una conversación
-    desorienta: la persona venía hablando de lumbago y se le respondía "puedo
-    ayudarle con presión alta, caídas, dolor de cabeza…"."""
+def test_el_no_se_con_contexto_no_nombra_ninguna_patologia(service_configurado):
+    """A media conversación el mensaje de "no sé" no afirma de qué SÍ puede
+    hablar.
+
+    Ofrecer la lista completa de temas desorienta, pero nombrar el tema
+    detectado es peor: la detección falla justo en los seguimientos vagos, que
+    es cuando más aparece este mensaje. Medido en producción, tras preguntar
+    por la neumonía el asistente respondía "sobre esguinces, contusiones y
+    golpes puedo contarle otras cosas"."""
     mensaje = service_configurado._mensaje_sin_informacion("LUMBAGO (DOLOR DE ESPALDA BAJA)")
 
-    assert "lumbago" in mensaje
+    assert "lumbago" not in mensaje.lower()
     assert "presión alta" not in mensaje
+    assert "CESFAM" in mensaje
     # Conserva la frase centinela, que es como se detecta el fallback.
     assert mensaje.startswith(service_configurado.FRASE_SIN_INFORMACION)
+
+
+def test_un_tema_nombrado_le_gana_a_uno_deducido_por_embeddings(service_configurado):
+    """Regresión del caso real: neumonía sepultada por un seguimiento vago.
+
+    "cuanto puede durar?" no nombra ningún tema y la votación de vecinos lo
+    asigna a ESGUINCES con plena confianza. Si ese tema gana por ser el mensaje
+    más reciente, entierra la neumonía que la persona nombró antes y desvía la
+    búsqueda hacia la patología equivocada."""
+    from types import SimpleNamespace
+
+    mensajes = [
+        SimpleNamespace(tipo="usuario", contenido="¿Qué es la neumonía?"),
+        SimpleNamespace(tipo="bot", contenido="La neumonía es una infección de los pulmones."),
+        SimpleNamespace(tipo="usuario", contenido="cuanto puede durar?"),
+    ]
+
+    assert service_configurado._tema_de_conversacion(mensajes) == "NEUMONÍA ADQUIRIDA EN LA COMUNIDAD"
 
 
 def test_sin_tema_se_ofrece_la_lista_de_grupos(service_configurado):
