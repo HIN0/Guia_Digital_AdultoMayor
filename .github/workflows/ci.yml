@@ -27,8 +27,15 @@ jobs:
       - name: Ruff
         run: ruff check .
 
-      - name: Tests
-        run: pytest tests/ -v
+      - name: Tests con cobertura
+        run: pytest tests/ -v --cov --cov-report=xml
+
+      - name: Guardar reporte de cobertura
+        uses: actions/upload-artifact@v4
+        with:
+          name: cobertura-backend
+          path: backend/coverage.xml
+          retention-days: 1
 
   frontend:
     runs-on: ubuntu-latest
@@ -50,5 +57,67 @@ jobs:
       - name: ESLint
         run: npm run lint
 
-      - name: Tests
-        run: npm run test
+      - name: Tests con cobertura
+        run: npm run test:coverage
+
+      - name: Guardar reporte de cobertura
+        uses: actions/upload-artifact@v4
+        with:
+          name: cobertura-frontend
+          path: frontend/coverage/lcov.info
+          retention-days: 1
+
+  sonarqube:
+    runs-on: ubuntu-latest
+    needs: [backend, frontend]
+    steps:
+      # fetch-depth: 0 es obligatorio para Sonar: sin el historial completo no
+      # puede distinguir el "código nuevo" del preexistente, que es sobre lo que
+      # se aplica el Quality Gate.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verificar que el token esté configurado
+        id: token
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          if [ -z "$SONAR_TOKEN" ]; then
+            echo "disponible=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::SONAR_TOKEN no está configurado. Se omite el análisis."
+          else
+            echo "disponible=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Descargar cobertura del backend
+        if: steps.token.outputs.disponible == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: cobertura-backend
+          path: backend
+
+      - name: Descargar cobertura del frontend
+        if: steps.token.outputs.disponible == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: cobertura-frontend
+          path: frontend/coverage
+
+      # Los dos reportes se generan desde su subdirectorio, así que sus rutas son
+      # relativas a backend/ y frontend/. Sonar las resuelve desde la raíz. Sin
+      # este ajuste el análisis corre sin errores pero reporta 0% de cobertura.
+      - name: Preparar reportes de cobertura
+        if: steps.token.outputs.disponible == 'true'
+        run: python3 scripts/preparar_cobertura.py
+
+      # sonar.organization solo aplica a SonarQube Cloud, por eso va aquí y no en
+      # sonar-project.properties (que también se usa con el servidor local).
+      # Verificar el valor en el dashboard: Information > Project Key.
+      - name: Análisis de SonarQube Cloud
+        if: steps.token.outputs.disponible == 'true'
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: -Dsonar.organization=hin0

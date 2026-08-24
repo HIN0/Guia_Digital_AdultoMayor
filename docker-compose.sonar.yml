@@ -1,0 +1,39 @@
+# SonarQube Server local — SOLO para análisis de calidad, NO es parte de la aplicación.
+# No se despliega al cliente. Va en un archivo aparte para no interferir con
+# docker-compose.yml, que sí es la aplicación (Postgres + backend).
+#
+#   Levantar:  docker compose -f docker-compose.sonar.yml up -d
+#   Apagar:    docker compose -f docker-compose.sonar.yml down
+#
+# Tarda 2-3 minutos en arrancar la primera vez. Queda en http://localhost:9000
+# (usuario y clave iniciales: admin / admin, te va a pedir cambiarla).
+#
+# ¿YA TIENES UN SONARQUBE CORRIENDO de otro ramo o proyecto? Entonces no uses
+# este archivo: una misma instancia aloja varios proyectos. Ve directo a crear el
+# proyecto en la que ya tienes (ver docs/sonarqube.md).
+
+services:
+  sonarqube:
+    image: sonarqube:community
+    # Nombre propio del proyecto: si se deja "sonarqube" a secas, choca con
+    # cualquier otra instancia que ya exista en la máquina.
+    container_name: sonarqube-guia-digital
+    ports:
+      # 9000 no colisiona con la app (3000, 8000 y 5432), pero sí con otro
+      # SonarQube. Si el 9000 está ocupado: SONAR_PORT=9001 docker compose ...
+      - "${SONAR_PORT:-9000}:9000"
+    environment:
+      # Elasticsearch (embebido en SonarQube) revisa límites del sistema al
+      # arrancar y en Docker Desktop no siempre se cumplen. Como esto es un uso
+      # local de evaluación, se desactiva esa verificación.
+      SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: "true"
+    volumes:
+      # Sin estos volúmenes se pierde el historial de análisis al recrear el contenedor.
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_logs:/opt/sonarqube/logs
+      - sonarqube_extensions:/opt/sonarqube/extensions
+
+volumes:
+  sonarqube_data:
+  sonarqube_logs:
+  sonarqube_extensions:

@@ -31,6 +31,7 @@ sentence-transformers>=2.7.0
 # --- Herramientas de desarrollo ---
 ruff>=0.5.0
 pytest>=8.0.0
+pytest-cov>=5.0.0
 
 # --- Seguridad ---
 slowapi>=0.1.9
