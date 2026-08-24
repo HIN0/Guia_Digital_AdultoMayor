@@ -1,6 +1,8 @@
 # Despliegue en producción — servidor propio.
 # Procedimiento completo en docs/Guia_traspaso_tecnico_HUAP.docx
 #
+# Levanta los tres componentes del sistema: base de datos, backend y frontend.
+#
 # Diferencias con docker-compose.yml (que es solo para desarrollo local):
 #   1. Postgres NO se publica en el host: solo es accesible desde la red interna
 #      de Docker. El backend le habla por el nombre de servicio "db".
@@ -8,10 +10,11 @@
 #      el arranque falla con un mensaje explícito en vez de usar una débil.
 #   3. No se sobrescriben DATABASE_URL ni ALLOWED_ORIGINS: se leen de
 #      backend/.env, que es donde la guía indica configurarlas.
-#   4. El backend escucha solo en 127.0.0.1; nginx hace de proxy inverso.
+#   4. Backend y frontend escuchan solo en 127.0.0.1; nginx hace de proxy
+#      inverso y es quien expone el sitio hacia afuera con TLS.
 #
-# Requiere un archivo .env en esta misma carpeta con POSTGRES_USER y
-# POSTGRES_PASSWORD (ver .env.example).
+# Requiere un archivo .env en esta misma carpeta con POSTGRES_USER,
+# POSTGRES_PASSWORD y NEXT_PUBLIC_API_URL (ver .env.example).
 #
 # Uso:
 #   docker compose -f docker-compose.prod.yml up -d --build
@@ -46,6 +49,33 @@ services:
     depends_on:
       db:
         condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        # ATENCIÓN: esta URL se hornea DENTRO del build de Next.js, no se lee
+        # en tiempo de ejecución. Debe ser la URL PÚBLICA del backend, la que
+        # ve el navegador del usuario final (no "http://backend:7860").
+        # Ejemplo: https://guiadigital.hospital.cl/api
+        # Si el dominio cambia, hay que reconstruir la imagen:
+        #   docker compose -f docker-compose.prod.yml up -d --build frontend
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:?Define NEXT_PUBLIC_API_URL en el archivo .env}
+    restart: unless-stopped
+    # Solo accesible desde el propio servidor. nginx expone el sitio con TLS.
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      # Llamadas de servidor a servidor (NextAuth valida el token de Google
+      # contra el backend). Van por la red interna de Docker: dentro de este
+      # contenedor "localhost" no es el backend.
+      BACKEND_INTERNAL_URL: http://backend:7860/api
+    # Variables de runtime de NextAuth: AUTH_SECRET, AUTH_URL y las de Google.
+    # AUTH_URL debe ser la URL pública del sitio, con https y sin barra final.
+    env_file:
+      - ./frontend/.env
+    depends_on:
+      - backend
 
 volumes:
   postgres_data:
