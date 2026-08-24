@@ -1009,7 +1009,7 @@ LECCIONES_DATA = [
           }
         ],
         "resultado": {
-          "umbral_aprobado": 4,
+          "umbral_aprobado": 3,
           "titulo_aprobado": "¡Excelente Trabajo!",
           "mensaje_aprobado": "Tienes una buena comprensión de este tema. ¡Sigue así!",
           "titulo_fallido": "¡Casi lo logras!",
@@ -2180,9 +2180,9 @@ QUIZZES_DATA = [
 
 def poblar(db: Session):
     modulos_data = [
-        {"nombre": "Conocer la inteligencia artificial", "orden": 1, "requiere_modulo_previo": False},
-        {"nombre": "Practicar con la IA",                "orden": 2, "requiere_modulo_previo": True},
-        {"nombre": "Asistente de IA",                    "orden": 3, "requiere_modulo_previo": True},
+        {"nombre": "Entender qué es la inteligencia artificial (IA)", "orden": 1, "requiere_modulo_previo": False},
+        {"nombre": "Practicar con la IA",                             "orden": 2, "requiere_modulo_previo": True},
+        {"nombre": "Asistente de IA",                                 "orden": 3, "requiere_modulo_previo": True},
     ]
     modulos = []
     for m in modulos_data:
@@ -2231,9 +2231,9 @@ def poblar(db: Session):
     print(f"✓ {len(QUIZZES_DATA)} quiz final insertado")
 
     for idata in [
-        {"nombre": "Conocedor de la IA",   "descripcion": "Completaste el Módulo 1: Conocer la IA",      "icono_url": "🧠"},
-        {"nombre": "Practicante de la IA", "descripcion": "Completaste el Módulo 2: Practicar con la IA", "icono_url": "💪"},
-        {"nombre": "Asistente de IA",      "descripcion": "Completaste el Módulo 3: Asistente de IA",     "icono_url": "🤖"},
+        {"nombre": "Conocedor de la IA",   "descripcion": "Completaste el Módulo 1: Entender qué es la inteligencia artificial (IA)", "icono_url": "🧠"},
+        {"nombre": "Practicante de la IA", "descripcion": "Completaste el Módulo 2: Practicar con la IA",                             "icono_url": "💪"},
+        {"nombre": "Asistente de IA",      "descripcion": "Completaste el Módulo 3: Asistente de IA",                                 "icono_url": "🤖"},
     ]:
         db.add(Insignia(**idata))
 
