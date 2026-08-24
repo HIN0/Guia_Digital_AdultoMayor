@@ -1,0 +1,21 @@
+node_modules
+.next
+out
+.git
+.gitignore
+
+# Variables de entorno: se inyectan por env_file / build args, nunca
+# se copian dentro de la imagen.
+.env
+.env.*
+
+# Artefactos de desarrollo y documentación
+coverage
+*.log
+npm-debug.log*
+README.md
+CLAUDE.md
+AGENTS.md
+vitest.config.ts
+vitest.setup.ts
+**/__tests__

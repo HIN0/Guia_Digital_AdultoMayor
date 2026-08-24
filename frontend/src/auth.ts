@@ -1,9 +1,19 @@
 import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
 
-// URL base del backend. En producción se define con NEXT_PUBLIC_API_URL
-// (ej: https://<tu-space>.hf.space/api). En local cae a localhost:8000.
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api"
+// URL base del backend para las llamadas que hace el SERVIDOR de Next.js
+// (este archivo se ejecuta solo en el servidor, nunca en el navegador).
+//
+// Dentro de Docker no sirve NEXT_PUBLIC_API_URL: esa apunta al dominio que
+// resuelve el NAVEGADOR del usuario, y desde el contenedor del frontend
+// "localhost" es el propio contenedor, no el backend. Por eso se usa
+// BACKEND_INTERNAL_URL, que apunta al nombre del servicio de Docker
+// (http://backend:7860/api). Fuera de Docker no se define y cae a las
+// alternativas siguientes.
+const API_URL =
+  process.env.BACKEND_INTERNAL_URL ??
+  process.env.NEXT_PUBLIC_API_URL ??
+  "http://localhost:8000/api"
 
 // El JWT propio del backend expira en ACCESS_TOKEN_EXPIRE_MINUTES (60 min por
 // defecto), pero la sesión de NextAuth dura mucho más — sin esto, pasada 1h
