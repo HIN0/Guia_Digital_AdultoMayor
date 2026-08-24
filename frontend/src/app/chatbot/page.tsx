@@ -131,18 +131,17 @@ export default function ChatbotPage() {
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const token = (session as any)?.accessToken as string | undefined
-    const esDemo = localStorage.getItem("huap_modo_demo") === "true"
 
     if (token) {
       getProgreso(token).then((progreso) => {
-        if (progreso && !progreso.chatbot_desbloqueado && !esDemo) {
+        if (progreso && !progreso.chatbot_desbloqueado) {
           router.replace("/modulos")
         }
       })
     } else {
       const chatbotDesbloqueado = localStorage.getItem("huap_chatbot_desbloqueado") === "true"
       const mod2completado = localStorage.getItem("huap_mod2_completado") === "true"
-      if (!chatbotDesbloqueado && !mod2completado && !esDemo) {
+      if (!chatbotDesbloqueado && !mod2completado) {
         router.replace("/modulos")
         return
       }

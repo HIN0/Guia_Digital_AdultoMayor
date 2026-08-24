@@ -2,6 +2,7 @@
 
 import { signIn } from "next-auth/react"
 import Image from "next/image"
+import Link from "next/link"
 
 export default function Home() {
   return (
@@ -61,7 +62,8 @@ export default function Home() {
             Entrar con Google 
           </button>
 
-          <button
+          <Link
+            href="/ayuda-google"
             className="w-full py-3 px-6 rounded-lg font-medium"
             style={{
               backgroundColor: "transparent",
@@ -70,17 +72,19 @@ export default function Home() {
               fontSize: "18px",
               minHeight: "52px",
               cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+              textDecoration: "none",
             }}>
-            Necesito ayuda
-          </button>
+            ¿No tienes una cuenta de Google?
+          </Link>
         </div>
 
         <footer className="text-center mt-4">
           <p style={{ color: "var(--huap-texto)", fontSize: "14px" }}>
             Hospital de Urgencia Asistencia Pública — Posta Central
-          </p>
-          <p style={{ fontSize: "12px", color: "#888", marginTop: "4px" }}>
-            Plataforma en desarrollo · Sprint 1
           </p>
         </footer>
 

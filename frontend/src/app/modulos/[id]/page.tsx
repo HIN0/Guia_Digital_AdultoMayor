@@ -14,6 +14,8 @@ export default function ModuloDetallePage() {
   const [modulo, setModulo] = useState<ModuloDetalle | null>(null)
   const [error, setError] = useState(false)
   const [leccionesCompletadas] = useState<Set<number>>(() => {
+    // El inicializador también corre en el servidor, donde no existe localStorage.
+    if (typeof window === "undefined") return new Set<number>()
     const guardadas: number[] = JSON.parse(
       localStorage.getItem(`huap_mod${moduloId}_lecciones_completadas`) ?? "[]"
     )
@@ -21,6 +23,7 @@ export default function ModuloDetallePage() {
   })
   const [quizAprobado, setQuizAprobado] = useState(false)
   const [chatbotAccesible] = useState(() => {
+    if (typeof window === "undefined") return false
     const desbloqueado = localStorage.getItem("huap_chatbot_desbloqueado") === "true"
     const mod2done = localStorage.getItem("huap_mod2_completado") === "true"
     return desbloqueado || mod2done

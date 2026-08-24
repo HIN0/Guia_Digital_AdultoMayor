@@ -9,7 +9,7 @@ import { getModulos, getProgreso, sincronizarLocalStorage, type ModuloResumen, t
 import type { Modulo } from "@/types"
 
 const DISPLAY: Record<number, { titulo: string; descripcion: string; leccionesTotales: number; tieneQuiz?: boolean }> = {
-  1: { titulo: "Entender qué es la IA",   descripcion: "Cómo funciona, qué puede y qué no puede hacer", leccionesTotales: 7, tieneQuiz: true },
+  1: { titulo: "Entender qué es la inteligencia artificial (IA)", descripcion: "Cómo funciona, qué puede y qué no puede hacer", leccionesTotales: 7, tieneQuiz: true },
   2: { titulo: "Practicar con la IA",     descripcion: "Hacer preguntas, leer respuestas, verificar",   leccionesTotales: 7, tieneQuiz: true },
   3: { titulo: "Asistente de IA",         descripcion: "Conversa sobre temas de salud",                 leccionesTotales: 1 },
 }
@@ -44,7 +44,6 @@ function construirDesdeBackend(apiModulos: ModuloResumen[], progreso: ResumenPro
 function construirDesdeLocalStorage(apiModulos: ModuloResumen[]): Modulo[] {
   const mod1completado = localStorage.getItem("huap_mod1_completado") === "true"
   const mod2completado = localStorage.getItem("huap_mod2_completado") === "true"
-  const esDemo = localStorage.getItem("huap_modo_demo") === "true"
 
   return apiModulos.map((m) => {
     const display = DISPLAY[m.orden] ?? { titulo: m.nombre, descripcion: "", leccionesTotales: 0 }
@@ -64,7 +63,7 @@ function construirDesdeLocalStorage(apiModulos: ModuloResumen[]): Modulo[] {
       }
     }
     if (m.orden === 2) {
-      const desbloqueado = mod1completado || esDemo
+      const desbloqueado = mod1completado
       const completadas = desbloqueado ? leccionesCount + (mod2completado ? 1 : 0) : 0
       const progreso = desbloqueado && leccionesTotales > 0 ? Math.round((completadas / leccionesTotales) * 100) : 0
       return {
@@ -74,7 +73,7 @@ function construirDesdeLocalStorage(apiModulos: ModuloResumen[]): Modulo[] {
         leccionesCompletadas: mod2completado ? leccionesTotales : desbloqueado ? completadas : 0,
       }
     }
-    const desbloqueado = mod2completado || esDemo
+    const desbloqueado = mod2completado
     const completadas = leccionesCount
     const progreso = leccionesTotales > 0 ? Math.round((completadas / leccionesTotales) * 100) : 0
     const repasoCompletado = completadas >= 1
@@ -95,11 +94,9 @@ export default function ModulosPage() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const token = (session as any)?.accessToken as string | undefined
 
-    const esDemo = localStorage.getItem("huap_modo_demo") === "true"
-
     getModulos()
       .then(async (apiModulos) => {
-        if (token && !esDemo) {
+        if (token) {
           const progreso = await getProgreso(token)
           if (progreso && progreso.modulos.length > 0) {
             sincronizarLocalStorage(progreso, apiModulos.map(m => m.id))

@@ -157,7 +157,12 @@ export default function LeccionPage() {
   const opcionesEjercicioRef = useRef<HTMLDivElement>(null)
 
   function scrollAProgreso() {
-    window.scrollTo({ top: 0, behavior: "smooth" })
+    // Se difiere al frame siguiente a propósito: quien llama a esta función cambia
+    // de página justo después, y si el scroll suave arranca antes de ese re-render
+    // el navegador lo cancela al reemplazarse el contenido y la vista se queda abajo.
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" })
+    })
   }
 
   function scrollAInstruccion() {
@@ -347,8 +352,11 @@ export default function LeccionPage() {
           seleccion: null,
           mostrandoFeedback: false,
         }))
+        // El scroll va aquí dentro, después de cambiar de pregunta: si sale antes
+        // se adelanta 450ms al cambio y al retirarse el feedback la página se
+        // acorta, dejando la pregunta nueva a media altura.
+        scrollAProgreso()
       }, 450)
-      scrollAInstruccion()
     }
   }
 

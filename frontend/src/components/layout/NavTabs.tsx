@@ -1,9 +1,11 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useSession } from "next-auth/react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { House, BookOpenText, MessageCircle, Lock } from "lucide-react"
+import { getProgreso } from "@/lib/api"
 import type React from "react"
 
 const TABS: { label: string; href: string; matchPaths: string[]; icon: React.ReactNode; requiereDesbloqueo?: boolean }[] = [
@@ -30,15 +32,32 @@ const TABS: { label: string; href: string; matchPaths: string[]; icon: React.Rea
 
 export default function NavTabs() {
   const pathname = usePathname()
+  const { data: session, status } = useSession()
   const [chatbotDesbloqueado, setChatbotDesbloqueado] = useState(false)
   const [mostrarAviso, setMostrarAviso] = useState(false)
 
   useEffect(() => {
+    // Mientras la sesión carga no decidimos: evita mostrar el Chat abierto por un instante.
+    if (status === "loading") return
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const token = (session as any)?.accessToken as string | undefined
+
+    // Con sesión el backend manda. Se consulta al montar y en cada navegación,
+    // que es cuando la barra necesita estar al día.
+    if (token) {
+      let vigente = true
+      getProgreso(token).then((progreso) => {
+        if (vigente) setChatbotDesbloqueado(progreso?.chatbot_desbloqueado === true)
+      })
+      return () => { vigente = false }
+    }
+
+    // Sin sesión solo queda el progreso local.
     const check = () => {
       const desbloqueado =
         localStorage.getItem("huap_chatbot_desbloqueado") === "true" ||
-        localStorage.getItem("huap_mod2_completado") === "true" ||
-        localStorage.getItem("huap_modo_demo") === "true"
+        localStorage.getItem("huap_mod2_completado") === "true"
       setChatbotDesbloqueado(desbloqueado)
     }
     check()
@@ -48,7 +67,7 @@ export default function NavTabs() {
       window.removeEventListener("storage", check)
       clearInterval(interval)
     }
-  }, [])
+  }, [session, status, pathname])
 
   useEffect(() => {
     if (mostrarAviso) {
@@ -57,7 +76,7 @@ export default function NavTabs() {
     }
   }, [mostrarAviso])
 
-  const OCULTAR_EN = ["/", "/login", "/bienvenida"]
+  const OCULTAR_EN = ["/", "/login", "/bienvenida", "/ayuda-google"]
   if (OCULTAR_EN.includes(pathname)) return null
 
   return (

@@ -34,7 +34,11 @@ export default function QuizFinalPage() {
   const quizId = Number(params.id as string)
 
   const [modulo, setModulo] = useState<ModuloDetalle | null>(null)
-  const [error, setError] = useState(() => !Number(sessionStorage.getItem("huap_quiz_modulo_id") ?? "0"))
+  const [error, setError] = useState(() => {
+    // El inicializador también corre en el servidor, donde no existe sessionStorage.
+    if (typeof window === "undefined") return false
+    return !Number(sessionStorage.getItem("huap_quiz_modulo_id") ?? "0")
+  })
   const [enviando, setEnviando] = useState(false)
   const [fase, setFase] = useState<Fase>("quiz")
 
