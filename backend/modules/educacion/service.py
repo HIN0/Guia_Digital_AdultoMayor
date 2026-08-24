@@ -1,12 +1,13 @@
 """
 Igual que antes, Session para tipar el parámetro db. Luego se importa el repository completo
-(no funciones sueltas) para llamarlo como repository.get_algo(...), y 
+(no funciones sueltas) para llamarlo como repository.get_algo(...), y
 las entidades para usarlas como tipos de retorno.
 """
 
 from sqlalchemy.orm import Session
+
 from modules.educacion import repository
-from modules.educacion.entity import Modulo, Leccion
+from modules.educacion.entity import Leccion, Modulo
 
 
 def listar_modulos(db: Session) -> list[Modulo]:

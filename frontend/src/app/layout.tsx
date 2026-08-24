@@ -2,6 +2,7 @@
 import "./globals.css"
 import NextAuthProvider from "@/components/layout/SessionProvider"
 import NavTabs from "@/components/layout/NavTabs"
+import FontSizeApplier from "@/components/layout/FontSizeApplier"
 
 export const metadata: Metadata = {
   title: "IA y Salud · Guía Digital para Personas Mayores",
@@ -20,6 +21,7 @@ export default function RootLayout({
     <html lang="es">
       <body className="antialiased min-h-screen flex flex-col">
         <NextAuthProvider>
+          <FontSizeApplier />
           {children}
           <NavTabs />
         </NextAuthProvider>

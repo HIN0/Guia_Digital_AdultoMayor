@@ -1,5 +1,9 @@
 # Backend — Guía Digital Adulto Mayor (FastAPI)
 
+> **Nota despliegue:** el backend corre en Docker (ver `Dockerfile`) y escucha en el
+> puerto `7860` dentro del contenedor. El ping de salud está en `/health`.
+> La documentación interactiva (`/docs`) solo se expone cuando `ENVIRONMENT=development`.
+
 Guía completa para alguien que **nunca ha usado FastAPI**.
 
 ---

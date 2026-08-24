@@ -1,17 +1,29 @@
 """
-Esquemas Pydantic para validación de datos de entrada (Request) 
+Esquemas Pydantic para validación de datos de entrada (Request)
 y serialización de datos de salida (Response).
 """
+from typing import List, Optional
+
 from pydantic import BaseModel
-from datetime import datetime
-from typing import List
+
 
 class ProgresoLeccionCreate(BaseModel):
     leccion_id: int
 
-class IntentoQuizCreate(BaseModel):
+class RespuestaItem(BaseModel):
+    pregunta_id: int
+    opcion_id: int
+
+class SubmitQuizCreate(BaseModel):
     quiz_id: int
-    puntaje: int
+    respuestas: List[RespuestaItem]
+
+class FeedbackPregunta(BaseModel):
+    pregunta_id: int
+    opcion_correcta_id: int
+    opcion_seleccionada_id: int
+    es_correcta: bool
+    feedback: str
 
 class InsigniaResponse(BaseModel):
     id: int
@@ -20,10 +32,30 @@ class InsigniaResponse(BaseModel):
     icono_url: str
 
     class Config:
-        # Permite a Pydantic leer los datos directamente desde los objetos ORM de SQLAlchemy
         from_attributes = True
+
+class ResultadoQuizResponse(BaseModel):
+    puntaje: int
+    minimo_aciertos: int
+    aprobado: bool
+    feedbacks: List[FeedbackPregunta]
+    insignia_otorgada: Optional[InsigniaResponse] = None
+
+class LeccionCompletadaResponse(BaseModel):
+    leccion_id: int
+    completada: bool
+    insignia_otorgada: Optional[InsigniaResponse] = None
+
+class EstadoModulo(BaseModel):
+    modulo_id: int
+    orden: int
+    desbloqueado: bool
+    completado: bool
+    lecciones_completadas: List[int]
 
 class ResumenProgresoResponse(BaseModel):
     lecciones_completadas: List[int]
     quizzes_aprobados: List[int]
     insignias: List[InsigniaResponse]
+    modulos: List[EstadoModulo] = []
+    chatbot_desbloqueado: bool = False

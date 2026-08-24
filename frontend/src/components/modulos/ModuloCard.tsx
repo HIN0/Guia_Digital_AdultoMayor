@@ -1,147 +1,176 @@
 "use client"
 
 import type { Modulo } from "@/types"
+import { Lock, CheckCircle2 } from "lucide-react"
 
 interface ModuloCardProps {
   modulo: Modulo
 }
 
-const ESTADO_CONFIG = {
-  disponible: {
-    borderColor: "#E8853A",
-    numeroBg: "#E8853A",
-    progressColor: "#E8853A",
-    titleColor: "var(--huap-texto)",
-    descColor: "#4A4A4A",
-  },
-  completado: {
-    borderColor: "var(--huap-verde)",
-    numeroBg: "var(--huap-verde)",
-    progressColor: "var(--huap-verde)",
-    titleColor: "var(--huap-texto)",
-    descColor: "#4A4A4A",
-  },
-  bloqueado: {
-    borderColor: "#E0E0E0",
-    numeroBg: "#AAAAAA",
-    progressColor: "#AAAAAA",
-    titleColor: "#AAAAAA",
-    descColor: "#AAAAAA",
-  },
+const MODULO_COLOR: Record<number, string> = {
+  1: "#2E7D46", // verde
+  2: "#C45E10", // naranja
+  3: "#6B3FA0", // púrpura
 }
 
 export default function ModuloCard({ modulo }: ModuloCardProps) {
-  const cfg = ESTADO_CONFIG[modulo.estado]
-
-  function renderStatus() {
-    if (modulo.estado === "completado") {
-      return (
-        <span style={{ color: "var(--huap-verde)", fontSize: "18px", fontWeight: 600 }}>
-          ✓ Completado
-        </span>
-      )
-    }
-    if (modulo.estado === "bloqueado") {
-      return (
-        <span style={{ color: "#777777", fontSize: "18px" }}>
-          Completa el Módulo {modulo.numero - 1} para desbloquearlo
-        </span>
-      )
-    }
-    if (modulo.leccionesCompletadas !== undefined && modulo.leccionesTotales) {
-      return (
-        <span style={{ color: "#4A4A4A", fontSize: "18px" }}>
-          {modulo.leccionesCompletadas} de {modulo.leccionesTotales} lecciones
-        </span>
-      )
-    }
-    return null
-  }
+  const accentColor = MODULO_COLOR[modulo.numero] ?? "#6B7280"
 
   return (
     <article
       style={{
-        backgroundColor: "white",
+        background: "#FFFFFF",
         borderRadius: "16px",
-        borderLeft: `5px solid ${cfg.borderColor}`,
-        boxShadow: "0 1px 6px rgba(0,0,0,0.07)",
-        padding: "20px 20px 20px 18px",
+        border: "0.5px solid #E5E7EB",
         display: "flex",
-        flexDirection: "column",
-        gap: "14px",
-        opacity: modulo.estado === "bloqueado" ? 0.8 : 1,
+        flexDirection: "row",
+        overflow: "hidden",
+        opacity: modulo.estado === "bloqueado" ? 0.7 : 1,
+        cursor: modulo.estado !== "bloqueado" ? "pointer" : "default",
       }}
       aria-label={`Módulo ${modulo.numero}: ${modulo.titulo} — ${modulo.estado}`}
     >
-      {/* Número + título + descripción en fila */}
-      <div style={{ display: "flex", gap: "14px", alignItems: "flex-start" }}>
-        <div
-          style={{
-            width: "48px",
-            height: "48px",
-            borderRadius: "50%",
-            backgroundColor: cfg.numeroBg,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "white",
-            fontWeight: 700,
-            fontSize: "22px",
-            flexShrink: 0,
-          }}
-          aria-hidden="true"
-        >
-          {modulo.numero}
-        </div>
+      {/* Franja izquierda pegada al borde */}
+      <div
+        aria-hidden="true"
+        style={{
+          width: "6px",
+          backgroundColor: accentColor,
+          flexShrink: 0,
+        }}
+      />
 
-        <div>
-          <h2
-            style={{
-              color: cfg.titleColor,
-              fontSize: "22px",
-              fontWeight: 700,
-              lineHeight: 1.3,
-              marginBottom: "6px",
-            }}
-          >
-            {modulo.titulo}
-          </h2>
-          <p style={{ color: cfg.descColor, fontSize: "18px", lineHeight: 1.5 }}>
-            {modulo.descripcion}
-          </p>
-        </div>
-      </div>
+      {/* Contenido con padding propio */}
+      <div style={{ flex: 1, minWidth: 0, padding: "16px", display: "flex", flexDirection: "column", gap: "12px" }}>
 
-      {/* Barra de progreso (solo si no está bloqueado) */}
-      {modulo.estado !== "bloqueado" && (
-        <div
-          role="progressbar"
-          aria-valuenow={modulo.progreso}
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-label={`Progreso del módulo: ${modulo.progreso}%`}
-          style={{
-            width: "100%",
-            height: "8px",
-            backgroundColor: "#E0E0E0",
-            borderRadius: "4px",
-            overflow: "hidden",
-          }}
-        >
+        {/* Fila superior: ícono + textos */}
+        <div style={{ display: "flex", alignItems: "flex-start", gap: "14px" }}>
+
+          {/* Ícono circular */}
           <div
             style={{
-              width: `${modulo.progreso}%`,
-              height: "100%",
-              backgroundColor: cfg.progressColor,
-              borderRadius: "4px",
-              transition: "width 0.4s ease",
+              width: "48px",
+              height: "48px",
+              borderRadius: "50%",
+              backgroundColor: modulo.estado === "bloqueado" ? "#F3F4F6" : accentColor,
+              border: modulo.estado === "bloqueado" ? "0.5px solid #D1D5DB" : "none",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
             }}
-          />
-        </div>
-      )}
+            aria-hidden="true"
+          >
+            {modulo.estado === "bloqueado" ? (
+              <Lock size={20} color="#9CA3AF" strokeWidth={2} />
+            ) : (
+              <span style={{ fontSize: "1rem", fontWeight: 500, color: "#FFFFFF" }}>
+                {modulo.numero}
+              </span>
+            )}
+          </div>
 
-      {/* Texto de estado */}
-      {renderStatus()}
+          {/* Título y descripción */}
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <h2
+              style={{
+                fontSize: "0.9rem",
+                fontWeight: 500,
+                color: modulo.estado === "bloqueado" ? "#9CA3AF" : "#111827",
+                margin: "0 0 4px 0",
+                lineHeight: 1.3,
+              }}
+            >
+              {modulo.titulo}
+            </h2>
+            <p style={{ fontSize: "0.75rem", color: "#6B7280", margin: 0, lineHeight: 1.5 }}>
+              {modulo.descripcion}
+            </p>
+          </div>
+        </div>
+
+        {/* Progreso o mensaje de bloqueo */}
+        {modulo.estado !== "bloqueado" ? (
+          modulo.leccionesTotales === 0 ? (
+            <span style={{ fontSize: "0.75rem", color: accentColor, fontWeight: 500 }}>
+              Abrir asistente →
+            </span>
+          ) : (
+          <div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "6px",
+              }}
+            >
+              {modulo.estado === "completado" ? (
+                <span
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "4px",
+                    fontSize: "0.75rem",
+                    color: accentColor,
+                  }}
+                >
+                  <CheckCircle2 size={14} strokeWidth={2.5} />
+                  Completado
+                </span>
+              ) : (
+                <span style={{ fontSize: "0.75rem", color: "#6B7280" }}>
+                  {modulo.leccionesCompletadas} de {modulo.leccionesTotales} {modulo.tieneQuiz ? "pasos" : "lecciones"}
+                </span>
+              )}
+              <span style={{ fontSize: "0.75rem", fontWeight: 500, color: accentColor }}>
+                {modulo.progreso}%
+              </span>
+            </div>
+
+            <div
+              role="progressbar"
+              aria-valuenow={modulo.progreso}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              style={{
+                width: "100%",
+                height: "5px",
+                backgroundColor: "#E5E7EB",
+                borderRadius: "999px",
+                overflow: "hidden",
+              }}
+            >
+              <div
+                style={{
+                  width: `${modulo.progreso}%`,
+                  height: "100%",
+                  backgroundColor: accentColor,
+                  borderRadius: "999px",
+                  transition: "width 0.6s ease",
+                }}
+              />
+            </div>
+          </div>
+          )
+        ) : (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              backgroundColor: "#F9FAFB",
+              borderRadius: "10px",
+              padding: "10px 12px",
+            }}
+          >
+            <Lock size={16} color="#9CA3AF" strokeWidth={2} />
+            <p style={{ fontSize: "0.75rem", color: "#6B7280", margin: 0 }}>
+              Completa el Módulo {modulo.numero - 1} para desbloquearlo
+            </p>
+          </div>
+        )}
+      </div>
     </article>
   )
 }
