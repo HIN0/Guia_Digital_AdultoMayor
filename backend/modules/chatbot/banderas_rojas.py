@@ -152,6 +152,87 @@ _CONTEXTOS_NO_URGENTES = (
 )
 
 
+# Caída de la que la persona no logra levantarse. Se exige la combinación de
+# ambas partes porque por separado son frecuentes y benignas: "me caí" aparece
+# en consultas por moretones, y "no me puedo levantar" describe también la
+# rigidez matinal de la artrosis. Juntas, en una persona mayor, sugieren
+# fractura de cadera, que no debe movilizarse sin ayuda.
+_CAIDA = (
+    "se cayo",
+    "me cai",
+    "se ha caido",
+    "me he caido",
+    "sufrio una caida",
+    "tuvo una caida",
+    "se resbalo",
+    "me resbale",
+)
+_NO_LOGRA_LEVANTARSE = (
+    "no se puede parar",
+    "no se puede levantar",
+    "no puede pararse",
+    "no puede levantarse",
+    "no se levanta",
+    "no me puedo parar",
+    "no me puedo levantar",
+    "no logra levantarse",
+    "no logro levantarme",
+)
+
+# ── Crisis de salud mental ──────────────────────────────────────────────────
+# Categoría aparte de las urgencias médicas: el aviso del 131 no es la
+# respuesta adecuada ante alguien que expresa desesperanza, y responderle con
+# información clínica genérica es peor todavía.
+#
+# La asimetría del error manda aquí. En el resto del módulo se evita
+# sobre-avisar, porque un bot que grita urgencia por una acidez enseña a no
+# hacerle caso. Ante una señal de riesgo suicida el cálculo se invierte: un
+# falso positivo cuesta una derivación amable a una línea de apoyo, y un falso
+# negativo puede costar una vida. Por eso esta lista incluye expresiones de
+# desesperanza que no son necesariamente ideación suicida.
+#
+# PENDIENTE DE VALIDACIÓN CLÍNICA: el texto del mensaje y los números
+# telefónicos deben ser revisados por la contraparte de salud del HUAP antes
+# de producción, igual que MENSAJE_EMERGENCIA.
+MENSAJE_CRISIS_SALUD_MENTAL = (
+    "Lamento mucho que se sienta así, y le agradezco la confianza de "
+    "contármelo. Lo que siente es más común de lo que parece, se puede tratar, "
+    "y usted no tiene por qué pasarlo solo.\n\n"
+    "Por favor cuénteselo hoy a alguien de confianza y no se quede solo. "
+    "Puede llamar gratis y a cualquier hora a Salud Responde, al 600 360 7777, "
+    "donde le atenderá un profesional de salud. Si en algún momento siente que "
+    "puede hacerse daño, llame al 131 o acuda al servicio de urgencia más "
+    "cercano.\n\n"
+    "Yo solo entrego información general y no puedo acompañarle en esto como "
+    "usted merece."
+)
+
+_FRASES_CRISIS_SALUD_MENTAL = (
+    "para que sigo viviendo",
+    "para que vivir",
+    "no quiero vivir",
+    "no quiero seguir viviendo",
+    "no vale la pena vivir",
+    "no vale la pena seguir",
+    "me quiero morir",
+    "quiero morirme",
+    "quisiera morirme",
+    "ojala no despertar",
+    "mejor estaria muerto",
+    "mejor estaria muerta",
+    "estarian mejor sin mi",
+    "quitarme la vida",
+    "acabar con mi vida",
+    "terminar con todo",
+    "hacerme dano",
+    "no sirvo para nada",
+    "soy una carga",
+    "soy un estorbo",
+    "nadie me necesita",
+    "no le importo a nadie",
+)
+
+
 def detectar_bandera_roja(pregunta: str) -> bool:
     """True si la pregunta describe una posible emergencia médica en curso."""
     texto = normalizar_texto(pregunta)
@@ -162,4 +243,20 @@ def detectar_bandera_roja(pregunta: str) -> bool:
     if any(contexto in texto for contexto in _CONTEXTOS_NO_URGENTES):
         return False
 
-    return any(frase in texto for frase in _FRASES_EMERGENCIA)
+    if any(frase in texto for frase in _FRASES_EMERGENCIA):
+        return True
+
+    return any(c in texto for c in _CAIDA) and any(
+        n in texto for n in _NO_LOGRA_LEVANTARSE
+    )
+
+
+def detectar_crisis_salud_mental(pregunta: str) -> bool:
+    """True si el mensaje expresa desesperanza o posible riesgo suicida.
+
+    Se evalúa sobre el texto completo y no solo al inicio: a diferencia de las
+    urgencias médicas, aquí no existe la formulación "informativa" que haya que
+    descartar. Alguien que escribe "¿para qué sigo viviendo?" merece la misma
+    respuesta lo pregunte como lo pregunte."""
+    texto = normalizar_texto(pregunta)
+    return any(frase in texto for frase in _FRASES_CRISIS_SALUD_MENTAL)
