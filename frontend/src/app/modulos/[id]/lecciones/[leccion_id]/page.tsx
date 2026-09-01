@@ -25,10 +25,10 @@ const IMAGENES_APOYO: Record<string, string> = {
   "Ilustración de un chatbot conversando con un usuario.": "/lecciones/modulo1/L2-5.svg",
   "Resumen con tres viñetas y marca de avance.": "/lecciones/modulo1/L2-6.svg",
   // L3 — La IA en salud
-  "Ícono de corazón con un signo de ayuda.": "/lecciones/modulo1/L3-1.svg",
+  "Imagen de un corazón con un signo de ayuda.": "/lecciones/modulo1/L3-1.svg",
   "Tres tarjetas: 📖 explicar palabras, ℹ️ información general, ⏰ recordatorios.": "/lecciones/modulo1/L3-2.svg",
   "Viñeta ilustrada de don Luis consultando la app en casa.": "/lecciones/modulo1/L3-3.svg",
-  'Lista con íconos rojos de "no" frente a cada límite.': "/lecciones/modulo1/L3-4.svg",
+  'Lista con imágenes en rojo de "no" frente a cada límite.': "/lecciones/modulo1/L3-4.svg",
   // L5 — Privacidad y datos
   "Ilustración de una plaza con mucha gente escuchando, frente a una consulta médica cerrada.": "/lecciones/modulo1/L5-1.svg",
   "Lista verde: síntomas en general, dudas sobre una enfermedad, preguntas de orientación.": "/lecciones/modulo1/L5-2.svg",
@@ -68,11 +68,11 @@ const IMAGENES_APOYO: Record<string, string> = {
   "Resumen con la regla de las dos fuentes y marca de avance.": "/lecciones/modulo2/L3-5.svg",
   // L4 — Casos por patología (Módulo 2, lección 2.4)
   "Cinco tarjetas con las patologías base. Aviso visible: \"contenido educativo, no diagnóstico\".": "/lecciones/modulo2/L4-1.svg",
-  "Ícono de tensiómetro. Pregunta útil vs. lo que es del médico.": "/lecciones/modulo2/L4-2.svg",
-  "Ícono de gota/glucómetro. Pregunta útil vs. lo que es del médico.": "/lecciones/modulo2/L4-3.svg",
-  "Ícono de articulación. Pregunta útil vs. lo que es del médico.": "/lecciones/modulo2/L4-4.svg",
-  "Ícono de corazón/arteria. Pregunta útil vs. lo que es del médico.": "/lecciones/modulo2/L4-5.svg",
-  "Ícono de pierna. Pregunta útil vs. lo que es del médico.": "/lecciones/modulo2/L4-6.svg",
+  "Imagen de un tensiómetro. Pregunta útil vs. lo que es del médico.": "/lecciones/modulo2/L4-2.svg",
+  "Imagen de un glucómetro. Pregunta útil vs. lo que es del médico.": "/lecciones/modulo2/L4-3.svg",
+  "Imagen de una articulación. Pregunta útil vs. lo que es del médico.": "/lecciones/modulo2/L4-4.svg",
+  "Imagen de un corazón. Pregunta útil vs. lo que es del médico.": "/lecciones/modulo2/L4-5.svg",
+  "Imagen de una pierna. Pregunta útil vs. lo que es del médico.": "/lecciones/modulo2/L4-6.svg",
   "Resumen del patrón común SÍ/NO con marca de avance.": "/lecciones/modulo2/L4-7.svg",
   // L5 — Preparar tu consulta médica (Módulo 2, lección 2.5)
   "Ilustración de una persona mayor llegando confiada a su consulta con una lista en la mano.": "/lecciones/modulo2/L5-1.svg",
@@ -85,7 +85,7 @@ const IMAGENES_APOYO: Record<string, string> = {
   "Encabezado en rojo de emergencia. Tono serio, sin alarmar.": "/lecciones/modulo2/L6-1.svg",
   "Caja de alerta roja con lista de síntomas (igual que en el prototipo).": "/lecciones/modulo2/L6-2.svg",
   "Tarjetas con números grandes (igual que en el prototipo).": "/lecciones/modulo2/L6-3.svg",
-  "Tres situaciones para médico de cabecera con ícono de médico.": "/lecciones/modulo2/L6-4.svg",
+  "Tres situaciones para médico de cabecera con imagen de médico.": "/lecciones/modulo2/L6-4.svg",
   "Mensaje de cierre destacado (disclaimer del prototipo).": "/lecciones/modulo2/L6-5.svg",
   // L1 — Repaso antes de usar el asistente (Módulo 3, lección 3.1)
   "Ilustración de una persona mayor con una lista de repaso y una estrella de logro.": "/lecciones/modulo3/L1-1.svg",

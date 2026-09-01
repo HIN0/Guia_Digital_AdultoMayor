@@ -152,9 +152,36 @@ export default function ChatbotPage() {
   }, [router, session])
 
   useEffect(() => {
-    if (listaRef.current) {
-      listaRef.current.scrollTop = listaRef.current.scrollHeight
+    const lista = listaRef.current
+    if (!lista) return
+
+    // Al llegar una respuesta hay que dejarla visible DESDE EL PRINCIPIO: si se
+    // baja hasta el final, una respuesta larga aparece por su última línea y el
+    // usuario tiene que subir a buscar el comienzo. Se alinea el inicio de la
+    // burbuja con el borde superior del área de mensajes.
+    // Mientras el usuario escribe o espera, se sigue el hilo hacia abajo.
+    const ultimo = mensajes[mensajes.length - 1]
+    if (!cargando && ultimo && ultimo.tipo !== "usuario" && ultimo.id !== 0) {
+      const burbuja = lista.querySelector<HTMLElement>(`[data-msg-id="${ultimo.id}"]`)
+      if (burbuja) {
+        const desplazamiento =
+          burbuja.getBoundingClientRect().top -
+          lista.getBoundingClientRect().top +
+          lista.scrollTop
+        // El margen deja respirar la burbuja contra el borde superior.
+        const destino = Math.max(0, desplazamiento - 12)
+        // scrollTo no existe en jsdom ni en navegadores antiguos; ahí se salta
+        // igual, solo sin la animación.
+        if (typeof lista.scrollTo === "function") {
+          lista.scrollTo({ top: destino, behavior: "smooth" })
+        } else {
+          lista.scrollTop = destino
+        }
+        return
+      }
     }
+
+    lista.scrollTop = lista.scrollHeight
   }, [mensajes, cargando])
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -331,7 +358,7 @@ export default function ChatbotPage() {
             aria-label="Conversación con el asistente" style={{ display: "flex", flexDirection: "column", gap: "16px", width: "100%", maxWidth: "680px" }}>
 
           {mensajes.map((msg) => (
-            <div key={msg.id}>
+            <div key={msg.id} data-msg-id={msg.id}>
               <div style={{ display: "flex", justifyContent: msg.tipo === "usuario" ? "flex-end" : "flex-start", alignItems: msg.tipo === "usuario" ? "flex-end" : "flex-start", gap: "8px" }}>
                 {msg.tipo !== "usuario" && (
                   <div style={{ width: 36, height: 36, borderRadius: "50%", flexShrink: 0, background: msg.tipo === "error" || msg.tipo === "emergencia" ? "var(--huap-rojo)" : "linear-gradient(135deg, var(--huap-azul), #3b6fd4)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 6px rgba(26,82,160,0.25)" }}>

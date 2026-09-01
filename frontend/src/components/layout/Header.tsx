@@ -5,6 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
+import ModalConfirmacion from "@/components/ui/ModalConfirmacion"
 
 const TAMANOS = ["pequeño", "mediano", "grande"] as const
 type Tamano = typeof TAMANOS[number]
@@ -14,6 +15,7 @@ export default function Header() {
   const { data: session } = useSession()
   const router = useRouter()
   const [open, setOpen] = useState(false)
+  const [confirmarSalida, setConfirmarSalida] = useState(false)
   const [tamano, setTamano] = useState<Tamano>(() => {
     if (typeof window === "undefined") return "mediano"
     return (localStorage.getItem("fontTamano") ?? "mediano") as Tamano
@@ -254,7 +256,7 @@ export default function Header() {
 
           {/* Cerrar sesión */}
           <button
-            onClick={() => { if (window.confirm("¿Cerrar sesión?")) signOut({ callbackUrl: "/" }) }}
+            onClick={() => { setOpen(false); setConfirmarSalida(true) }}
             style={{
               width: "100%", padding: "18px 20px",
               display: "flex", alignItems: "center", gap: "14px",
@@ -272,6 +274,24 @@ export default function Header() {
           </button>
         </div>
       )}
+
+      <ModalConfirmacion
+        abierto={confirmarSalida}
+        tono="peligro"
+        titulo="¿Cerrar sesión?"
+        mensaje="Tu progreso queda guardado. Podrás volver a entrar con tu cuenta de Google cuando quieras."
+        textoConfirmar="Sí, cerrar sesión"
+        textoCancelar="No, quedarme aquí"
+        icono={
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+        }
+        onConfirmar={() => signOut({ callbackUrl: "/" })}
+        onCancelar={() => setConfirmarSalida(false)}
+      />
     </header>
   )
 }
